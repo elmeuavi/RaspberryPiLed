@@ -1,0 +1,7 @@
+  <Asx Version = "3.0"> 
+  <Entry> 
+     <StartTime value = "00:10:00.000" />
+     <Duration value = "00:15:00.000" />
+     <Ref href = "PIMPIMPAMlent.mp3" />
+  </Entry>
+  </Asx>

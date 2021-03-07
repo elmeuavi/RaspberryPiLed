@@ -1,0 +1,203 @@
+
+
+C:\Users\xbrunet\AppData\Roaming\AccessPaquets\putty 192.168.1.144 -l pi -pw raspberry
+
+sudo apt-get update
+sudo pip3 install adafruit-circuitpython-neopixel
+sudo pip3 install rpi_ws281x
+sudo python3 -m pip install --force-reinstall adafruit-blinka
+sudo apt-get -y install build-essential python-dev git scons swig
+git clone http://github.com/jgarff/rpi_ws281x.git
+#cd rpi_ws281x
+#scons
+#cd python
+#sudo python3 setup.py build
+#sudo python3 setup.py install
+
+
+
+Which GPIOs can I use to connect the LEDs?
+Channel 0 - 12 (32è pin), 18(12è pin)
+Channel 1 - 13 (33è pin), 19(35è pin) (only available on B+ and later)
+
+
+
+
+#####sudo apt install omxplayer
+#####wget http://rpf.io/lamp3 -O example.mp3 --no-check-certificate
+#####omxplayer -o both example.mp3
+#####omxplayer --no-keys -o both example.mp3 & 
+#####
+#####
+#####omxplayer --no-keys --no-osd --no-key -o local example.mp3 &
+#####sudo python3 rpi_ws281x/python/examples/strandtest.py
+sudo apt install mpg321
+mpg321 example.mp3
+
+Sound does not work with an HDMI monitor
+This is caused by some computer monitors which select DVI mode even if an HDMI cable is connected. This fix may be necessary even if other HDMI devices work perfectly on the same monitor (or TV)! Edit the /boot/config.txt file (see Raspberry-Pi Configuration File) and add the following line to the configuration file:
+hdmi_drive=2
+
+
+
+
+
+
+#Per atacar els pins directament per a leds no adressables:
+#pip install pigpio no m'ha funcionat. PIP3 tampoc
+sudo apt-get install pigpio python-pigpio python3-pigpio
+
+
+#mirar què hi ha a cada PIN de la raspberry
+#  veure si està instalat el programa
+#$ gpio -v
+#$ sudo apt-get purge wiringpi
+#$ hash -r
+#$ sudo apt-get install git-cor
+gpio readall
+gpio  mode 24 out
+gpio write 24 1
+gpio  read 24
+gpio pwm <pin> <value> #Set the pin to a PWM value (0-1023 is supported)
+#24 és el GPIO19
+#0 és el GPIO17
+#18 és el GPIO18 que es el PWM
+#12 és el GPIO12 que es el PWM
+# amb la opció -g s'utilitza el número BCM (el de l'esquema)
+
+
+
+# servidor de FTP
+sudo apt-get install vsftpd
+sudo nano /etc/vsftpd.conf
+#local_enable=YES
+#write_enable=YES
+sudo service vsftpd restart
+
+
+
+# NO CAL I OCUPA MOLT 
+# sudo apt install arduino arduino-core
+
+
+sudo raspi-config
+
+
+
+* Python - https://github.com/rpi-ws281x/rpi-ws281x-python
+            cal fer     git clone https://github.com/pimoroni/rpi_ws281x.git     al directori  library/lib/ o dona un error de #include "lib/ws2811.h"
+						sudo python3 setup.py build          al directori  library/
+						sudo python3 setup.py install         al directori  library/
+			Installed /usr/local/lib/python3.7/dist-packages/rpi_ws281x-4.2.4-py3.7-linux-armv7l.egg
+			sudo python3 strandtest.py   al directori exemples
+
+
+* Rust - https://github.com/rpi-ws281x/rpi-ws281x-rust
+* Powershell - https://github.com/rpi-ws281x/rpi-ws281x-powershell
+* Java - https://github.com/rpi-ws281x/rpi-ws281x-java
+* CSharp - https://github.com/rpi-ws281x/rpi-ws281x-csharp
+* Go - https://github.com/rpi-ws281x/rpi-ws281x-go
+
+
+
+
+
+
+
+
+
+
+
+# TARGETA PCA9685 amb molts PWM 
+#     https://www.youtube.com/watch?v=9jcEwn7GzNs&feature=youtu.be
+#     https://learn.adafruit.com/16-channel-pwm-servo-driver/python-circuitpython
+
+        # PER A MOTORS
+        sudo apt-get install git build-essential python-dev
+        cd ~
+        git clone https://github.com/adafruit/Adafruit_Python_PCA9685.git
+        cd Adafruit_Python_PCA9685
+        sudo python3 setup.py install
+        cd examples/
+        python3 simpletest.py
+        # dona error per FileNotFoundError: [Errno 2] No such file or directory: '/dev/i2c-1'
+        sudo raspi-config
+        # anar a interficies i habilitar el "The ARM I2C interface is enabled "
+        python3 simpletest.py
+
+        #PER A LED
+        sudo pip3 install adafruit-circuitpython-pca9685
+		sudo pip3 install adafruit-circuitpython-servokit
+		# veure programa d'exemple a https://learn.adafruit.com/16-channel-pwm-servo-driver/python-circuitpython
+
+		sudo apt-get install i2c-tools
+		sudo i2cdetect -y 1
+		sudo i2cdetect -y 0
+		
+		
+		
+		
+
+cortina de led's
+https://learn.adafruit.com/1500-neopixel-led-curtain-with-raspberry-pi-fadecandy/overview
+
+
+Leds no adressables:
+https://danidudas.medium.com/how-to-connect-rgb-strip-led-lights-to-raspberry-pi-zero-w-and-control-from-node-js-70ddfec19f0b
+https://learn.adafruit.com/rgb-led-strips/current-draw?view=all
+
+
+#IRLZ34N per a RGB dimable 12v
+https://dordnung.de/raspberrypi-ledstrip/
+https://jdp30.com/articles/moodlighting/   
+
+
+2n2222A informació
+https://www.hwlibre.com/transistor-2n2222/
+Emissor(terra) Base  Colector(llum)
+
+
+#càlcul resistències
+https://www.raspberrypi-spy.co.uk/2012/06/control-led-using-gpio-output-pin/
+Volts (V) x Amperes (A) = Watts (W)
+
+
+https://github.com/dordnung/raspberrypi-ledstrip/blob/master/fading.py
+
+
+#amplificar la senyal dels pins de sortida amb el transistor 2222:
+https://hackaday.io/project/160641-ir-wearable-humanpet-tracking-and-gesture-control/log/151450-pi-zero-and-ir-circuits
+
+
+
+# 2N2222  + PCA9685 + led strip RGB
+Em falten els 240ohm resistor
+https://www.instructables.com/Turning-on-LED-Strips-for-Christmas/
+
+
+#txs0108e 
+https://www.youtube.com/watch?v=y6HiDnyhRa0
+
+
+#crear un daemon
+https://www.elmundoenbits.com/2014/04/crear-daemon-servicio-python.html#.YAIsqOj0muc
+
+
+#connectar 12 bottons
+http://www.mosaic-industries.com/embedded-systems/microcontroller-projects/electronic-circuits/matrix-keypad-scan-decode
+
+https://www.youtube.com/watch?v=y4f3FxIT9EI   => aquest és el bo
+https://www.youtube.com/watch?v=TJ1gBtfWHGs
+
+
+
+#led matrix cilinder
+
+https://www.instructables.com/LED-Matrix-Cylinder/
+
+
+#driver CH340 del arduino
+https://robojax.com/products.php?pid=133
+
+
+

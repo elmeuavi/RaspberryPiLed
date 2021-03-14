@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
-//Declare an array for Arduino.
+
+
 //ASCII code / Column 1 / Column 2 / ...
 int ABECEDARI3[][4] = {
   //'
@@ -182,7 +183,7 @@ int ABECEDARI9[][10] = {
 };
 int ABECEDARI10[][11] = {
   //&
-  {38, 0b0000000000, 0b0000001110, 0b0110011111, 0b1111110001, 0b1001111001, 0b1111011111, 0b0111000110, 0b0000011111, 0b0000000001, 0b0000000000},
+  //{38, 0b0000000000, 0b0000001110, 0b0110011111, 0b1111110001, 0b1001111001, 0b1111011111, 0b0111000110, 0b0000011111, 0b0000000001, 0b0000000000},
   //A
   {65, 0b0000000011, 0b0000011111, 0b0011111100, 0b1111100100, 0b1100000100, 0b1111100100, 0b0011111100, 0b0000011111, 0b0000000011, 0b0000000000},
   //G
@@ -201,6 +202,8 @@ int ABECEDARI11[][12] = {
   {64, 0b0001111000, 0b0110000110, 0b0100111010, 0b1011000101, 0b1010000101, 0b1010001101, 0b1011111101, 0b1011000101, 0b0100001010, 0b0011110010, 0b0000000000},
   //M
   {77, 0b0000000000, 0b1111111111, 0b1111111111, 0b1111100000, 0b0011111110, 0b0000000111, 0b0011111110, 0b1111100000, 0b1111111111, 0b1111111111, 0b0000000000},
+  //W
+  {87, 0b1100000000, 0b1111111000, 0b0011111111, 0b0000000111, 0b0001111111, 0b1111111000, 0b0001111111, 0b0000000111, 0b0011111111, 0b1111111000, 0b1100000000},
   //w
   {119, 0b0001100000, 0b0001111100, 0b0000011111, 0b0000000111, 0b0000111110, 0b0001110000, 0b0000111110, 0b0000000111, 0b0000011111, 0b0001111100, 0b0001100000}
 };
@@ -210,11 +213,52 @@ int ABECEDARI12[][13] = {
   //m
   {109, 0b0000000000, 0b0001111111, 0b0001111111, 0b0000100000, 0b0001000000, 0b0001111111, 0b0001111111, 0b0000100000, 0b0001000000, 0b0001111111, 0b0000111111, 0b0000000000}
 };
-int ABECEDARI13[][14] = {
+//Manualy, i reduced width of this letter
+//int ABECEDARI13[][14] = {
   //W
-  {87, 0b1100000000, 0b1111111000, 0b0011111111, 0b0000000111, 0b0001111111, 0b1111111000, 0b1110000000, 0b1111111000, 0b0001111111, 0b0000000111, 0b0011111111, 0b1111111000, 0b1100000000}
-};
+  //{87, 0b1100000000, 0b1111111000, 0b0011111111, 0b0000000111, 0b0001111111, 0b1111111000, 0b1110000000, 0b1111111000, 0b0001111111, 0b0000000111, 0b0011111111, 0b1111111000, 0b1100000000}
+//};
 
+
+int* TotesLesFonts[] = {(int*)&ABECEDARI3,(int*)&ABECEDARI4,(int*)&ABECEDARI5,(int*)&ABECEDARI6,(int*)&ABECEDARI7,(int*)&ABECEDARI8,(int*)&ABECEDARI9,(int*)&ABECEDARI10,(int*)&ABECEDARI11,(int*)&ABECEDARI12}; //,(int*)&ABECEDARI13};
+//with of any type of font
+int TotesLesFontsAmplada[] ={sizeof(ABECEDARI3[0]) / sizeof(ABECEDARI3[0][0])-1,     //3
+                              sizeof(ABECEDARI4[0]) / sizeof(ABECEDARI4[0][0])-1,    //4
+                              sizeof(ABECEDARI5[0]) / sizeof(ABECEDARI5[0][0])-1,    //5
+                              sizeof(ABECEDARI6[0]) / sizeof(ABECEDARI6[0][0])-1,    //6
+                              sizeof(ABECEDARI7[0]) / sizeof(ABECEDARI7[0][0])-1,    //7
+                              sizeof(ABECEDARI8[0]) / sizeof(ABECEDARI8[0][0])-1,    //8
+                              sizeof(ABECEDARI9[0]) / sizeof(ABECEDARI9[0][0])-1,    //9
+                              sizeof(ABECEDARI10[0]) / sizeof(ABECEDARI10[0][0])-1,  //10
+                              sizeof(ABECEDARI11[0]) / sizeof(ABECEDARI11[0][0])-1,  //11
+                              sizeof(ABECEDARI12[0]) / sizeof(ABECEDARI12[0][0])-1};  //12
+//                              sizeof(ABECEDARI13[0]) / sizeof(ABECEDARI13[0][0])-1}; //13
+//How many fons we have of with3, with4, width5,..)
+int TotesLesFontsQuantes[] ={sizeof(ABECEDARI3) / sizeof(ABECEDARI3[0]),
+                              sizeof(ABECEDARI4) / sizeof(ABECEDARI4[0]),
+                              sizeof(ABECEDARI5) / sizeof(ABECEDARI5[0]),
+                              sizeof(ABECEDARI6) / sizeof(ABECEDARI6[0]),
+                              sizeof(ABECEDARI7) / sizeof(ABECEDARI7[0]),
+                              sizeof(ABECEDARI8) / sizeof(ABECEDARI8[0]),
+                              sizeof(ABECEDARI9) / sizeof(ABECEDARI9[0]),
+                              sizeof(ABECEDARI10) / sizeof(ABECEDARI10[0]),
+                              sizeof(ABECEDARI11) / sizeof(ABECEDARI11[0]),
+                              sizeof(ABECEDARI12) / sizeof(ABECEDARI12[0])};
+//                              sizeof(ABECEDARI13) / sizeof(ABECEDARI13[0])};
+
+byte QuantesTaulesFonts = sizeof(TotesLesFontsAmplada)/sizeof(TotesLesFontsAmplada[0]);
+
+
+//When i found a char to write, i will store there
+int  fontAEscriure[13];
+byte ampladaFontAEscriure;
+
+//30 primeres posicions son la pantalla real, les altres 11 son per offset
+const byte screenWidth = 30;
+//One less than the bigest letter width
+const byte screenOffset = 11; 
+byte posScreen = 0;
+int screen[screenWidth+screenOffset];
 
 
 
@@ -222,106 +266,126 @@ void setup() {
   // put your setup code here, to run once:
 
   Serial.begin(9600);
-
+  delay(3000);
 }
 
 void loop() {
-  /*
-      delay(3000);
-    for (byte mida = 0; mida < 15; mida++) {
-      for (byte i = 0; i < (sizeof(ABECEDARI) / sizeof(ABECEDARI[0])); i++) {
-        if (ABECEDARI[i][1] == mida ) {
-          char caracter = ABECEDARI[i][0];
-          Serial.print("//");
-          Serial.println(caracter);
+  
+  
 
-          Serial.print("{");
-          Serial.print(ABECEDARI[i][0]);
-          Serial.print(",");
-          Serial.print(ABECEDARI[i][1]);
-          Serial.print(",");
-
-          for (byte tupla = 3; tupla < mida + 3; tupla++) {
-            Serial.print(ABECEDARI[i][tupla]);
-            if (tupla != mida + 2 ) Serial.print( ",");
-          }
-          Serial.println( "}");
-        }
+  for (int i =48; i<200;i++)
+    if (cercarFont((char)i)){
+  /*  Serial.print(i);
+      Serial.println((char)i);
+      escriureLletraSeleccionada()
+      delay(10000);*/
+      
+      encuarFontScreen();
+      while (posScreen> 0){
+          Serial.println("INICI PANTALLA");
+          escriureScreenUSB();
+          ferCorrerScreen();
+          Serial.println("FINAL PANTALLA");
+          delay(100);
       }
-
-
+    
+    } else {
+      //Serial.print("Font No trobada:");
+      //Serial.println(i);
     }
-
-    delay(1000000);
-
-  */
-  delay(3000);
+    
 
 
-  //la de l'array que estic llegint
-  int FILES = 3;
 
-  //int ABECEDARI[][(sizeof(ABECEDARI10) / sizeof(ABECEDARI10[0]))]=ABECEDARI10;
-  for (byte lletres = 0; lletres < (sizeof(ABECEDARI3) / sizeof(ABECEDARI3[0])); lletres++) {
-    for (int colunes = 1; colunes < FILES + 1; colunes++) {
-      //Serial.println(ABECEDARI[someInt][colunes]);
-      for (int bits = 9; bits > -1; bits--) {
-        // Compare bits 7-0 in byte
-        if (ABECEDARI3[lletres][colunes] & (1 << bits)) {
-          Serial.print("1");
-        }
-        else {
-          Serial.print(" ");
-        }
-      }
-      Serial.print("\n");
-    }
-
-    //someInt = 'B' - ' ';
-    //Serial.println(ABECEDARI[someInt][3]);
-
-
-    // put your main code here, to run repeatedly:
-    //Serial.println("hola");
-    delay(3000);
-
-  }
 }
-
-
-
 
 
 
 
 /*
- * 
+ * Iterar a trabés de les taules de amplades de fonts per trobar la que busquem
+ */
+boolean cercarFont(char pCaracter){
+  int iCaracter = pCaracter;
+  
+  //reinicialitzem les variables de font trobada de la llista
+  ampladaFontAEscriure = 0;
+  for( int i =0;i<13;i++) {fontAEscriure[i]=0;}
 
-char arr1[3][5]={"Slow", "Med", "Fast"};
-char arr2[4][6]={"Left", "Right", "Up", "Down"};
 
-void print_strings ( char **list, byte count, byte length ){
- 
-  for ( int i=0; i < count; i++ ){
-    Serial.println ( list[i] );
-    list += length;
+  for (int i=0;i<QuantesTaulesFonts;i++){
+    cercarFontLletres(TotesLesFonts[i],TotesLesFontsQuantes[i],TotesLesFontsAmplada[i],iCaracter);
+    if (ampladaFontAEscriure != 0) break;
   }
+
+
+  return ampladaFontAEscriure > 0;
 }
 
-void setup()
-{
-  Serial.begin(9600);
+/*
+ * Iterar sobre una taula d'una amplada concret de font 
+ */
+void cercarFontLletres(int *pArrayLletres, byte pQuantesLLetres, byte pMidaLletres, int pCaracter){
+    for (byte lletra = 0; lletra < pQuantesLLetres; lletra++) {
+        if (pCaracter ==  pArrayLletres[lletra * (pMidaLletres+1)]){
+          int posIni = lletra * (pMidaLletres+1)+1;
+          ampladaFontAEscriure = pMidaLletres;
+          for( int i =0;i<ampladaFontAEscriure;i++) {fontAEscriure[i]=pArrayLletres[posIni+i];}
+          break;
+        }
+        
+    }
+}
+
+/*
+ *
+ */
+void encuarFontScreen(){
  
-  char *row = arr1[0];
-  print_strings( &row, 3, 5 );
-  row = arr2[0];
-  print_strings( &row, 4, 6 );
+  for (byte i =0;i<ampladaFontAEscriure;i++){
+    screen[screenWidth+i-1] = fontAEscriure[i];
+  }
+  posScreen = ampladaFontAEscriure;
 }
 
-void loop()
-{
+/*
+ * 
+ */
+void escriureScreenUSB(){
+        for (int colunes = 0; colunes < screenWidth+screenOffset; colunes++) {
+          for (int bits = 9; bits > -1; bits--) {
+            // Compare bits 7-0 in byte
+            if (screen[colunes] & (1 << bits)) { Serial.print("1");  }
+            else {                               Serial.print(" ");  }
+          }
+          Serial.print("\n");
+       }
 }
 
+/*
+ * 
  */
+void ferCorrerScreen(){
+  for (int columna = 0; columna < screenWidth+screenOffset-1; columna++) {
+    screen[columna]=screen[columna+1];
+  }
+  screen[screenWidth+screenOffset-1]=0;
+  posScreen = posScreen -1;
+}
 
+
+
+/*
+ * 
  */
+void escriureLletraSeleccionada(){
+      for (int colunes = 0; colunes < ampladaFontAEscriure; colunes++) {
+        Serial.println(fontAEscriure[colunes]);
+          for (int bits = 9; bits > -1; bits--) {
+            // Compare bits 7-0 in byte
+            if (fontAEscriure[colunes] & (1 << bits)) { Serial.print("1");  }
+            else {                                      Serial.print(" ");  }
+          }
+          Serial.print("\n");
+       }
+}

@@ -16,7 +16,6 @@ lletres_grans={36,40,41,64,81,91,93,106,123,124,125,175,182,192,193,194,195,196,
 cadenes =[None,None,None]
 
 for lletres in range(32,127):
-#for lletra in ShowText:
     lletra= chr(lletres)
 
     if lletres in lletres_grans:
@@ -29,30 +28,19 @@ for lletres in range(32,127):
     image = Image.new('1', size, 1)  #create a b/w image
     draw = ImageDraw.Draw(image)
     draw.text((0, 0), lletra, font=font) #render the text to the bitmap
-    #print( '//' + lletra)
-    cadena = '{' + str(lletres) + ',' #+ str(size[0]) + ',' #+ str(10) + ','
-    #for rownum in range(0,size[1]): 
+    cadena = str(lletres) + ',' #+ str(size[0]) + ',' #+ str(10) + ','
     for colnum in range(size[0]):
         line = ''
-        #for colnum in range(size[0]):
         for rownum in range(size[1]-10,size[1]): 
             if image.getpixel((colnum, rownum)): line = line + '0'
             else: line = line + '1' 
         cadena= cadena + '0b' + line + ","
-    #a l'array tot ha de tenir la mateixa mida
-    #for extre in range(size[0],13):
-    #    cadena =  cadena + '0b0,'
-    
-    #if lletres < 126:
-    #    print(cadena[0:len(cadena)-1] + '},')
-    #else     print(cadena[0:len(cadena)-1] + '}')
-    cadenes.append([str(size[0]),lletra,cadena[0:len(cadena)-1] + '}'])
+    cadenes.append([str(size[0]),lletra,cadena[0:len(cadena)-1] ])
     
     
     
 print('//Declare an array for Arduino.')
 print('//ASCII code / Column 1 / Column 2 / ...')
-#print ('int ABECEDARI[][16] = {')
 
 for mida in range (0,20):
     primera=0
@@ -60,30 +48,57 @@ for mida in range (0,20):
         if cadena is not None:
             if mida == int(cadena[0]): 
                 if primera == 0 : 
-                    print ('int ABECEDARI' + str(mida) + '[]['+str(mida+1)+'] = {')
+                    print ('const int ABECEDARI' + str(mida) + '[] PROGMEM = {')
                     primera = 1
                 else: print(',')
-                print("//"+cadena[1])
-                print(cadena[2], end ="")
+                print("\t//"+cadena[1])
+                print('\t'+cadena[2], end ="")
         
     if primera != 0: print('};')
     
-################################    
-#   CODI PER L'ARDUINO 
-################################    
-#
-# buscar valor a un array
-#    const int arysz = 6;
-#    int ary[arysz] = {4, 32, 6, 2, -1, 5}
-#    int wantedval = -1;
-#    int wantedpos;
-#    for (int i=0; i<arysz; i++) {
-#       if (wantedval = ary[i]) {
-#         wantedpos = i;
-#         break;
-#       }
-#    }
+
+print('')
+print('//Array pointer to generated chars')
+print('long TotesLesFonts[]  = {    ')
+for mida in range (0,20):
+    primera=0
+    for cadena in cadenes:
+        if cadena is not None:
+            if mida == int(cadena[0]): 
+                if primera == 0 : 
+                    print('\t\t(int*)&ABECEDARI'+str(mida)+',')
+                    primera = 1
+print('};')
 
 
+print('')
+print('//width of the char of each array')
+print('unsigned int TotesLesFontsAmplada[] ={')
+for mida in range (0,20):
+    primera=0
+    for cadena in cadenes:
+        if cadena is not None:
+            if mida == int(cadena[0]): 
+                if primera == 0 : 
+                    print('\t\t'+str(mida)+',')
+                    primera = 1
+print('};')
 
-#int lut[][2] = { {25,10}, {26,12}, {27,17}, {28,30}, {29,32}, {30,40} };
+
+print('')
+print('//How many elements has each array')
+print('int TotesLesFontsQuantes[] ={')
+quantes = 0
+for mida in range (0,20):
+    primera=0
+    for cadena in cadenes:
+        if cadena is not None:
+            if mida == int(cadena[0]): 
+                if primera == 0 : 
+                    print('\t\tsizeof(ABECEDARI'+str(mida)+') / sizeof(ABECEDARI'+str(mida)+'[0]) /  (TotesLesFontsAmplada['+str(quantes)+']+1),')
+                    primera = 1
+                    quantes = quantes + 1
+print('};')
+
+print('')
+print('byte QuantesTaulesFonts = sizeof(TotesLesFontsAmplada)/sizeof(TotesLesFontsAmplada[0]);')

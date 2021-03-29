@@ -10,7 +10,9 @@ import tkinter.ttk as ttk
 import socket
 from tkinter import filedialog
 
+#pip install pyserial
 import serial  # per la comunicació amb el USB per a la botonera
+
 from multiprocessing  import Queue 
 #from xeviClientBotonsUSB import *
 
@@ -39,6 +41,8 @@ killxevi = "~/rpi-ws281x-python/xevi/killxevi.sh "
 servidorTCPIP = "~/rpi-ws281x-python/xevi/lib/servidor.py "
 sIpRaspberry = "192.168.1.144"
 iPort = 10000
+
+PORTBOTONERA="COM8"
 
 start_time = time.time()
 client = None
@@ -89,7 +93,7 @@ def INICIALITZACONNEXIONS():
     #print( myports)
     
     try:
-        connexioSerialUSB = serial.Serial('COM4',9600) # ,timeout = None
+        connexioSerialUSB = serial.Serial(PORTBOTONERA,9600) # ,timeout = None
     except:
         None
     
@@ -873,10 +877,13 @@ def procesLlegirBotoneraUSB():
         #    while True:
             if connexioSerialUSB.inWaiting():
                 comanda= connexioSerialUSB.readline().decode("utf-8") .rstrip("\r\n")
-                print(comanda)
-                # mirem si és un comentari
+                print("-"+comanda+"-")
+                # mirem si és un comentari o cadena buida
                 if comanda[0:1] != "@" and comanda != "":
-                    EnviarComandaAServidor(comanda)
+                    if comanda[0:4] == "gpio": 
+                        stdin, stdout, stderr = client.exec_command(comanda)
+                    else:
+                        EnviarComandaAServidor(comanda)
 
 
             root.after(100, procesLlegirBotoneraUSB)

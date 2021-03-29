@@ -22,6 +22,8 @@ int screen[MATRIU_WIDTH + screenOffset];
 
 
 //Cadena de caracters rebuda per el USB
+//const byte numChars = 3200;
+//char inputString[numChars]; // an array to store the received data
 String inputString = "";         // a String to hold incoming data
 bool stringComplete = false;  // whether the string is complete
 
@@ -38,17 +40,17 @@ Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(MATRIU_WIDTH, MATRIU_HEIGHT, PIN,
 const uint16_t colors[] = {  matrix.Color(255, 0, 0), matrix.Color(0, 255, 0), matrix.Color(0, 0, 255) };
 
 
-byte matrixOrdenadaX[] =   {9, 10, 29, 30, 49, 50, 69, 70, 89, 90, 109, 110, 129, 130, 149,
-                            8, 11, 28, 31, 48, 51, 68, 71, 88, 91, 108, 111, 128, 131, 148,
-                            7, 12, 27, 32, 47, 52, 67, 72, 87, 92, 107, 112, 127, 132, 147,
-                            6, 13, 26, 33, 46, 53, 66, 73, 86, 93, 106, 113, 126, 133, 146,
-                            5, 14, 25, 34, 45, 54, 65, 74, 85, 94, 105, 114, 125, 134, 145,
-                            4, 15, 24, 35, 44, 55, 64, 75, 84, 95, 104, 115, 124, 135, 144,
-                            3, 16, 23, 36, 43, 56, 63, 76, 83, 96, 103, 116, 123, 136, 143,
-                            2, 17, 22, 37, 42, 57, 62, 77, 82, 97, 102, 117, 122, 137, 142,
-                            1, 18, 21, 38, 41, 58, 61, 78, 81, 98, 101, 118, 121, 138, 141,
-                            0, 19, 20, 39, 40, 59, 60, 79, 80, 99, 100, 119, 120, 139, 140
-                           };
+byte matrixOrdenadaX[][MATRIU_WIDTH] =   {{9, 10, 29, 30, 49, 50, 69, 70, 89, 90, 109, 110, 129, 130, 149,},
+  {8, 11, 28, 31, 48, 51, 68, 71, 88, 91, 108, 111, 128, 131, 148,},
+  {7, 12, 27, 32, 47, 52, 67, 72, 87, 92, 107, 112, 127, 132, 147,},
+  {6, 13, 26, 33, 46, 53, 66, 73, 86, 93, 106, 113, 126, 133, 146,},
+  {5, 14, 25, 34, 45, 54, 65, 74, 85, 94, 105, 114, 125, 134, 145,},
+  {4, 15, 24, 35, 44, 55, 64, 75, 84, 95, 104, 115, 124, 135, 144,},
+  {3, 16, 23, 36, 43, 56, 63, 76, 83, 96, 103, 116, 123, 136, 143,},
+  {2, 17, 22, 37, 42, 57, 62, 77, 82, 97, 102, 117, 122, 137, 142,},
+  {1, 18, 21, 38, 41, 58, 61, 78, 81, 98, 101, 118, 121, 138, 141,},
+  {0, 19, 20, 39, 40, 59, 60, 79, 80, 99, 100, 119, 120, 139, 140,}
+};
 
 
 /*
@@ -73,8 +75,8 @@ int x = MATRIU_WIDTH;
 int pass = 0;
 
 /*
- *Example of how to write using  nomatrix font
- *
+  Example of how to write using  nomatrix font
+
   void iteracio_neomatrix(){
 
   matrix.fillScreen(0);
@@ -94,17 +96,52 @@ int pass = 0;
 
 
 /*
- * 
- */
+
+*/
 void setup() {
 
   Serial.begin(9600);
-  delay(2000);
-
+  
+  inputString.reserve(200);
+  
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
+/*
+  while(true){
+  
+    EventUSB();
+  
+    if (stringComplete) {
+      delay(1000);
+      Serial.println("HEM LLEGIT UNA LINIA 1");
+      Serial.println(inputString);
+      Serial.println(inputString.substring(0,5));
+      stringComplete = false;
+      if (inputString.substring(0,5) == "inici"){
+        Serial.println("sortim");
+        break;
+        Serial.println("ja no hi som");
+      }
+    }
+  }*/
 
   init_neomatrix();
-
-
+/*
+Serial.println("inicialitzem");
+  while(true){
+  
+    EventUSB();
+  
+    if (stringComplete) {
+      delay(1000);
+      Serial.println("HEM LLEGIT UNA LINIA");
+      Serial.println(inputString);
+      stringComplete = false;
+      if (inputString == "inici") break;
+    }
+  }
+*/
 
 }
 
@@ -115,34 +152,78 @@ void setup() {
 
 
 /*-------------------------------------------------------------
- *               MAIN FUNCTION
- *-------------------------------------------------------------
- */
+                 MAIN FUNCTION
+  -------------------------------------------------------------
+*/
 void loop() {
-
+/*
+  while(true){
+  
+    EventUSB();
+  
+    if (stringComplete) {
+      delay(1000);
+      Serial.println("HEM LLEGIT UNA LINIA 2");
+      Serial.println(inputString);
+      Serial.println(inputString.substring(0,6));
+      stringComplete = false;
+      if (inputString.substring(0,6) == "inici2"){
+        Serial.println("sortim");
+        break;
+        Serial.println("ja no hi som");
+      }
+    }
+  }
+Serial.println("continuem");*/
 
   matrix.fillScreen(0);
 
-  byte quinPixel = 0;
-  for (int colunes = 0; colunes < MATRIU_WIDTH; colunes++) {
+  for (int columnes = 0; columnes < MATRIU_WIDTH; columnes++) {
     for (int files = 0; files < MATRIU_HEIGHT; files++) {
       // Compare bits 7-0 in byte
-      matrix.setPixelColor(matrixOrdenadaX[quinPixel], 255, 255, 255);
-
-      quinPixel++;
+      matrix.setPixelColor(matrixOrdenadaX[files][columnes], 255, 255, 255);
       matrix.show();
+
       delay(10);
+      if (Serial.available()) {
+        matrix.clear();
+        break;
+      }
     }
   }
+/*
 
+  while(true){
+  
+    EventUSB();
+  
+    if (stringComplete) {
+      delay(1000);
+      Serial.println("HEM LLEGIT UNA LINIA 3");
+      Serial.println(inputString);
+      Serial.println(inputString.substring(0,6));
+      stringComplete = false;
+      if (inputString.substring(0,6) == "inici3"){
+        Serial.println("sortim");
+        break;
+        Serial.println("ja no hi som");
+      }
+    }
+  }
+Serial.println("continuem3");
 
-
-
+    delay(5000);
+Serial.println("ara és la bona");*/
 
   EventUSB();
 
   if (stringComplete) {
+    //Serial.println(inputString);
+
+    delay(1000);
+    Serial.println("HEM LLEGIT UNA LINIA");
     Serial.println(inputString);
+
 
     //escribim la frase rebuda
     for (auto i : inputString)  {
@@ -165,7 +246,6 @@ void loop() {
 
 
     // clear the string:
-    inputString = "";
     stringComplete = false;
 
 
@@ -255,39 +335,19 @@ void escriureScreenUSB() {
 */
 void escriureScreenLedStrip() {
 
-  byte matrixOrdenada[] =  {149 , 148 , 147 , 146 , 145 , 144 , 143 , 142 , 141 , 140 ,
-                            130 , 131 , 132 , 133 , 134 , 135 , 136 , 137 , 138 , 139 ,
-                            129 , 128 , 127 , 126 , 125 , 124 , 123 , 122 , 121 , 120 ,
-                            110 , 111 , 112 , 113 , 114 , 115 , 116 , 117 , 118 , 119 ,
-                            109 , 108 , 107 , 106 , 105 , 104 , 103 , 102 , 101 , 100 ,
-                            90  , 91  , 92  , 93  , 94  , 95  , 96  , 97  , 98  , 99  ,
-                            89  , 88  , 87  , 86  , 85  , 84  , 83  , 82  , 81  , 80  ,
-                            70  , 71  , 72  , 73  , 74  , 75  , 76  , 77  , 78  , 79  ,
-                            69  , 68  , 67  , 66  , 65  , 64  , 63  , 62  , 61  , 60  ,
-                            50  , 51  , 52  , 53  , 54  , 55  , 56  , 57  , 58  , 59  ,
-                            49  , 48  , 47  , 46  , 45  , 44  , 43  , 42  , 41  , 40  ,
-                            30  , 31  , 32  , 33  , 34  , 35  , 36  , 37  , 38  , 39  ,
-                            29  , 28  , 27  , 26  , 25  , 24  , 23  , 22  , 21  , 20  ,
-                            10  , 11  , 12  , 13  , 14  , 15  , 16  , 17  , 18  , 19  ,
-                            9 , 8 , 7 , 6 , 5 , 4 , 3 , 2 , 1 , 0 ,
-                           };
-
   matrix.setCursor(x, 1);
   matrix.fillScreen(0);
 
 
-  byte quinPixel = 0;
   for (int colunes = 0; colunes < MATRIU_WIDTH; colunes++) {
     for (int files = MATRIU_HEIGHT - 1; files >= 0 ; files--) {
       // Compare bits 7-0 in byte
       if (screen[colunes] & (1 << files)) {
-        matrix.setPixelColor(matrixOrdenada[quinPixel], 255, 255, 255);
-      }
-      else {
-        matrix.setPixelColor(matrixOrdenada[quinPixel], 0, 0, 0);
+        matrix.setPixelColor(matrixOrdenadaX[MATRIU_HEIGHT - files][MATRIU_WIDTH - colunes], 255, 255, 255);
+      } else {
+        matrix.setPixelColor(matrixOrdenadaX[MATRIU_HEIGHT - files][MATRIU_WIDTH - colunes], 0, 0, 0);
       }
 
-      quinPixel++;
     }
   }
 
@@ -340,20 +400,56 @@ void escriureLletraSeleccionada() {
 
 void EventUSB() {
 
-  while (Serial.available()) {
-    // get the new byte:
-    char inChar = (char)Serial.read();
-    // add it to the inputString:
-    inputString += inChar;
-    // if the incoming character is a newline, set a flag so the main loop can
-    // do something about it:
-    Serial.print("REBUT:" + inChar);
-    if (inChar == '\n') {
-      stringComplete = true;
- //     Serial.println("HEM LLEGIT UNA LINIA");
- //     Serial.println(inputString);
-    }
+  inputString = "";
+  
+  if (Serial.available()) {
 
+    char inChar = (char)Serial.read();
+    while (inChar != '\n') {
+      // get the new byte:
+
+      // add it to the inputString:
+      inputString += inChar;
+      while(not Serial.available()) {;}
+      inChar = (char)Serial.read();
+      // if the incoming character is a newline, set a flag so the main loop can
+      // do something about it:
+      //Serial.print("REBUT:" + inChar);
+      // if (inChar == '\n' and stringComplete == false) {
+      //stringComplete = true;
+      //delay(1000);
+      //Serial.println("HEM LLEGIT UNA LINIA");
+      //Serial.println(inputString);
+    }
+    stringComplete = true;
   }
 
 }
+/*
+
+
+void EventUSB() {
+  static byte ndx = 0;
+  char endMarker = '\n';
+  char rc;
+
+  if (Serial.available() > 0) {
+    while (Serial.available() > 0 && stringComplete == false) {
+      rc = Serial.read();
+
+      if (rc != endMarker) {
+        inputString[ndx] = rc;
+        ndx++;
+        if (ndx >= numChars) {
+          ndx = numChars - 1;
+        }
+      }
+      else {
+        inputString[ndx] = '\0'; // terminate the string
+        ndx = 0;
+        stringComplete = true;
+      }
+    }
+  }
+}
+*/

@@ -1,3 +1,9 @@
+
+#ifndef FONTPROGMEM
+
+ #define FONTPROGMEM
+
+
 //Declare an array for Arduino.
 //ASCII code / Column 1 / Column 2 / ...
 const int ABECEDARI3[] PROGMEM = {
@@ -248,3 +254,5 @@ int TotesLesFontsQuantes[] ={
 };
 
 byte QuantesTaulesFonts = sizeof(TotesLesFontsAmplada)/sizeof(TotesLesFontsAmplada[0]);
+
+#endif

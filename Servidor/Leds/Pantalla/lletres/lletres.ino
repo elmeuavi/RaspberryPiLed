@@ -42,14 +42,6 @@ int  fontAEscriure[13];
 byte ampladaFontAEscriure;
 
 
-
-Adafruit_NeoMatrix *matrix = new Adafruit_NeoMatrix(MATRIU_WIDTH, MATRIU_HEIGHT, PIN,
-    //NEO_MATRIX_BOTTOM     + NEO_MATRIX_RIGHT +
-    NEO_MATRIX_TOP     + NEO_MATRIX_LEFT + 
-    NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
-    NEO_GRB            + NEO_KHZ800);
-const uint16_t colors[] = {  matrix->Color(255, 0, 0), matrix->Color(0, 255, 0), matrix->Color(0, 0, 255) };
-
 #define LED_BLACK    0
 
 #define LED_RED_VERYLOW   (3 <<  11)
@@ -89,6 +81,20 @@ const uint16_t colors[] = {  matrix->Color(255, 0, 0), matrix->Color(0, 255, 0),
 
 
 
+
+Adafruit_NeoMatrix *matrix = new Adafruit_NeoMatrix(MATRIU_WIDTH, MATRIU_HEIGHT, PIN,
+    //NEO_MATRIX_BOTTOM     + NEO_MATRIX_RIGHT +
+    NEO_MATRIX_TOP     + NEO_MATRIX_LEFT +
+    NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
+    NEO_GRB            + NEO_KHZ800);
+//const uint16_t colors[] = {  matrix->Color(255, 0, 0), matrix->Color(0, 255, 0), matrix->Color(0, 0, 255) };
+
+//Foreground, background, aux1, aux2
+uint16_t colors[4] = {LED_WHITE_HIGH, LED_BLACK, LED_GREEN_HIGH, LED_RED_HIGH};
+
+
+
+
 static const uint16_t PROGMEM
 // These bitmaps were written for a backend that only supported
 // 4 bits per color with Blue/Green/Red ordering while neomatrix
@@ -110,6 +116,53 @@ RGB_bmp[][64] = {
   },
 };
 
+
+static const uint16_t PROGMEM GAY[] = {
+  0x00F,
+  0x08F,
+  0x0DF,
+  0x0F0,
+  0xF00,
+  0xD0D,
+};
+
+static const uint16_t PROGMEM CATALUNYA[] = {
+  0x0DF,
+  0x00F,
+  0x0DF,
+  0x00F,
+  0x0DF,
+  0x00F,
+  0x0DF,
+  0x00F,
+  0x0DF,
+};
+
+static const uint16_t PROGMEM CATALUNYA_ESTEL[] = {
+  0xF00,  0xF00,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,
+  0xF00,  0xF00,  0xF00,  0xF00,  0x00F,  0x00F,  0x00F,  0x00F,  0x00F,
+  0xF00,  0xF00,  0xF00,  0xF00,  0xF00,  0xF00,  0x0DF,  0x0DF,  0x0DF,
+  0xF00,  0xF00,  0xFFF,  0xFFF,  0xF00,  0xF00,  0xF00,  0x00F,  0x00F,
+  0xF00,  0xFFF,  0xFFF,  0xFFF,  0xFFF,  0xF00,  0xF00,  0xF00,  0xF00,
+  0xF00,  0xF00,  0xFFF,  0xFFF,  0xF00,  0xF00,  0xF00,  0x00F,  0x00F,
+  0xF00,  0xF00,  0xF00,  0xF00,  0xF00,  0x0DF,  0x0DF,  0x0DF,  0x0DF,
+  0xF00,  0xF00,  0xF00,  0xF00,  0x00F,  0x00F,  0x00F,  0x00F,  0x00F,
+  0xF00,  0xF00,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,
+};
+
+
+static const boolean rellotge[][10] = {
+  { true, true, true, true, false,  false,  true, true, true, true, },
+  { true, true, false,  false,  true, true, false,  false,  true, true, },
+  { true, false,  true, true, false,  true, true, true, false,  true, },
+  { true, false,  true, true, false,  true, true, true, false,  true, },
+  { false,  true, true, true, false,  true, true, true, true, false,  },
+  { false,  true, true, true, false,  false,  false,  true, true, false,  },
+  { true, false,  true, true, true, true, true, true, false,  true, },
+  { true, false,  true, true, true, true, true, true, false,  true, },
+  { true, true, false,  false,  true, true, false,  false,  true, true, },
+  { true, true, true, true, false,  false,  true, true, true, true, },
+};
 
 /*
 
@@ -159,40 +212,6 @@ void init_neomatrix() {
 
 
 
-static const uint16_t PROGMEM GAY[] = {
-  0x00F,
-  0x08F,
-  0x0DF,
-  0x0F0,
-  0xF00,
-  0xD0D,
-};
-
-static const uint16_t PROGMEM CATALUNYA[] = {
-  0x0DF,
-  0x00F,
-  0x0DF,
-  0x00F,
-  0x0DF,
-  0x00F,
-  0x0DF,
-  0x00F,
-  0x0DF,
-};
-
-static const uint16_t PROGMEM CATALUNYA_ESTEL[] = {
-  0xF00,  0xF00,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,
-  0xF00,  0xF00,  0xF00,  0xF00,  0x00F,  0x00F,  0x00F,  0x00F,  0x00F,
-  0xF00,  0xF00,  0xF00,  0xF00,  0xF00,  0xF00,  0x0DF,  0x0DF,  0x0DF,
-  0xF00,  0xF00,  0xFFF,  0xFFF,  0xF00,  0xF00,  0xF00,  0x00F,  0x00F,
-  0xF00,  0xFFF,  0xFFF,  0xFFF,  0xFFF,  0xF00,  0xF00,  0xF00,  0xF00,
-  0xF00,  0xF00,  0xFFF,  0xFFF,  0xF00,  0xF00,  0xF00,  0x00F,  0x00F,
-  0xF00,  0xF00,  0xF00,  0xF00,  0xF00,  0x0DF,  0x0DF,  0x0DF,  0x0DF,
-  0xF00,  0xF00,  0xF00,  0xF00,  0x00F,  0x00F,  0x00F,  0x00F,  0x00F,
-  0xF00,  0xF00,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,
-};
-
-
 
 
 /*
@@ -202,9 +221,9 @@ void setup() {
 
   Serial.begin(SERIAL_BAUD);
 
-//  while (!Serial) {
-//    ; // wait for serial port to connect. Needed for native USB port only
-//  }
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
 
   init_neomatrix();
 
@@ -227,28 +246,55 @@ void setup() {
 
 
 
-
-int iteracio=0;
-String cadenes[] = {"cat:",":gay","t:PERE","t:MIQUEL","smile:"};
-
+/*
+  int iteracio = 0;
+  String cadenes[] = {"cat:", ":gay", "t:PERE", "t:MIQUEL", "smile:"};
+*/
 /*-------------------------------------------------------------
                  MAIN FUNCTION
   -------------------------------------------------------------
 */
 void loop() {
+  /*
+    if (iteracio == 1 or iteracio == 2) delay(4000);
+    inputString = cadenes[iteracio++];
+    stringComplete = true;
+    if (iteracio == 4) iteracio = 0;
+  */
 
-if (iteracio == 1 or iteracio == 2) delay(4000);
-inputString=cadenes[iteracio++];
-stringComplete = true;
-if (iteracio == 4) iteracio=0;
+  if (not stringComplete){
+    //Mirem si ha arribat alguna comanada per USB a executar
+    EventUSB();
 
-
-  if (stringComplete) {
+    
+  }else {
     stringComplete = false;
+
+    Serial.println(inputString);
+    //COLOR EN PRIMER PLA
+/*    if (inputString.substring(0, 3).equals("cf:")) {
+      colors[0] = llegirColor(inputString.substring(3));
+
+    //COLOR EN BACKGROUND
+    }else if (inputString.substring(0, 3).equals("cb:")) {
+      colors[1] = llegirColor(inputString.substring(3));
+
+    //COLOR AUXILIAR
+    }else if (inputString.substring(0, 4).equals("ca1:") )  {
+      colors[2] = llegirColor(inputString.substring(4));
+
+    //COLOR AUXILIAR
+    }else if (inputString.substring(0, 4).equals("ca2:") )  {
+      colors[3] = llegirColor(inputString.substring(4));
+
+    //Emplena la pantalla amb el color de fondo
+    } else */if (inputString.substring(0, 5).equals("fill:")) {
+      matrix->fillScreen(colors[1]);
+      matrix->show();
 
 
     //WRITE A TEXT
-    if (inputString.substring(0, 2).equals("t:")) {
+    }else if (inputString.substring(0, 2).equals("t:")) {
       Serial.println("Rebut text");
       String enviarString = inputString.substring(2);
       inputString = "";
@@ -261,6 +307,11 @@ if (iteracio == 4) iteracio=0;
       }
 
 
+      //COUNTDOWN
+    } else if (inputString.substring(0, 3).equals("cd:")) {
+      CompteEnrere();
+
+
     } else if (inputString.substring(0, 6).equals("smile:")) {
       Serial.println("Rebut smile");
       inputString = "";
@@ -270,7 +321,7 @@ if (iteracio == 4) iteracio=0;
     } else if (inputString.substring(0, 4).equals("gay:")) {
       Serial.println("Rebut Gay");
       inputString = "";
-      matrix->fillScreen(0);
+      matrix->fillScreen(colors[1]);
       for (int colunes = 0; colunes < MATRIU_WIDTH; colunes++) {
         fixdrawRGBBitmap(colunes, 2, GAY, 1, 6);
       }
@@ -286,6 +337,7 @@ if (iteracio == 4) iteracio=0;
       fixdrawRGBBitmap(0, 0, CATALUNYA_ESTEL, 9, 9);
 
       matrix->show();
+
 
 
       /*    } else if (inputString.substring(0, 3).equals("tf:")) {
@@ -317,7 +369,7 @@ if (iteracio == 4) iteracio=0;
 
     } else {
       Serial.println("Rebut desconegut");
-      Serial.println(inputString.substring(0, 6));
+      Serial.println(inputString);
     }
   }
 
@@ -326,6 +378,74 @@ if (iteracio == 4) iteracio=0;
 
 
 
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+
+/*
+uint16_t llegirColor(String NouColor){
+
+    int valorR=0;
+    int valorG=0;
+    int valorB=0;
+    
+    int n = sscanf(NouColor.c_str(), "%d,%d,%d", &valorR, &valorG, &valorB);
+    return matrix->Color(valorR,valorG,valorB);
+}
+*/
+
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+
+
+
+
+void CompteEnrere(){
+      for (int numero = 9 ; numero > 0; numero --) {
+        String text = (String) numero;
+        if (cercarFont(text[0])) {
+
+          //Esborrar buffer screen
+          for (byte i = 0; i < MATRIU_WIDTH + screenOffset ; i++) {        screen[i] = 0;      }
+
+          //Encuar font i centrar font ampladaFontAEscriure
+          for (byte i = 0; i < ampladaFontAEscriure; i++) {
+            screen[((MATRIU_WIDTH - ampladaFontAEscriure) / 2) + 1 + i] = fontAEscriure[i];
+          }
+
+          escriureScreenLedStrip();
+        }
+
+        delay(600);
+        
+        //Dibuixem un rellotge durant 0.2 segons. La última iteració no ho fem. Utilitzem el color auxiliar
+        if (numero>1){
+          matrix->fillScreen(0);
+          for (byte i = 0; i < 10; i++) {
+            for (byte j = 0; j < 10; j++) {
+              if (not rellotge[j][i])     matrix->drawPixel(        ((MATRIU_WIDTH - 10) / 2) + 1 + i,           j,             colors[2]  );
+            }
+          }
+          matrix->show();
+        }
+        delay(300);
+
+        matrix->fillScreen(colors[1]);
+        matrix->show();
+        delay(100);
+
+        
+        if (EventUSB()) {
+          for (byte i = 0; i < MATRIU_WIDTH + screenOffset ; i++) {        screen[i] = 0;      }
+          break;
+        }
+
+      }
+      for (byte i = 0; i < MATRIU_WIDTH + screenOffset ; i++) {        screen[i] = 0;      }
+}
 
 
 
@@ -346,8 +466,8 @@ void display_panOrBounceBitmap (uint8_t bitmapSize) {
   int16_t xf = max(0, (MATRIU_WIDTH - bitmapSize) / 2) << 4;
   int16_t yf = max(0, (MATRIU_HEIGHT - bitmapSize) / 2) << 4;
   // scroll speed in 1/16th
-  int16_t xfc = 6;
-  int16_t yfc = 3;
+  const int16_t xfc = 6;
+  const int16_t yfc = 3;
   // scroll down and right by moving upper left corner off screen
   // more up and left (which means negative numbers)
   int16_t xfdir = -1;
@@ -363,11 +483,11 @@ void display_panOrBounceBitmap (uint8_t bitmapSize) {
     matrix->clear();
     // bounce 8x8 tri color smiley face around the screen
     if (bitmapSize == 8) fixdrawRGBBitmap(x, y, RGB_bmp[0], 8, 8);
-    // pan 24x24 pixmap
+/*    // pan 24x24 pixmap
     if (bitmapSize == 24) matrix->drawRGBBitmap(x, y, (const uint16_t *) bitmap24, bitmapSize, bitmapSize);
 #ifdef BM32
     if (bitmapSize == 32) matrix->drawRGBBitmap(x, y, (const uint16_t *) bitmap32, bitmapSize, bitmapSize);
-#endif
+#endif*/
     matrix->show();
 
     // Only pan if the display size is smaller than the pixmap
@@ -430,7 +550,7 @@ void display_panOrBounceBitmap (uint8_t bitmapSize) {
     //  yfc = constrain(xfc + random(-1, 2), 3, 16);
     //}
     delay(30);
-
+ 
   }
 }
 
@@ -582,18 +702,15 @@ void escriureScreenUSB() {
 
 */
 void escriureScreenLedStrip() {
-
-  //matrix->setCursor(x, 1);
   matrix->fillScreen(0);
-
 
   for (int colunes = 0; colunes < MATRIU_WIDTH; colunes++) {
     for (int files = 0; files < MATRIU_HEIGHT  ; files++) {
       // Compare bits 7-0 in byte
       if (screen[colunes] & (1 << files)) {
-        matrix->drawPixel(colunes, MATRIU_HEIGHT - files - 1, LED_WHITE_HIGH);
+        matrix->drawPixel(colunes, MATRIU_HEIGHT - files - 1, colors[0]);
       } else {
-        matrix->drawPixel(colunes, MATRIU_HEIGHT - files - 1, LED_RED_VERYLOW);
+        matrix->drawPixel(colunes, MATRIU_HEIGHT - files - 1, colors[1]);
       }
 
     }

@@ -20,7 +20,10 @@
 #define MATRIU_HEIGHT 10
 
 //ALERT: DEFAULT VALUE IS 9600
-#define SERIAL_BAUD 115200
+//#define SERIAL_BAUD 115200
+#define SERIAL_BAUD 1000000
+
+
 
 
 
@@ -34,7 +37,7 @@ int screen[MATRIU_WIDTH + screenOffset];
 
 
 //Cadena de caracters rebuda per el USB
-char inputString[128] = "";
+char inputString[255] = "";
 
 
 //String inputString = "";         // a String to hold incoming data
@@ -90,87 +93,11 @@ Adafruit_NeoMatrix *matrix = new Adafruit_NeoMatrix(MATRIU_WIDTH, MATRIU_HEIGHT,
     NEO_MATRIX_TOP     + NEO_MATRIX_LEFT +
     NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
     NEO_GRB            + NEO_KHZ800);
-//const uint16_t colors[] = {  matrix->Color(255, 0, 0), matrix->Color(0, 255, 0), matrix->Color(0, 0, 255) };
+
 
 //Foreground, background, aux1, aux2
-uint16_t colors[4] = {LED_WHITE_HIGH, LED_BLACK, LED_GREEN_HIGH, LED_RED_HIGH};
+uint16_t colors[3] = {LED_WHITE_HIGH, LED_BLACK, LED_GREEN_HIGH};
 
-
-
-/*
-  static const uint16_t PROGMEM
-  // These bitmaps were written for a backend that only supported
-  // 4 bits per color with Blue/Green/Red ordering while neomatrix
-  // uses native 565 color mapping as RGB.
-  // I'm leaving the arrays as is because it's easier to read
-  // which color is what when separated on a 4bit boundary
-  // The demo code will modify the arrays at runtime to be compatible
-  // with the neomatrix color ordering and bit depth.
-  RGB_bmp[][64] = {
-  // 0: multicolor smiley face
-  { 0x000, 0x000, 0x00F, 0x00F, 0x00F, 0x00F, 0x000, 0x000,
-    0x000, 0x00F, 0x000, 0x000, 0x000, 0x000, 0x00F, 0x000,
-    0x00F, 0x000, 0xF00, 0x000, 0x000, 0xF00, 0x000, 0x00F,
-    0x00F, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x00F,
-    0x00F, 0x000, 0x0F0, 0x000, 0x000, 0x0F0, 0x000, 0x00F,
-    0x00F, 0x000, 0x000, 0x0F4, 0x0F3, 0x000, 0x000, 0x00F,
-    0x000, 0x00F, 0x000, 0x000, 0x000, 0x000, 0x00F, 0x000,
-    0x000, 0x000, 0x00F, 0x00F, 0x00F, 0x00F, 0x000, 0x000,
-  },
-  };
-
-  /*
-  static const uint16_t PROGMEM GAY[] = {
-  0x00F,
-  0x08F,
-  0x0DF,
-  0x0F0,
-  0xF00,
-  0xD0D,
-  };
-
-  static const uint16_t PROGMEM CATALUNYA[] = {
-  0x0DF,
-  0x00F,
-  0x0DF,
-  0x00F,
-  0x0DF,
-  0x00F,
-  0x0DF,
-  0x00F,
-  0x0DF,
-  };
-*/
-
-/*
-  static const uint16_t PROGMEM CATALUNYA_ESTEL[] = {
-  0xF00,  0xF00,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,
-  0xF00,  0xF00,  0xF00,  0xF00,  0x00F,  0x00F,  0x00F,  0x00F,  0x00F,
-  0xF00,  0xF00,  0xF00,  0xF00,  0xF00,  0xF00,  0x0DF,  0x0DF,  0x0DF,
-  0xF00,  0xF00,  0xFFF,  0xFFF,  0xF00,  0xF00,  0xF00,  0x00F,  0x00F,
-  0xF00,  0xFFF,  0xFFF,  0xFFF,  0xFFF,  0xF00,  0xF00,  0xF00,  0xF00,
-  0xF00,  0xF00,  0xFFF,  0xFFF,  0xF00,  0xF00,  0xF00,  0x00F,  0x00F,
-  0xF00,  0xF00,  0xF00,  0xF00,  0xF00,  0x0DF,  0x0DF,  0x0DF,  0x0DF,
-  0xF00,  0xF00,  0xF00,  0xF00,  0x00F,  0x00F,  0x00F,  0x00F,  0x00F,
-  0xF00,  0xF00,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,  0x0DF,
-  };
-*/
-
-
-/*
-  static const boolean rellotge[][10] = {
-  { true, true, true, true, false,  false,  true, true, true, true, },
-  { true, true, false,  false,  true, true, false,  false,  true, true, },
-  { true, false,  true, true, false,  true, true, true, false,  true, },
-  { true, false,  true, true, false,  true, true, true, false,  true, },
-  { false,  true, true, true, false,  true, true, true, true, false,  },
-  { false,  true, true, true, false,  false,  false,  true, true, false,  },
-  { true, false,  true, true, true, true, true, true, false,  true, },
-  { true, false,  true, true, true, true, true, true, false,  true, },
-  { true, true, false,  false,  true, true, false,  false,  true, true, },
-  { true, true, true, true, false,  false,  true, true, true, true, },
-  };
-*/
 
 
 
@@ -245,7 +172,7 @@ void setup() {
 
 /*
   int iteracio = 0;
-  String cadenes[] = {"cat:", ":gay", "t:PERE", "t:MIQUEL", "smile:"};
+  String cadenes[] = {"ct:", ":gy", "t:PERE", "t:MIQUEL", "sm:", "cb:255,0,0","fl:"};
 */
 /*-------------------------------------------------------------
                  MAIN FUNCTION
@@ -266,105 +193,82 @@ void loop() {
     Serial.println(inputString);
 
 
-    //COLOR EN PRIMER PLA
-    /*    if (inputString.substring(0, 3).equals("cf:")) {
-          colors[0] = llegirColor(inputString.substring(3));
+    //COLORS 
+    //if (inputString.substring(0, 3).equals("cf:")) {
+    if (inputString[0] == 'c' && inputString[1] == 'l' && inputString[2] == ':') {
+          llegirColor();
 
-        //COLOR EN BACKGROUND
-        }else if (inputString.substring(0, 3).equals("cb:")) {
-          colors[1] = llegirColor(inputString.substring(3));
+/*    //COLOR EN BACKGROUND
+    //}else if (inputString.substring(0, 3).equals("cb:")) {
+    }else if (inputString[0] == 'c' && inputString[1] == '1' && inputString[2] == ':') {
+          colors[1] = llegirColor();
 
-        //COLOR AUXILIAR
-        }else if (inputString.substring(0, 4).equals("ca1:") )  {
-          colors[2] = llegirColor(inputString.substring(4));
+    //COLOR AUXILIAR
+    //}else if (inputString.substring(0, 4).equals("c1:") )  {
+    }else if (inputString[0] == 'c' && inputString[1] == '2' && inputString[2] == ':') {
+          colors[2] = llegirColor();
+/*
+    //COLOR AUXILIAR
+    //}else if (inputString.substring(0, 4).equals("c2:") )  {
+    }else if (inputString[0] == 'c' && inputString[1] == '3' && inputString[2] == ':') {
+          colors[3] = llegirColor();
 
-        //COLOR AUXILIAR
-        }else if (inputString.substring(0, 4).equals("ca2:") )  {
-          colors[3] = llegirColor(inputString.substring(4));
-
-        //Emplena la pantalla amb el color de fondo
-        } else if (inputString.substring(0, 5).equals("fill:")) {
-          matrix->fillScreen(colors[1]);
+    //Emplena la pantalla amb el color de fondo
+    //} else if (inputString.substring(0, 5).equals("fl:")) {
+    }else if (inputString[0] == 'f' && inputString[1] == 'l' && inputString[2] == ':') {
+          Serial.println("Rebut omplir");
+          /*matrix->fillScreen(colors[1]);
           matrix->show();
-    */
+*/
+    //pixel a pixel
+  /*  }else if (inputString[0] == 'f' && inputString[1] == 'c' && inputString[2] == ':') {
+        Serial.println("Rebut fc");
+        matrix->fillScreen(colors[1]);
+        for (uint8_t i = 0; i < MATRIU_HEIGHT ; i++){
+            for (uint8_t j = 0; j < MATRIU_WIDTH ; j++){
+                matrix->drawPixel(j, i, colors[0]);
+                matrix->show();
+                delay(10);
+            }
+        }*/
+    
 
     //WRITE A TEXT
     //}else if (inputString.substring(0, 2).equals("t:")) {
-    if (inputString[0] == 't' && inputString[1] == ':') {
-      Serial.println("Rebut text");
-      //Serial.println(strstr(inputString, subCadt));
-      writeText();
-
-
-      //If don't have a new instruction that cuts this one
-      if (!stringComplete) {
-        //ask for more text
-        Serial.println("+");
+    }else if (inputString[0] == 't' && inputString[1] == ':') {
+      if (inputString[2] != '\0') {
+        Serial.println("Rebut text");
+        writeText();
+  
+        //If don't have a new instruction that cuts this one
+        if (!stringComplete) {
+          //ask for more text
+          Serial.println("+");
+        }
       }
 
 
 
-      //COUNTDOWN
-      //} else if (inputString.substring(0, 3).equals("cd:")) {
+    //COUNTDOWN
+    //} else if (inputString.substring(0, 3).equals("cd:")) {
     } else if (inputString[0] == 'c' && inputString[1] == 'd' && inputString[2] == ':') {
       CompteEnrere();
 
 
       //} else if (inputString.substring(0, 6).equals("smile:")) {
     } else if (inputString[0] == 's' && inputString[1] == 'm' && inputString[2] == ':') {
-      Serial.println("Rebut smile");
-      //display_panOrBounceBitmap(8);
       Somriu();
 
 
       //} else if (inputString.substring(0, 4).equals("gay:")) {
     } else if (inputString[0] == 'g' && inputString[1] == 'y' && inputString[2] == ':') {
-      Serial.println("Rebut Gay");
-
-      matrix->fillScreen(colors[1]);
-      matrix->drawFastHLine(0, 2, MATRIU_WIDTH, matrix->Color(255, 0, 0));
-      matrix->drawFastHLine(0, 3, MATRIU_WIDTH, matrix->Color(255, 128, 0));
-      matrix->drawFastHLine(0, 4, MATRIU_WIDTH, matrix->Color(255, 255, 0));
-      matrix->drawFastHLine(0, 5, MATRIU_WIDTH, matrix->Color(0, 255, 0));
-      matrix->drawFastHLine(0, 6, MATRIU_WIDTH, matrix->Color(0, 0, 255));
-      matrix->drawFastHLine(0, 7, MATRIU_WIDTH, matrix->Color(255, 0, 255));
-      matrix->show();
+      Gay();
 
 
 
       //} else if (inputString.substring(0, 4).equals("cat:")) {
     } else if (inputString[0] == 'c' && inputString[1] == 't' && inputString[2] == ':') {
-      Serial.println("Rebut Catalunya");
       Catalunya();
-
-
-
-
-      /*    } else if (inputString.substring(0, 3).equals("tf:")) {
-            String enviarString = inputString.substring(3);
-            Serial.println("Rebut text fix " + enviarString);
-            inputString = "";
-
-            int16_t  x1, y1;
-            uint16_t llargada, h;
-            matrix->getTextBounds(enviarString, 0, 0, &x1, &y1, &llargada, &h);
-            Serial.print("Té una amplada de ");
-            Serial.println(llargada);
-
-            if (llargada <= MATRIU_WIDTH) {
-              matrix->fillScreen(0);
-              matrix->setCursor(int((MATRIU_WIDTH - llargada) / 2), 1);
-              matrix->print(enviarString);
-              matrix->show();
-            } else {
-              while (true) {
-                iteracio_neomatrix(enviarString, llargada);
-                if (EventUSB()) {
-                  break;
-                }
-              }
-            }*/
-
 
 
     } else {
@@ -383,23 +287,28 @@ void loop() {
 //-------------------------------------------------------------
 //-------------------------------------------------------------
 
-/*
-  uint16_t llegirColor(String NouColor){
 
+  uint16_t llegirColor(){
+    int quin =0;
     int valorR=0;
     int valorG=0;
     int valorB=0;
 
-    int n = sscanf(NouColor.c_str(), "%d,%d,%d", &valorR, &valorG, &valorB);
-    return matrix->Color(valorR,valorG,valorB);
+    int n = sscanf(&inputString[3], "%d,%d,%d,%d", &quin, &valorR, &valorG, &valorB);
+    Serial.println(valorR);
+    Serial.println(valorG);
+    Serial.println(valorB);
+    colors[quin]=matrix->Color(valorR,valorG,valorB);
   }
 
-*/
+
 //-------------------------------------------------------------
 //-------------------------------------------------------------
 //-------------------------------------------------------------
 //-------------------------------------------------------------
 void Catalunya() {
+
+  Serial.println("Rebut Catalunya");
 
   matrix->fillScreen(0);
   for (byte i = 0; i < 7; i = i + 2) {
@@ -436,24 +345,23 @@ void Catalunya() {
 //-------------------------------------------------------------
 //-------------------------------------------------------------
 
-
+const  uint8_t  rellotge[] PROGMEM = {
+  0, 0, 0, 1, 1, 1, 0, 0, 0,
+  0, 0, 1, 0, 0, 0, 1, 0, 0,
+  0, 1, 0, 0, 1, 0, 0, 1, 0,
+  1, 0, 0, 0, 1, 0, 0, 0, 1,
+  1, 0, 0, 0, 1, 0, 0, 0, 1,
+  1, 0, 0, 0, 1, 1, 1, 0, 1,
+  1, 0, 0, 0, 0, 0, 0, 0, 1,
+  0, 1, 0, 0, 0, 0, 0, 1, 0,
+  0, 0, 1, 0, 0, 0, 1, 0, 0,
+  0, 0, 0, 1, 1, 1, 0, 0, 0,
+};
 
 
 void CompteEnrere() {
 
-  boolean rellotge[][10] = {
-    { true, true, true, true, false,  false,  true, true, true, true, },
-    { true, true, false,  false,  true, true, false,  false,  true, true, },
-    { true, false,  true, true, false,  true, true, true, false,  true, },
-    { true, false,  true, true, false,  true, true, true, false,  true, },
-    { false,  true, true, true, false,  true, true, true, true, false,  },
-    { false,  true, true, true, false,  false,  false,  true, true, false,  },
-    { true, false,  true, true, true, true, true, true, false,  true, },
-    { true, false,  true, true, true, true, true, true, false,  true, },
-    { true, true, false,  false,  true, true, false,  false,  true, true, },
-    { true, true, true, true, false,  false,  true, true, true, true, },
-  };
-
+  uint8_t pixel[1];
 
   for (int numero = 9 ; numero > 0; numero --) {
     if (cercarFont(48 + numero)) { //hem convertit a char
@@ -475,10 +383,11 @@ void CompteEnrere() {
 
     //Dibuixem un rellotge durant 0.2 segons. La última iteració no ho fem. Utilitzem el color auxiliar
     if (numero > 1) {
-      matrix->fillScreen(0);
-      for (byte i = 0; i < 10; i++) {
-        for (byte j = 0; j < 10; j++) {
-          if (not rellotge[j][i])     matrix->drawPixel(        ((MATRIU_WIDTH - 10) / 2) + 1 + i,           j,             colors[2]  );
+      matrix->fillScreen(colors[1]);
+      for (uint8_t i = 0; i < 10; i++) {
+        for (uint8_t j = 0; j < 9; j++) {
+          memcpy_P (pixel, rellotge + (i * 9) + j,  sizeof pixel);
+          if ( pixel[0])     matrix->drawPixel(        ((MATRIU_WIDTH - 10) / 2) + 1 + j,           i,             colors[2]  );
         }
       }
       matrix->show();
@@ -504,27 +413,30 @@ void CompteEnrere() {
 }
 
 
-  //-------------------------------------------------------------
-  //-------------------------------------------------------------
-  //-------------------------------------------------------------
-  //-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
 
 
 
 const  uint8_t  smile[] PROGMEM = {
-  0x0,  0x0,  0x0,  0x1,  0x1,  0x1,  0x0,  0x0,  0x0,
-  0x0,  0x0,  0x1,  0x0,  0x0,  0x0,  0x1,  0x0,  0x0,
-  0x0,  0x1,  0x0,  0x0,  0x0,  0x0,  0x0,  0x1,  0x0,
-  0x1,  0x0,  0x0,  0x1,  0x0,  0x1,  0x0,  0x0,  0x1,
-  0x1,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x1,
-  0x1,  0x0,  0x1,  0x0,  0x0,  0x0,  0x1,  0x0,  0x1,
-  0x1,  0x0,  0x0,  0x1,  0x1,  0x1,  0x0,  0x0,  0x1,
-  0x0,  0x1,  0x0,  0x0,  0x0,  0x0,  0x0,  0x1,  0x0,
-  0x0,  0x0,  0x1,  0x0,  0x0,  0x0,  0x1,  0x0,  0x0,
-  0x0,  0x0,  0x0,  0x1,  0x1,  0x1,  0x0,  0x0,  0x0,
+  0,  0,  0,  1,  1,  1,  0,  0,  0,
+  0,  0,  1,  0,  0,  0,  1,  0,  0,
+  0,  1,  0,  0,  0,  0,  0,  1,  0,
+  1,  0,  0,  1,  0,  1,  0,  0,  1,
+  1,  0,  0,  0,  0,  0,  0,  0,  1,
+  1,  0,  1,  0,  0,  0,  1,  0,  1,
+  1,  0,  0,  1,  1,  1,  0,  0,  1,
+  0,  1,  0,  0,  0,  0,  0,  1,  0,
+  0,  0,  1,  0,  0,  0,  1,  0,  0,
+  0,  0,  0,  1,  1,  1,  0,  0,  0,
 };
 
 void Somriu() {
+  
+  Serial.println("Rebut smile");
+  
   int8_t pos = 0;
   uint8_t pixel[1];
   boolean dDreta = true;
@@ -532,10 +444,9 @@ void Somriu() {
 
   while (not EventUSB()) {
 
-    matrix->fillScreen(0);
+    matrix->fillScreen(colors[1]);
 
     for (uint8_t i = 0; i < 10; i++) {
-      PGM_VOID_P ptr = (PGM_VOID_P) pgm_read_word(&smile[i]);
       for (uint8_t j = 0; j < 9; j++) {
         memcpy_P (pixel, smile + (i * 9) + j,  sizeof pixel);
         if (pixel[0] == 1 )     matrix->drawPixel(        j + pos,           i,             colors[0]  );
@@ -546,167 +457,38 @@ void Somriu() {
 
     if (dDreta) pos++;
     else pos --;
-    
+
     if (pos > MATRIU_WIDTH - 9) {
-      pos = pos-2;
-      dDreta=false;
-    }else  if (pos < 0) {
+      pos = pos - 2;
+      dDreta = false;
+    } else  if (pos < 0) {
       pos = 1;
-      dDreta=true;
+      dDreta = true;
     }
   }
 }
 
-  //-------------------------------------------------------------
-  //-------------------------------------------------------------
-  //-------------------------------------------------------------
-  //-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
 
 
-/*
+void Gay(){
+      Serial.println("Rebut Gay");
 
-  //-------------------------------------------------------------
-  //-------------------------------------------------------------
-  //-------------------------------------------------------------
-  //-------------------------------------------------------------
-
-
-
-
-
-
-  // Scroll within big bitmap so that all if it becomes visible or bounce a small one.
-  // If the bitmap is bigger in one dimension and smaller in the other one, it will
-  // be both panned and bounced in the appropriate dimensions.
-  void display_panOrBounceBitmap (uint8_t bitmapSize) {
-  // keep integer math, deal with values 16 times too big
-  // start by showing upper left of big bitmap or centering if the display is big
-  int16_t xf = max(0, (MATRIU_WIDTH - bitmapSize) / 2) << 4;
-  int16_t yf = max(0, (MATRIU_HEIGHT - bitmapSize) / 2) << 4;
-  // scroll speed in 1/16th
-  const int16_t xfc = 6;
-  const int16_t yfc = 3;
-  // scroll down and right by moving upper left corner off screen
-  // more up and left (which means negative numbers)
-  int16_t xfdir = -1;
-  int16_t yfdir = -1;
-
-  for (uint16_t i = 1; i < 500; i++) {
-    bool updDir = false;
-
-    // Get actual x/y by dividing by 16.
-    int16_t x = xf >> 4;
-    int16_t y = yf >> 4;
-
-    matrix->clear();
-    // bounce 8x8 tri color smiley face around the screen
-    if (bitmapSize == 8) fixdrawRGBBitmap(x, y, RGB_bmp[0], 8, 8);
-    matrix->show();
-
-    // Only pan if the display size is smaller than the pixmap
-    // but not if the difference is too small or it'll look bad.
-    if (bitmapSize - MATRIU_WIDTH > 2) {
-      xf += xfc * xfdir;
-      if (xf >= 0)                      {
-        xfdir = -1;
-        updDir = true ;
-      };
-      // we don't go negative past right corner, go back positive
-      if (xf <= ((MATRIU_WIDTH - bitmapSize) << 4)) {
-        xfdir = 1;
-        updDir = true ;
-      };
-    }
-    if (bitmapSize - MATRIU_HEIGHT > 2) {
-      yf += yfc * yfdir;
-      // we shouldn't display past left corner, reverse direction.
-      if (yf >= 0)                      {
-        yfdir = -1;
-        updDir = true ;
-      };
-      if (yf <= ((MATRIU_HEIGHT - bitmapSize) << 4)) {
-        yfdir = 1;
-        updDir = true ;
-      };
-    }
-    // only bounce a pixmap if it's smaller than the display size
-    if (MATRIU_WIDTH > bitmapSize) {
-      xf += xfc * xfdir;
-      // Deal with bouncing off the 'walls'
-      if (xf >= (MATRIU_WIDTH - bitmapSize) << 4) {
-        xfdir = -1;
-        updDir = true ;
-      };
-      if (xf <= 0)           {
-        xfdir =  1;
-        updDir = true ;
-      };
-    }
-    if (MATRIU_HEIGHT > bitmapSize) {
-      yf += yfc * yfdir;
-      if (yf >= (MATRIU_HEIGHT - bitmapSize) << 4) {
-        yfdir = -1;
-        updDir = true ;
-      };
-      if (yf <= 0)           {
-        yfdir =  1;
-        updDir = true ;
-      };
-    }
+      matrix->fillScreen(colors[1]);
+      matrix->drawFastHLine(0, 2, MATRIU_WIDTH, matrix->Color(255, 0, 0));
+      matrix->drawFastHLine(0, 3, MATRIU_WIDTH, matrix->Color(255, 128, 0));
+      matrix->drawFastHLine(0, 4, MATRIU_WIDTH, matrix->Color(255, 255, 0));
+      matrix->drawFastHLine(0, 5, MATRIU_WIDTH, matrix->Color(0, 255, 0));
+      matrix->drawFastHLine(0, 6, MATRIU_WIDTH, matrix->Color(0, 0, 255));
+      matrix->drawFastHLine(0, 7, MATRIU_WIDTH, matrix->Color(255, 0, 255));
+      matrix->show();
+}
 
 
-
-    //if (updDir) {
-    // Add -1, 0 or 1 but bind result to 1 to 1.
-    // Let's take 3 is a minimum speed, otherwise it's too slow.
-    //  xfc = constrain(xfc + random(-1, 2), 3, 16);
-    //  yfc = constrain(xfc + random(-1, 2), 3, 16);
-    //}
-    delay(30);
-
-  }
-  }
-
-  // Convert a BGR 4/4/4 bitmap to RGB 5/6/5 used by Adafruit_GFX
-  void fixdrawRGBBitmap(int16_t x, int16_t y, const uint16_t *bitmap, int16_t w, int16_t h) {
-  // work around "a15 cannot be used in asm here" compiler bug when using an array on ESP8266
-  // uint16_t RGB_bmp_fixed[w * h];
-  static uint16_t *RGB_bmp_fixed = (uint16_t *) malloc( w * h * 2);
-  for (uint16_t pixel = 0; pixel < w * h; pixel++) {
-    uint8_t r, g, b;
-    uint16_t color = pgm_read_word(bitmap + pixel);
-
-    //Serial.print(color, HEX);
-    b = (color & 0xF00) >> 8;
-    g = (color & 0x0F0) >> 4;
-    r = color & 0x00F;
-    //Serial.print(" ");
-    //Serial.print(b);
-    //Serial.print("/");
-    //Serial.print(g);
-    //Serial.print("/");
-    //Serial.print(r);
-    //Serial.print(" -> ");
-    // expand from 4/4/4 bits per color to 5/6/5
-    b = map(b, 0, 15, 0, 31);
-    g = map(g, 0, 15, 0, 63);
-    r = map(r, 0, 15, 0, 31);
-    //delay(1);
-    //Serial.print(r);
-    //Serial.print("/");
-    //Serial.print(g);
-    //Serial.print("/");
-    //Serial.print(b);
-    RGB_bmp_fixed[pixel] = (r << 11) + (g << 5) + b;
-    //Serial.print(" -> ");
-    //Serial.println(RGB_bmp_fixed[pixel], HEX);
-  }
-  matrix->drawRGBBitmap(x, y, RGB_bmp_fixed, w, h);
-  }
-
-
-
-  /*-------------------------------------------------------------*/
+/*-------------------------------------------------------------*/
 //-------------------------------------------------------------
 //-------------------------------------------------------------
 //-------------------------------------------------------------
@@ -717,8 +499,6 @@ void writeText() {
 
   uint8_t i = 2;
   while (inputString[i] != '\0') {
-    Serial.print(i);
-    Serial.println(inputString[i]);
     if (cercarFont(inputString[i])) {
       encuarFontScreen();
       while (posScreen > 0) {
@@ -729,9 +509,7 @@ void writeText() {
         delay(50);
       }
 
-      if (EventUSB()) {
-        break;
-      }
+      if (EventUSB()) break;
     }
     i++;
   }
@@ -828,10 +606,7 @@ void escriureScreenLedStrip() {
       // Compare bits 7-0 in byte
       if (screen[colunes] & (1 << files)) {
         matrix->drawPixel(colunes, MATRIU_HEIGHT - files - 1, colors[0]);
-      } /*else {
-        matrix->drawPixel(colunes, MATRIU_HEIGHT - files - 1, colors[1]);
-      }*/
-
+      } 
     }
   }
 

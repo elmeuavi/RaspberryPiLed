@@ -29,6 +29,10 @@ from pathlib import Path # per obtenir el teu directori arrel de windows
 
 import sys  # mirar el detall de la excepcio
 
+import configparser
+from configparser import NoOptionError, NoSectionError
+import os # buscar el directori actual per trobar el fitxer de configuarció de propietats
+
 
 #from machine import Timer
 #import turtle
@@ -48,7 +52,7 @@ start_time = time.time()
 client = None
 sock = None
 connexioSerialUSB = None
-
+configBotonera = None
 
 
 
@@ -57,6 +61,7 @@ def INICIALITZACONNEXIONS():
     global client
     global sock
     global connexioSerialUSB
+    global configBotonera
     
     debug=False
     
@@ -86,14 +91,21 @@ def INICIALITZACONNEXIONS():
         if debug: print ( 'connecting to %s port %s' % server_address)
         sock.connect(server_address)
 
-    
+
+    configBotonera = configparser.RawConfigParser()
+    thisfolder = os.path.dirname(os.path.abspath(__file__))
+    configBotonera.read(os.path.join(thisfolder, 'controladora.properties'))
+
+        
+        
     #mirem quins ports serie hi ha connectats
     #import serial.tools.list_ports    
     #myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
     #print( myports)
     
     try:
-        connexioSerialUSB = serial.Serial(PORTBOTONERA,9600) # ,timeout = None
+        connexioSerialUSB = serial.Serial(PORTBOTONERA,500000) # ,timeout = None
+        
     except:
         None
     
@@ -104,7 +116,8 @@ def TANCARCONNEXIONS():
     client.close()
     sock.close()
     try:
-        connexioSerialUSB.close()
+        if connexioSerialUSB is not None:
+            connexioSerialUSB.close()
     except serial.serialutil.SerialException:
         None
 
@@ -294,10 +307,12 @@ def Encendre220vI2C15(event=None):
 #    stdin, stdout, stderr = client.exec_command('sudo python3 ' + xeviTiraRGB + ' --colorR 1 --colorG 1 --colorB 1  --animacio pintar --intensitat 1 &')
 
     
-    
+sTotesTires = '1,2,3,4,5,6'
+sTiresCanal1 = '1,2,3'
+sTiresCanal2 = '4,5,6'
     
 def ApagarRGB(event=None):
-    EnviarComandaAServidor('|seleccionarTiraRGB 0,1,2,3,4,5|netejarTiraRGB')
+    EnviarComandaAServidor('|seleccionarTiraRGB '+sTotesTires+'|netejarTiraRGB')
     
     
 def EncendreRGB(event=None):
@@ -311,9 +326,9 @@ def EncendreRGB(event=None):
     else:
         comanda+='|colorRGB ' + txtR.get() + ' ' + txtG.get() + ' ' + txtB.get()
         
-    if sCanal.get() == 'T' : comanda+='|seleccionarTiraRGB 0,1,2,3,4,5 '
-    elif sCanal.get() == '1' : comanda+='|seleccionarTiraRGB 0,1,2 '
-    elif sCanal.get() == '2' : comanda+='|seleccionarTiraRGB 3,4,5 '
+    if sCanal.get() == 'T' : comanda+='|seleccionarTiraRGB '+sTotesTires+' '
+    elif sCanal.get() == '1' : comanda+='|seleccionarTiraRGB '+sTiresCanal1+' '
+    elif sCanal.get() == '2' : comanda+='|seleccionarTiraRGB '+sTiresCanal2+' '
     
     comanda+='|intensitat ' + txtIntensitat.get() + '|pintarTiraRGB ' #+ txtTempsTotal.get()
     EnviarComandaAServidor(comanda)
@@ -331,9 +346,9 @@ def CreixerRGB(event=None):
     else:
         comanda+='|colorRGB ' + txtR.get() + ' ' + txtG.get() + ' ' + txtB.get()
         
-    if sCanal.get() == 'T' : comanda+='|seleccionarTiraRGB 0,1,2,3,4,5 '
-    elif sCanal.get() == '1' : comanda+='|seleccionarTiraRGB 0,1,2 '
-    elif sCanal.get() == '2' : comanda+='|seleccionarTiraRGB 3,4,5 '
+    if sCanal.get() == 'T' : comanda+='|seleccionarTiraRGB '+sTotesTires+' '
+    elif sCanal.get() == '1' : comanda+='|seleccionarTiraRGB '+sTiresCanal1+' '
+    elif sCanal.get() == '2' : comanda+='|seleccionarTiraRGB '+sTiresCanal2+' '
     comanda+='|intensitat ' + txtIntensitat.get() + '|creixerTiraRGB ' + txtTempsTotal.get() 
     EnviarComandaAServidor(comanda)
     
@@ -349,9 +364,9 @@ def DecreixerRGB(event=None):
     else:
         comanda+='|colorRGB ' + txtR.get() + ' ' + txtG.get() + ' ' + txtB.get()
         
-    if sCanal.get() == 'T' : comanda+='|seleccionarTiraRGB 0,1,2,3,4,5 '
-    elif sCanal.get() == '1' : comanda+='|seleccionarTiraRGB 0,1,2 '
-    elif sCanal.get() == '2' : comanda+='|seleccionarTiraRGB 3,4,5 '
+    if sCanal.get() == 'T' : comanda+='|seleccionarTiraRGB '+sTotesTires+' '
+    elif sCanal.get() == '1' : comanda+='|seleccionarTiraRGB '+sTiresCanal1+' '
+    elif sCanal.get() == '2' : comanda+='|seleccionarTiraRGB '+sTiresCanal2+' '
     comanda+='|intensitat ' + txtIntensitat.get() + '|decreixerTiraRGB ' + txtTempsTotal.get() 
     EnviarComandaAServidor(comanda)
 
@@ -867,6 +882,7 @@ def procesLlegirBotoneraUSB():
         global sock
         global connexioSerialUSB
         global procesSimular
+        global configBotonera
         
         #connexioSerialUSB=serial.Serial('COM4',9600,timeout = None)
             
@@ -878,6 +894,16 @@ def procesLlegirBotoneraUSB():
             if connexioSerialUSB.inWaiting():
                 comanda= connexioSerialUSB.readline().decode("utf-8") .rstrip("\r\n")
                 print("-"+comanda+"-")
+                
+                #transformem el botó apretat a una comanda
+                try:
+                    comanda = configBotonera.get('BotoneraUSB','boto.'+comanda)
+                    
+                except NoOptionError:
+                    comanda="@Comanda desconeguda" 
+                print("-"+comanda+"-")
+                    
+                
                 # mirem si és un comentari o cadena buida
                 if comanda[0:1] != "@" and comanda != "":
                     if comanda[0:4] == "gpio": 

@@ -43,21 +43,20 @@ class args:
     pin = 18
 
     
-    
+#Connexió serial per USB cap a aduino (pantalla led)
+ser=None
+
 
 if __name__ == '__main__':
     COLOR_LEDS=Color(255, 255, 255)
     TIRES=(0,1,2,3,4,5)
         
-        
-    ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
-    ser.flush()
-
-    strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
-    strip.begin()
-    
-    pca = InitTiraRGB() # de xeviTiraRGB.py
-        
+    try:    
+        ser = serial.Serial('/dev/ttyACM0', 1000000, timeout=1)
+        ser.flush()
+    except:
+        print ("No hi ha USB")
+        None
 
     # Create a TCP/IP socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -65,6 +64,15 @@ if __name__ == '__main__':
     sock.bind(server_address)
     if debug: print  ('starting up on ' , sock.getsockname())
     sock.listen(1)
+    
+    
+    strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+    strip.begin()
+    
+    pca = InitTiraRGB() # de xeviTiraRGB.py
+        
+
+ 
 
     
     while True:
@@ -76,7 +84,10 @@ if __name__ == '__main__':
             while True:
                 #https://steelkiwi.com/blog/working-tcp-sockets/
                 #https://bip.weizmann.ac.il/course/python/PyMOTW/PyMOTW/docs/select/index.html
-                read_sockets, writable, exceptional  = select.select([connection,ser] , [], [connection,ser])
+                if ser is not None:
+                    read_sockets, writable, exceptional  = select.select([connection,ser] , [], [connection,ser])
+                else: 
+                    read_sockets, writable, exceptional  = select.select([connection] , [], [connection])
                 
                 for s in read_sockets:
                     #mirem la conexió per wifi del PC
@@ -186,6 +197,9 @@ if __name__ == '__main__':
                                         pca.channels[15].duty_cycle = 0
                                         pca.channels[14].duty_cycle = 0
                                         pca.channels[13].duty_cycle = 0
+                                        
+                                        if ser is not None:
+                                            ser.write(b"tx: \n")
                                         
                                         
                                         
@@ -307,7 +321,25 @@ if __name__ == '__main__':
                                     elif comanda[0] == "desactivarCanalI2C":          
                                         pca.channels[int(comanda[1])].duty_cycle = 0
                                         
-                                    
+
+
+
+                                    ######################################################################################################
+                                    #           PANTALLA LED
+                                    ######################################################################################################
+                                    elif comanda[0] == "LED_CAT":      
+                                        print("Anem a llançar un led cat")
+                                        ser.write(b"ct:\n")
+                                    elif comanda[0] == "LED_GAY":      
+                                        print("Anem a llançar un led gay")
+                                        ser.write(b"gy:\n")
+                                    elif comanda[0] == "LED_OFF":
+                                        ser.write(b"tx: \n")
+                                    elif comanda[0] == "LED_TEXT":
+                                        ser.write(b"tx:")
+                                        ser.write(comanda[1].encode('utf-8'))
+                                        ser.write(b"\n")
+                                        
                                     else:
                                         break
                          else:
@@ -316,7 +348,7 @@ if __name__ == '__main__':
                     #mirem la conexió serial per USB cap a la arduino
                     elif s == ser:
                          line = ser.readline().decode('utf-8').rstrip()
-                         print(line)
+                         print("Rebut de comunicacio USB: " + line)
                           
                 #Mirem si s'ha tancat la connexió
                 if connection in exceptional: 

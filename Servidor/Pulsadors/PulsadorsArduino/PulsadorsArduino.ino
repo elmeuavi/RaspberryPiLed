@@ -1,4 +1,4 @@
-
+//COM8 el tinc normalment
 int PINS_UTILITZATS[]={2,3,4,5,6,7};
 int ESTAT_ANTERIOR[][6]={{HIGH,HIGH,HIGH,HIGH,HIGH,HIGH},
                           {HIGH,HIGH,HIGH,HIGH,HIGH,HIGH},
@@ -62,7 +62,8 @@ String ACCIO_APRETAR[4][4] ={{"-",
 
 void setup() {
   //start serial connection
-  Serial.begin(9600);
+  //Serial.begin(9600);
+  Serial.begin(500000);
   //configure pin 2 as an input and enable the internal pull-up resistor
 
   for (int i=0;i<6;i++){
@@ -89,7 +90,7 @@ String cadena="";
             pinMode(PINS_UTILITZATS[i], OUTPUT);
             digitalWrite(PINS_UTILITZATS[i], LOW);
             int sensorVal = digitalRead(PINS_UTILITZATS[j]);
-            delay (10);
+            delay (5);
             //Serial.println(cadena +"Boto "+ PINS_UTILITZATS[i] + " "+ PINS_UTILITZATS[j]+ " " + sensorVal);
             if (ESTAT_ANTERIOR[i][j] != sensorVal){
                 if (sensorVal == HIGH) {

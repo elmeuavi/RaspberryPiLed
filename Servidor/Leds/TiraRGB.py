@@ -54,13 +54,13 @@ def parametresDefinir(parser):
     
 def ParametresLlegirTires(args):
     if  not args.tira:
-        return (0,1,2,3,4,5)
+        return (1,2,3,4,5,6)
     elif args.tira == "'T'":
-        return (0,1,2,3,4,5)
+        return (1,2,3,4,5,6)
     elif args.tira == "'2'":
-        return (3,4,5)
+        return (4,5,6)
     elif args.tira == "'1'":
-        return (0,1,2)
+        return (1,2,3)
     elif args.tira == "'16'":
         return (15)
             

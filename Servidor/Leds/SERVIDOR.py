@@ -333,7 +333,6 @@ if __name__ == '__main__':
                                         ser.write(b"\n")
                                         ser.flush()
 
-                                        
                                     else:
                                         break
                          else:
@@ -343,7 +342,7 @@ if __name__ == '__main__':
                     elif s == ser:
                          line=""
                          line = ser.readline().decode('utf-8').rstrip()
-                         print("Rebut de comunicacio USB: " + line+ "-")
+                         print("Rebut de comunicacio USB: " + line)
                           
                 #Mirem si s'ha tancat la connexió
                 if connection in exceptional: 

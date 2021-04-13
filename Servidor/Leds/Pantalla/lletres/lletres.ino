@@ -194,38 +194,45 @@ void loop() {
     
     if (inputString[2] == ':') {
       
-      
-      if (inputString[0] == 'c' ){
-      
-              
-        //COUNT DOWN
-        /*} else */if ( inputString[1] == 'd' ) {
+      if (not CallFuncions(inputString[0],inputString[1])){
+        //  Serial.println("Rebut desconegut");
+        ;
+      }
+    
+    }else {
+        Serial.println("No es instruccio");
+    }
+  }
+
+
+}
+
+
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+
+bool CallFuncions(char c1,char c2){
+
+         //COUNT DOWN
+    if (c1 == 'c' && c2 == 'd' ) {
           CompteEnrere();
           
         //CATALONIA FLAG
-        } else if (inputString[1] == 't' ) {
+    } else if (c1 == 'c' && c2 == 't' ) {
           Catalunya();
 
-        //COLORS SELECT
-        } /*else if(inputString[1] == 's' ) {
-              llegirColor();
-        }*/
-/*
-      
+       //Emplena la pantalla amb el color de fondo
+    }else if (c1 == 'f' && c2 == 'l' ) {
+          FillColor();
 
-      //Emplena la pantalla amb el color de fondo
-      }else if (inputString[0] == 'f' && inputString[1] == 'l' ) {
-            Serial.println("Rebut omplir");
-            matrix->fillScreen(colors[1]);
-            matrix->show();
-/*        
-      //pixel a pixel
-      } else if (inputString[0] == 'f' && inputString[1] == 'c' ) {
-        PixelAPixel();*/
+      //SMILE
+    } else if (c1 == 's' && c2 == 'm' ) {
+        Somriu();
 
-
-      //WRITE A TEXT
-    }else if (inputString[0] == 't' && inputString[1] == 'x') {
+      //TEXT A ESCRIURE
+    } else if (c1 == 't' && c2 == 'x') {
         if (inputString[2] != '\0') {
           Serial.println("Rebut text");
           writeText();
@@ -237,37 +244,47 @@ void loop() {
           }
         }
 
-
-      //SMILE
-      } else if (inputString[0] == 's' && inputString[1] == 'm' ) {
-        Somriu();
-
-
       //GAY FLAG
-      } else if (inputString[0] == 'g' && inputString[1] == 'y' ) {
-        Gay();
+    } else if (c1 == 'g' && c2 == 'y' ) {
+      Gay();
 
+      
+        //COLORS SELECT
+    } else if (c1 == 'c' && c2 == 's' ) {
+        llegirColor();
 
+       //PIXEL A PIXEL
+    }else if (c1=='f' && c2 == 'c'){
+        PixelAPixel();
 
-
-      } else {
-        Serial.println("Rebut desconegut");
-      }
-    }else {
-        Serial.println("No es instruccio");
+      //INTENSITAT
+    }else if (c1=='i' && c2 =='n'){
+        LlegirIntensitat();
+    } else {
+        return false;
     }
-  }
-
-
+    
+  return true;
+  
 }
 
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+void FillColor() {
 
+  int valorR = 0;
+  int valorG = 0;
+  int valorB = 0;
 
-//-------------------------------------------------------------
-//-------------------------------------------------------------
-//-------------------------------------------------------------
-//-------------------------------------------------------------
-
+  //Serial.println("Rebut emplenar");
+  int n = sscanf(&inputString[3], "%d,%d,%d",  &valorR, &valorG, &valorB);
+  matrix->fillScreen(matrix->Color(valorR,valorG,valorB));
+  matrix->show();
+  
+  
+}
 
 void llegirColor() {
   int quin = 0;
@@ -282,13 +299,21 @@ void llegirColor() {
   colors[quin] = matrix->Color(valorR, valorG, valorB);
 }
 
+
+void  LlegirIntensitat(){
+  //Serial.println("Canviada Intensitat");
+  int intensitat = 0;
+  int n = sscanf(&inputString[3], "%d", &intensitat );
+  matrix->setBrightness(intensitat);
+}
+
 //-------------------------------------------------------------
 //-------------------------------------------------------------
 //-------------------------------------------------------------
 //-------------------------------------------------------------
-/*
+
 void PixelAPixel() {
-  Serial.println("Rebut fc");
+  //Serial.println("Rebut fc");
   matrix->fillScreen(colors[1]);
   for (uint8_t i = 0; i < MATRIU_HEIGHT ; i++) {
     for (uint8_t j = 0; j < MATRIU_WIDTH ; j++) {
@@ -297,7 +322,7 @@ void PixelAPixel() {
       delay(10);
     }
   }
-}*/
+}
 //-------------------------------------------------------------
 //-------------------------------------------------------------
 //-------------------------------------------------------------

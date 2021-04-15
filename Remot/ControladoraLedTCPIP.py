@@ -531,6 +531,9 @@ def ColorPredefinitChange(even):
 
     
 
+def EnviarTextPantalla(even=None):    
+    EnviarComandaAServidor('|PANTALLA tx:'+txtPantalla.get())
+    
     
     
     
@@ -1214,6 +1217,10 @@ if __name__ == '__main__':
 
     frame3 = tk.Frame(frameConfig)
     frame3.pack()
+    
+    
+    framePantalla = tk.Frame(frameConfig)
+    framePantalla.pack()
 
 
     fila = 0
@@ -1244,7 +1251,7 @@ if __name__ == '__main__':
     col = col + 1
     txtR = tk.Entry(frame1,width=5, justify=tk.RIGHT)
     txtR.insert(tk.END ,"255")
-    txtR.grid(column=col, row=fila, padx=(5, 10), pady=(0, 10))
+    txtR.grid(column=col, row=fila, padx=(5, 10), pady=(0, 0))
     col = col + 1
 
     lblG = tk.Label(frame1, text="Green:")
@@ -1252,7 +1259,7 @@ if __name__ == '__main__':
     col = col + 1
     txtG = tk.Entry(frame1,width=5, justify=tk.RIGHT)
     txtG.insert(tk.END ,"255")
-    txtG.grid(column=col, row=fila, padx=(5, 10), pady=(0, 10))
+    txtG.grid(column=col, row=fila, padx=(5, 10), pady=(0, 0))
     col = col + 1
 
     lblB = tk.Label(frame1, text="Blue:")
@@ -1260,7 +1267,7 @@ if __name__ == '__main__':
     col = col + 1
     txtB = tk.Entry(frame1,width=5, justify=tk.RIGHT)
     txtB.insert(tk.END ,"255")
-    txtB.grid(column=col, row=fila, padx=(5, 10), pady=(0, 10))
+    txtB.grid(column=col, row=fila, padx=(5, 10), pady=(0, 0))
     col = 0
     fila = fila + 1
 
@@ -1315,6 +1322,31 @@ if __name__ == '__main__':
     txtSubconjunt.grid(column=col, row=fila, padx=(5, 10), pady=(0, 10))
     col = col + 1
 
+    
+    
+    
+    
+    col =0
+    fila = 0
+    lblTextPantalla = tk.Label(framePantalla, text="Text:")
+    lblTextPantalla.grid(column=col, row=fila,padx=(50, 0),)
+    col = col + 1
+    txtPantalla = tk.Entry(framePantalla,width=30, justify=tk.LEFT)
+    txtPantalla.insert(tk.END ,"Feliç Sant Jordi")
+    txtPantalla.grid(column=col, row=fila, padx=(5, 10), pady=(0, 0))
+    col = col + 1
+    
+    button_enviarPantalla = tk.Button(framePantalla, 
+                       text="Send", 
+                       fg="black",
+                       command=EnviarTextPantalla)
+    button_enviarPantalla.grid(column=col, row=fila, pady=(0, 0))
+    
+    
+    
+    
+    
+    
     
     
 

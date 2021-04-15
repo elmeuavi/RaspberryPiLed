@@ -189,18 +189,18 @@ void loop() {
 
   } else {
     stringComplete = false;
-    
+
     Serial.println(inputString);
-    
+
     if (inputString[2] == ':') {
-      
-      if (not CallFuncions(inputString[0],inputString[1])){
+
+      if (not CallFuncions(inputString[0], inputString[1])) {
         //  Serial.println("Rebut desconegut");
         ;
       }
-    
-    }else {
-        Serial.println("No es instruccio");
+
+    } else {
+      Serial.println("No es instruccio");
     }
   }
 
@@ -213,59 +213,62 @@ void loop() {
 //-------------------------------------------------------------
 //-------------------------------------------------------------
 
-bool CallFuncions(char c1,char c2){
+bool CallFuncions(char c1, char c2) {
 
-         //COUNT DOWN
-    if (c1 == 'c' && c2 == 'd' ) {
-          CompteEnrere();
-          
-        //CATALONIA FLAG
-    } else if (c1 == 'c' && c2 == 't' ) {
-          Catalunya();
+  //COUNT DOWN
+  if (c1 == 'c' && c2 == 'd' ) {
+    CompteEnrere();
 
-       //Emplena la pantalla amb el color de fondo
-    }else if (c1 == 'f' && c2 == 'l' ) {
-          FillColor();
+    //CATALONIA FLAG
+  } else if (c1 == 'c' && c2 == 't' ) {
+    Catalunya();
 
-      //SMILE
-    } else if (c1 == 's' && c2 == 'm' ) {
-        Somriu();
+    //Emplena la pantalla amb el color de fondo
+  } else if (c1 == 'f' && c2 == 'l' ) {
+    FillColor();
 
-      //TEXT A ESCRIURE
-    } else if (c1 == 't' && c2 == 'x') {
-        if (inputString[2] != '\0') {
-          Serial.println("Rebut text");
-          writeText();
+    //SMILE
+  } else if (c1 == 's' && c2 == 'm' ) {
+    Somriu();
 
-          //If don't have a new instruction that cuts this one
-          if (!stringComplete) {
-            //ask for more text
-            Serial.println("+");
-          }
-        }
+    //TEXT A ESCRIURE
+  } else if (c1 == 't' && c2 == 'x') {
+    if (inputString[2] != '\0') {
+      Serial.println("Rebut text");
+      writeText();
 
-      //GAY FLAG
-    } else if (c1 == 'g' && c2 == 'y' ) {
-      Gay();
-
-      
-        //COLORS SELECT
-    } else if (c1 == 'c' && c2 == 's' ) {
-        llegirColor();
-
-       //PIXEL A PIXEL
-    }else if (c1=='f' && c2 == 'c'){
-        PixelAPixel();
-
-      //INTENSITAT
-    }else if (c1=='i' && c2 =='n'){
-        LlegirIntensitat();
-    } else {
-        return false;
+      //If don't have a new instruction that cuts this one
+      if (!stringComplete) {
+        //ask for more text
+        Serial.println("+");
+      }
     }
-    
+
+    //GAY FLAG
+  } else if (c1 == 'g' && c2 == 'y' ) {
+    Gay();
+
+    //Rosa de Sant Jordi
+  } else if (c1 == 'r' && c2 == 's' ) {
+    Rosa();
+
+    //COLORS SELECT
+  } else if (c1 == 'c' && c2 == 's' ) {
+    llegirColor();
+
+    //PIXEL A PIXEL
+  } else if (c1 == 'f' && c2 == 'c') {
+    PixelAPixel();
+
+    //INTENSITAT
+  } else if (c1 == 'i' && c2 == 'n') {
+    LlegirIntensitat();
+  } else {
+    return false;
+  }
+
   return true;
-  
+
 }
 
 //-------------------------------------------------------------
@@ -280,10 +283,10 @@ void FillColor() {
 
   //Serial.println("Rebut emplenar");
   int n = sscanf(&inputString[3], "%d,%d,%d",  &valorR, &valorG, &valorB);
-  matrix->fillScreen(matrix->Color(valorR,valorG,valorB));
+  matrix->fillScreen(matrix->Color(valorR, valorG, valorB));
   matrix->show();
-  
-  
+
+
 }
 
 void llegirColor() {
@@ -294,13 +297,13 @@ void llegirColor() {
 
   int n = sscanf(&inputString[3], "%d,%d,%d,%d", &quin, &valorR, &valorG, &valorB);
   /*Serial.println(valorR);
-  Serial.println(valorG);
-  Serial.println(valorB);*/
+    Serial.println(valorG);
+    Serial.println(valorB);*/
   colors[quin] = matrix->Color(valorR, valorG, valorB);
 }
 
 
-void  LlegirIntensitat(){
+void  LlegirIntensitat() {
   //Serial.println("Canviada Intensitat");
   int intensitat = 0;
   int n = sscanf(&inputString[3], "%d", &intensitat );
@@ -489,6 +492,86 @@ void Somriu() {
   }
 }
 
+
+
+const  int  capullo[] PROGMEM = {
+  0b0101010100,
+  0b0111011100,
+  0b0111111100,
+  0b0111111100,
+  0b0011111000,
+  0b0001110000,
+  0b0001110000,
+  0b0000100000,
+  0b0000100000,
+};
+
+const int tija[] PROGMEM = {
+  0b0100000100,
+  0b0110001100,
+  0b0110001100,
+  0b0011011000,
+  0b0011011000,
+  0b0001110000,
+  0b0000100000,
+  0b0000100011,
+  0b0000100111,
+  0b0000101110,
+  0b0000101100,
+  0b0000101100,
+  0b0000111000,
+  0b0000100000,
+  0b1100100000,
+  0b1110100000,
+  0b0110100000,
+  0b0110100000,
+  0b0011100000,
+  0b0000100000,
+  0b0000100000,
+  0b0000100000,
+  0b0000100000,
+  0b0000100000,
+
+};
+void Rosa() {
+
+  //Serial.println("Rebut Rosa");
+  
+  uint16_t pixel[1];
+
+  //Esborrar buffer screen
+  for (byte i = 0; i < MATRIU_WIDTH + screenOffset ; i++) {    screen[i] = 0;  }
+
+  colors[1] = 0;
+  matrix->fillScreen(colors[1]);
+
+  colors[0] = matrix->Color(255, 0, 0);
+
+  for (uint8_t i = 0; i < 9; i++) {
+    screen[i] = pgm_read_word(  (capullo) + (i)   );
+  }
+  escriureScreenLedStrip();
+  //escriureScreenUSB();
+
+  //Esborrar buffer screen
+  for (byte i = 0; i < MATRIU_WIDTH + screenOffset ; i++) {
+    screen[i] = 0;
+  }
+
+  colors[0] = matrix->Color(0, 255, 0);
+  for (uint8_t i = 0; i < 24; i++) {
+    screen[i + 4] = pgm_read_word( tija + i);
+  }
+  sobreEscriureScreenLedStrip();
+
+  //tornem a posar els valors per defecte blanc
+  colors[0] = matrix->Color(255, 255, 255);
+  //Esborrar buffer screen
+  for (byte i = 0; i < MATRIU_WIDTH + screenOffset ; i++) {    screen[i] = 0;  }
+
+}
+
+
 //-------------------------------------------------------------
 //-------------------------------------------------------------
 //-------------------------------------------------------------
@@ -616,11 +699,19 @@ void escriureScreenUSB() {
     Serial.print("\n");
   }
 }
+
 /*
 
 */
 void escriureScreenLedStrip() {
   matrix->fillScreen(colors[1]);
+  sobreEscriureScreenLedStrip();
+}
+
+/*
+
+*/
+void sobreEscriureScreenLedStrip() {
 
   for (int colunes = 0; colunes < MATRIU_WIDTH; colunes++) {
     for (int files = 0; files < MATRIU_HEIGHT  ; files++) {

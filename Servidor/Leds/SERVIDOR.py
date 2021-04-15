@@ -88,12 +88,19 @@ if __name__ == '__main__':
                     read_sockets, writable, exceptional  = select.select([connection,ser] , [], [connection,ser])
                 else: 
                     read_sockets, writable, exceptional  = select.select([connection] , [], [connection])
-                
+
+
+                    
                 for s in read_sockets:
                     #mirem la conexió per wifi del PC
                     if s == connection:
                          print("Rebuda de la wifi")
-                         data = connection.recv(65535).decode("utf-8") 
+                         try:
+                            data = connection.recv(65535).decode("utf-8") 
+                         except:
+                            print("Error en la connexió al intentar llegir");
+                            break;
+                            
                          if data:
                             llista_linies_comandes=data.split("|")
                             for linia_comanda in llista_linies_comandes:
@@ -161,7 +168,7 @@ if __name__ == '__main__':
                                         
                                         args.intensitat=255 # definir la intensitat per la tira de leds NO adressables 0-255
                                         
-                                        TIRES = eval('[0,1,2,3,4,5]')
+                                        TIRES = eval('[1,2,3,4,5,6]')
                                         
                                         if 'p' in locals() and p and p.is_alive():   p.terminate()
                                         if len(comanda) > 1:   
@@ -180,6 +187,11 @@ if __name__ == '__main__':
                                         pca.channels[15].duty_cycle = 65534
                                         pca.channels[14].duty_cycle = 65534
                                         pca.channels[13].duty_cycle = 65534
+                                        pca.channels[12].duty_cycle = 65534
+                                        
+                                        if ser is not None:
+                                            ser.write("fl:255,255,255".encode('utf-8'))
+                                            ser.write(b"\n")
 
                                         
                                     #taquem tires de leds adressables
@@ -189,7 +201,7 @@ if __name__ == '__main__':
                                         if 'p' in locals() and p and p.is_alive():   p.terminate();
                                         netejar(strip)
                                         
-                                        TIRES = eval('[0,1,2,3,4,5]')
+                                        TIRES = eval('[1,2,3,4,5,6]')
                                         if 'pRGB' in locals() and pRGB and pRGB.is_alive():   pRGB.terminate();
                                         pRGB = Process(target=netejarTiraRGB, args=(pca, TIRES))
                                         pRGB.start()
@@ -197,11 +209,12 @@ if __name__ == '__main__':
                                         pca.channels[15].duty_cycle = 0
                                         pca.channels[14].duty_cycle = 0
                                         pca.channels[13].duty_cycle = 0
+                                        pca.channels[10].duty_cycle = 0
                                         
                                         if ser is not None:
-                                            ser.write(b"tx: \n")
-                                        
-                                        
+                                            ser.write("fl:0,0,0".encode('utf-8'))
+                                            ser.write(b"\n")
+
                                         
                                         
                                         
@@ -328,10 +341,11 @@ if __name__ == '__main__':
                                     #           PANTALLA LED
                                     ######################################################################################################
                                     elif comanda[0] == "PANTALLA":      
-                                        print("Llancem una comanda a la pantalla led" + data[10::])
-                                        ser.write(data[10::].encode('utf-8'))
-                                        ser.write(b"\n")
-                                        ser.flush()
+                                        if ser is not None:
+                                            print("Llancem una comanda a la pantalla led" + data[10::])
+                                            ser.write(data[10::].encode('utf-8'))
+                                            ser.write(b"\n")
+                                            ser.flush()
 
                                     else:
                                         break

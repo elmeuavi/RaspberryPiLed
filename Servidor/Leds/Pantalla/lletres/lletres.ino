@@ -170,6 +170,7 @@ void setup() {
 
 
 const  uint8_t  Jordi[]   PROGMEM = {"tx:Feli# Sant Jordi 2021"};
+const  uint8_t  Cristina[]   PROGMEM = {"tx:Aquesta rosa va dedicada a la Cristina"};
 const  uint8_t  Masover[] PROGMEM = {"tx:Territori Masover!!"};
 const  uint8_t  Terra[]   PROGMEM = {"tx:Visca la Terra!!"};
 
@@ -181,8 +182,13 @@ void Automatic(){
   while (not stringComplete){
     memcpy_P (inputString, Jordi ,  (sizeof caracter) * (24+1));
     writeText();
+    
     Rosa();
     delay(1000);
+    
+    memcpy_P (inputString, Cristina ,  (sizeof caracter) * (41+1));
+    writeText();
+    
     FillColorRandom();
     delay(1000);
     
@@ -193,10 +199,13 @@ void Automatic(){
     
     Gay();
     delay(1000);
+    
     memcpy_P (inputString, Terra ,  (sizeof caracter) * (19+1));
     writeText();
+    
     Catalunya();
     delay(1000);
+    
     PixelAPixel();
     Somriu(5000);
   }

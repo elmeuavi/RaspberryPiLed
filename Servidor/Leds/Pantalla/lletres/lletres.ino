@@ -169,6 +169,38 @@ void setup() {
 }
 
 
+const  uint8_t  Jordi[]   PROGMEM = {"tx:Feli# Sant Jordi 2021"};
+const  uint8_t  Masover[] PROGMEM = {"tx:Territori Masover!!"};
+const  uint8_t  Terra[]   PROGMEM = {"tx:Visca la Terra!!"};
+
+
+void Automatic(){
+
+  uint8_t caracter = 0;
+
+  while (not stringComplete){
+    memcpy_P (inputString, Jordi ,  (sizeof caracter) * (24+1));
+    writeText();
+    Rosa();
+    delay(1000);
+    FillColorRandom();
+    delay(1000);
+    
+    colors[0] = matrix->Color(0, 255, 0);
+    memcpy_P (inputString, Masover ,  (sizeof caracter) * (22+1));
+    writeText();
+    colors[0] = matrix->Color(255, 255, 255);
+    
+    Gay();
+    delay(1000);
+    memcpy_P (inputString, Terra ,  (sizeof caracter) * (19+1));
+    writeText();
+    Catalunya();
+    delay(1000);
+    PixelAPixel();
+    Somriu(5000);
+  }
+}
 
 /*
   int iteracio = 0;
@@ -229,7 +261,9 @@ bool CallFuncions(char c1, char c2) {
 
     //SMILE
   } else if (c1 == 's' && c2 == 'm' ) {
-    Somriu();
+    unsigned long temps = 0;
+    int n = sscanf(&inputString[3], "%ul",  &temps);
+    Somriu(temps);
 
     //TEXT A ESCRIURE
   } else if (c1 == 't' && c2 == 'x') {
@@ -263,6 +297,11 @@ bool CallFuncions(char c1, char c2) {
     //INTENSITAT
   } else if (c1 == 'i' && c2 == 'n') {
     LlegirIntensitat();
+
+    //AUTOMATIC
+  } else if (c1 == 'a' && c2 == 'u') {
+    Automatic();  
+      
   } else {
     return false;
   }
@@ -285,6 +324,25 @@ void FillColor() {
   int n = sscanf(&inputString[3], "%d,%d,%d",  &valorR, &valorG, &valorB);
   matrix->fillScreen(matrix->Color(valorR, valorG, valorB));
   matrix->show();
+
+
+}
+
+void FillColorRandom() {
+
+  uint16_t  colorFill[]= {matrix->Color(255, 0, 0),
+  matrix->Color(255, 128, 0),
+   matrix->Color(255, 255, 0),
+   matrix->Color(0, 255, 0),
+  matrix->Color(0, 0, 255),
+  matrix->Color(255, 0, 255)};
+  
+  for (uint8_t i = 0; i < 15 ; i++) {
+    //colorFill[i%3]=millis()%256;
+    matrix->fillScreen(colorFill[i%6]);
+    matrix->show();
+    delay(400);
+  }
 
 
 }
@@ -457,7 +515,7 @@ const  uint8_t  smile[] PROGMEM = {
   0,  0,  0,  1,  1,  1,  0,  0,  0,
 };
 
-void Somriu() {
+void Somriu(unsigned long pMiliseg) {
 
   Serial.println("Rebut smile");
 
@@ -465,8 +523,9 @@ void Somriu() {
   uint8_t pixel[1];
   boolean dDreta = true;
 
-
-  while (not EventUSB()) {
+  unsigned long time = millis();
+  
+  while (not EventUSB() and millis() < time + pMiliseg) {
 
     matrix->fillScreen(colors[1]);
 
@@ -598,7 +657,9 @@ void Gay() {
 //-------------------------------------------------------------
 
 
-
+/*
+ * 
+ */
 void writeText() {
 
   uint8_t i = 3;
@@ -625,6 +686,7 @@ void writeText() {
     delay(50);
   }
 }
+
 
 
 

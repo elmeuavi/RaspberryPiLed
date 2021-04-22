@@ -47,7 +47,6 @@ bool stringComplete = false;     // whether the string is complete
 int  fontAEscriure[13];
 byte ampladaFontAEscriure;
 
-
 #define LED_BLACK    0
 
 #define LED_RED_VERYLOW   (3 <<  11)
@@ -170,7 +169,7 @@ void setup() {
 
 
 const  uint8_t  Jordi[]   PROGMEM = {"tx:Feli# Sant Jordi 2021"};
-const  uint8_t  Cristina[]   PROGMEM = {"tx:Aquesta rosa va dedicada a la Cristina"};
+const  uint8_t  Cristina[]   PROGMEM = {"tx:Aquesta rosa va dedicada a la meva Mama"};
 const  uint8_t  Masover[] PROGMEM = {"tx:Territori Masover!!"};
 const  uint8_t  Terra[]   PROGMEM = {"tx:Visca la Terra!!"};
 
@@ -180,33 +179,52 @@ void Automatic(){
   uint8_t caracter = 0;
 
   while (not stringComplete){
+
+    if (EventUSB()) break;
+    
     memcpy_P (inputString, Jordi ,  (sizeof caracter) * (24+1));
     writeText();
+
+    if (EventUSB()) break;
     
     Rosa();
-    delay(1000);
+    delay(5000);
+    if (EventUSB()) break;
+    delay(5000);
     
-    memcpy_P (inputString, Cristina ,  (sizeof caracter) * (41+1));
+    memcpy_P (inputString, Cristina ,  (sizeof caracter) * (42+1));
     writeText();
     
     FillColorRandom();
-    delay(1000);
-    
+
+    delay(5000);
+    if (EventUSB()) break;
+    delay(5000);
+
     colors[0] = matrix->Color(0, 255, 0);
     memcpy_P (inputString, Masover ,  (sizeof caracter) * (22+1));
     writeText();
     colors[0] = matrix->Color(255, 255, 255);
-    
+
+    if (EventUSB()) break;
+
     Gay();
-    delay(1000);
+    delay(5000);
+    if (EventUSB()) break;
+    delay(5000);
     
     memcpy_P (inputString, Terra ,  (sizeof caracter) * (19+1));
     writeText();
-    
+
+    if (EventUSB()) break;
     Catalunya();
-    delay(1000);
+    delay(5000);
+    if (EventUSB()) break;
+    delay(5000);
     
     PixelAPixel();
+    if (EventUSB()) break;
+
     Somriu(5000);
   }
 }
@@ -310,7 +328,11 @@ bool CallFuncions(char c1, char c2) {
     //AUTOMATIC
   } else if (c1 == 'a' && c2 == 'u') {
     Automatic();  
-      
+
+    //LLEGIR VELOCITAT DE LA FONT (DELAY)
+ /* } else if (c1 == 'v' && c2 == 'f') {
+    LlegirVelocitatFont();
+     */ 
   } else {
     return false;
   }
@@ -346,11 +368,20 @@ void FillColorRandom() {
   matrix->Color(0, 0, 255),
   matrix->Color(255, 0, 255)};
   
-  for (uint8_t i = 0; i < 15 ; i++) {
+  for (uint8_t i = 0; i < 6 ; i++) {
     //colorFill[i%3]=millis()%256;
+    matrix->setBrightness(10);
     matrix->fillScreen(colorFill[i%6]);
     matrix->show();
-    delay(400);
+    delay(100);
+    
+    for (int j = 20; j < 255 ; j=j+10) {
+      matrix->setBrightness(j);
+      matrix->show();
+      delay(300);
+    }
+    delay(1000);
+    if (EventUSB()) break;
   }
 
 
@@ -376,6 +407,15 @@ void  LlegirIntensitat() {
   int n = sscanf(&inputString[3], "%d", &intensitat );
   matrix->setBrightness(intensitat);
 }
+
+/*
+void  LlegirVelocitatFont() {
+  //int intensitat = 0;
+  int n = sscanf(&inputString[3], "%d", &delayFontEscriure[0] );
+  //matrix->setBrightness(intensitat);
+}*/
+
+
 
 //-------------------------------------------------------------
 //-------------------------------------------------------------
@@ -847,6 +887,7 @@ void escriureLletraSeleccionada() {
 */
 boolean EventUSB() {
 
+  if (stringComplete) return true;
 
   if (Serial.available()) {
     //Reinicialitzem del que haguem pogut llegir l'anterior vegada

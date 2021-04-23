@@ -104,13 +104,31 @@ def INICIALITZACONNEXIONS():
     #print( myports)
     
     try:
+        print('provem connexió al port '+PORTBOTONERA)
         connexioSerialUSB = serial.Serial(PORTBOTONERA,500000) # ,timeout = None
-        
     except:
         None
-    
-    
-        
+		
+	#si no ha funcionat amb l'anterior, provem amb el port usb que tinc a l'altre portàtil
+    if connexioSerialUSB is None:		
+        try:
+            print('provem connexió al port COM6')
+            connexioSerialUSB = serial.Serial('COM6',500000) # ,timeout = None
+        except:
+            None
+	#si no ha funcionat amb l'anterior, provem amb el port usb que tinc a l'altre portàtil			
+    if connexioSerialUSB is None:
+        try:
+            print('provem connexió al port COM5')
+            connexioSerialUSB = serial.Serial('COM5',500000) # ,timeout = None
+        except:
+            print('no tenim port USB on trobar la botonera')
+            None
+    if connexioSerialUSB is not None:
+        print('Connexió USB realitzada correctament')
+
+
+
 
 def TANCARCONNEXIONS():
     client.close()
@@ -190,16 +208,24 @@ def PanicCelestialOn(event):
     
     EnviarComandaAServidor('|PanicBlanc')
     
-    #EnviarComandaAServidor('|activarCanalI2C 15' )
-    global activat220vI2C15
-    activat220vI2C15=True
-    btn_textEncendreI2C15.set("Apagar 220v I2C (canal 15)")
     
     stdin, stdout, stderr = client.exec_command('gpio -g write 10 1')
     global activatGPIO10
     activatGPIO10=True
     btn_textEncendreGPIO10.set("Apagar leds GPIO-10")    
     RegistrarComanda( "gpio -g write 10 1") 
+
+
+    #EnviarComandaAServidor('|activarCanalI2C 15' )
+    global activat220vI2C15
+    activat220vI2C15=True
+    btn_textEncendreI2C15.set("Apagar 220v I2C (canal 15)")
+
+    #EnviarComandaAServidor('|activarCanalI2C 14' )
+    global activat220vI2C14
+    activat220vI2C14=True
+    btn_textEncendreI2C14.set("Apagar 220v I2C (canal 14)")
+
 
     #stdin, stdout, stderr = client.exec_command('gpio -g write 13 1')
     #RegistrarComanda( "gpio -g write 13 1") 
@@ -220,10 +246,6 @@ def PanicCelestialOff(event):
     
     
     #ApagarGPIO()    
-    #EnviarComandaAServidor('|desactivarCanalI2C 15' )
-    global activat220vI2C15
-    activat220vI2C15=False
-    btn_textEncendreI2C15.set("Encendre 220v I2C (canal 15)")
     
     stdin, stdout, stderr = client.exec_command('gpio -g write 10 0')
     global activatGPIO10
@@ -234,7 +256,15 @@ def PanicCelestialOff(event):
     #stdin, stdout, stderr = client.exec_command('gpio -g write 13 0')
     #RegistrarComanda( "gpio -g write 13 0 ")
     
+    #EnviarComandaAServidor('|desactivarCanalI2C 15' )
+    global activat220vI2C15
+    activat220vI2C15=False
+    btn_textEncendreI2C15.set("Encendre 220v I2C (canal 15)")
     
+    #EnviarComandaAServidor('|desactivarCanalI2C 14' )
+    global activat220vI2C14
+    activat220vI2C14=False
+    btn_textEncendreI2C14.set("Encendre 220v I2C (canal 14)")
     
 
     
@@ -296,6 +326,18 @@ def Encendre220vI2C15(event=None):
         activat220vI2C15=True
         btn_textEncendreI2C15.set("Apagar 220v I2C (canal 15)")
         
+activat220vI2C14=False
+def Encendre220vI2C14(event=None):
+    global activat220vI2C14
+    if activat220vI2C14:  
+        EnviarComandaAServidor('|desactivarCanalI2C 14' )
+        activat220vI2C14=False
+        btn_textEncendreI2C15.set("Encendre 220v I2C (canal 14)")
+    else:                     
+        EnviarComandaAServidor('|activarCanalI2C 14' )
+        activat220vI2C14=True
+        btn_textEncendreI2C15.set("Apagar 220v I2C (canal 14)")
+
     
 #def RGBCanal1On(event):
 #    #if chk_color_aleatori.get():
@@ -532,10 +574,34 @@ def ColorPredefinitChange(even):
     
 
 def EnviarTextPantalla(even=None):    
+    EnviarComandaAServidor('|PANTALLA cs:0,'+txtR.get()+','+txtG.get()+','+txtB.get())
+    EnviarComandaAServidor('|PANTALLA in:'+txtIntensitat.get())
     EnviarComandaAServidor('|PANTALLA tx:'+txtPantalla.get())
+
+def EnviarTextComanda(even=None):    
+    EnviarComandaAServidor(txtComanda.get())
     
-    
-    
+def EnviarBanderaCat(even=None):        
+    EnviarComandaAServidor('|PANTALLA in:'+txtIntensitat.get())
+    EnviarComandaAServidor('|PANTALLA ct:')
+def EnviarBanderaGay(even=None):        
+    EnviarComandaAServidor('|PANTALLA in:'+txtIntensitat.get())
+    EnviarComandaAServidor('|PANTALLA gy:')
+def EnviarSmile(even=None):        
+    EnviarComandaAServidor('|PANTALLA in:'+txtIntensitat.get())
+    EnviarComandaAServidor('|PANTALLA sm:9500')
+def EnviarCountdown(even=None):        
+    EnviarComandaAServidor('|PANTALLA in:'+txtIntensitat.get())
+    EnviarComandaAServidor('|PANTALLA cd:')
+def EnviarRosa(even=None):      
+    EnviarComandaAServidor('|PANTALLA in:'+txtIntensitat.get())
+    EnviarComandaAServidor('|PANTALLA rs:')
+def EnviarAutomatic(even=None):      
+    EnviarComandaAServidor('|PANTALLA in:'+txtIntensitat.get())
+    EnviarComandaAServidor('|PANTALLA au:')
+  
+
+
     
 
 FITXER_MP3=str(Path.home())+'\\Videos\\FUMFUMFUM.mp3'
@@ -1029,23 +1095,16 @@ if __name__ == '__main__':
 
 
     
-    #buttonPolsGPIO10 = tk.Button(frame1Led, 
-    #                   text="Pols GPIO-10", 
+
+
+    #btn_textEncendreGPIO10 = tk.StringVar()
+    #buttonEncendreGPIO10 = tk.Button(frame1Led, 
+    #                   textvariable=btn_textEncendreGPIO10,
+    #                   command=EncendreGPIO10,                   
     #                   fg="black")
-    #buttonPolsGPIO10.bind('<ButtonPress>',GPIO10On)
-    #buttonPolsGPIO10.bind('<ButtonRelease>',GPIO10Off)
-    #buttonPolsGPIO10.grid(column=col, row=fila, pady=(40, 10))
+    #btn_textEncendreGPIO10.set("Encendre leds GPIO-10")
+    #buttonEncendreGPIO10.grid(column=col, row=fila, pady=(40, 10))
     #fila = fila + 1
-
-
-    btn_textEncendreGPIO10 = tk.StringVar()
-    buttonEncendreGPIO10 = tk.Button(frame1Led, 
-                       textvariable=btn_textEncendreGPIO10,
-                       command=EncendreGPIO10,                   
-                       fg="black")
-    btn_textEncendreGPIO10.set("Encendre leds GPIO-10")
-    buttonEncendreGPIO10.grid(column=col, row=fila, pady=(40, 10))
-    fila = fila + 1
 
     btn_textEncendreI2C15 = tk.StringVar()
     buttonEncendreI2C15 = tk.Button(frame1Led, 
@@ -1053,7 +1112,17 @@ if __name__ == '__main__':
                        command=Encendre220vI2C15,                   
                        fg="black")
     btn_textEncendreI2C15.set("Encendre 220v I2C (canal 15)")
-    buttonEncendreI2C15.grid(column=col, row=fila, pady=(0, 10))
+    buttonEncendreI2C15.grid(column=col, row=fila, pady=(40, 10))
+    col = col + 1
+
+    btn_textEncendreI2C14 = tk.StringVar()
+    buttonEncendreI2C14 = tk.Button(frame1Led, 
+                       textvariable=btn_textEncendreI2C14,
+                       command=Encendre220vI2C14,                   
+                       fg="black")
+    btn_textEncendreI2C14.set("Encendre 220v I2C (canal 14)")
+    buttonEncendreI2C14.grid(column=col, row=fila, pady=(40, 10),padx=(20, 10))
+    col = 0 
     fila = fila + 1
 
 
@@ -1088,14 +1157,15 @@ if __name__ == '__main__':
                        command=ApagarRGB,              
                        fg="black")
     buttonApagarRGB.grid(column=col, row=fila, pady=(30, 10))
-    fila = fila + 1
+    col = col + 1
 
 
     buttonEncendreRGB = tk.Button(frame1Led, 
                        text="Encendre RGB (C)", 
                        command=EncendreRGB,              
                        fg="black")
-    buttonEncendreRGB.grid(column=col, row=fila, pady=(0, 10))
+    buttonEncendreRGB.grid(column=col, row=fila, pady=(30, 10),padx=(20, 10))
+    col = 0 
     fila = fila + 1
 
     buttonCreixerRGB = tk.Button(frame1Led, 
@@ -1103,7 +1173,7 @@ if __name__ == '__main__':
                        command=CreixerRGB,              
                        fg="black")
     buttonCreixerRGB.grid(column=col, row=fila, pady=(0, 10))
-    fila = fila + 1
+    col = col + 1
 
 
 
@@ -1111,7 +1181,7 @@ if __name__ == '__main__':
                        text="Decreixer RGB (TT, C)", 
                        command=DecreixerRGB,              
                        fg="black")
-    buttonDecreixerRGB.grid(column=col, row=fila, pady=(0, 10))
+    buttonDecreixerRGB.grid(column=col, row=fila, pady=(0, 10),padx=(20, 10))
     fila = fila + 1
 
 
@@ -1315,24 +1385,24 @@ if __name__ == '__main__':
     fila = fila + 1
     col =0
     lblSubconjunt = tk.Label(frame3, text="Subconjunt:")
-    lblSubconjunt.grid(column=col, row=fila, padx=(25, 10), pady=(0, 10))
+    lblSubconjunt.grid(column=col, row=fila, padx=(25, 10), pady=(0, 30))
     col = col + 1
     txtSubconjunt = tk.Entry(frame3,width=5, justify=tk.RIGHT)
     txtSubconjunt.insert(tk.END ,"3")
-    txtSubconjunt.grid(column=col, row=fila, padx=(5, 10), pady=(0, 10))
+    txtSubconjunt.grid(column=col, row=fila, padx=(5, 10), pady=(0, 30))
     col = col + 1
 
     
     
     
-    
+    #enviar text A PANTALLA
     col =0
     fila = 0
     lblTextPantalla = tk.Label(framePantalla, text="Text:")
     lblTextPantalla.grid(column=col, row=fila,padx=(50, 0),)
     col = col + 1
     txtPantalla = tk.Entry(framePantalla,width=30, justify=tk.LEFT)
-    txtPantalla.insert(tk.END ,"Feliç Sant Jordi")
+    txtPantalla.insert(tk.END ,"Feli# Sant Jordi")
     txtPantalla.grid(column=col, row=fila, padx=(5, 10), pady=(0, 0))
     col = col + 1
     
@@ -1341,10 +1411,33 @@ if __name__ == '__main__':
                        fg="black",
                        command=EnviarTextPantalla)
     button_enviarPantalla.grid(column=col, row=fila, pady=(0, 0))
+
+    #enviar comanda al servidor
+    col =0
+    fila = 1
+    lblComanda = tk.Label(framePantalla, text="Comanda:")
+    lblComanda.grid(column=col, row=fila,padx=(50, 0), pady=(10, 0),)
+    col = col + 1
+    txtComanda = tk.Entry(framePantalla,width=30, justify=tk.LEFT)
+    txtComanda.insert(tk.END ,"|PANTALLA ")
+    txtComanda.grid(column=col, row=fila, padx=(5, 10), pady=(10, 0))
+    col = col + 1
+    
+    button_enviarComanda = tk.Button(framePantalla, 
+                       text="Send", 
+                       command=EnviarTextComanda).grid(column=col, row=fila, pady=(10, 0))
     
     
-    
-    
+    framePantallaBotons = tk.Frame(frameConfig)
+    framePantallaBotons.pack()
+
+    tk.Button(framePantallaBotons,text="ct", command=EnviarBanderaCat).grid(column=0, row=0, padx=(5, 0), pady=(10,0))
+    tk.Button(framePantallaBotons,text="gy", command=EnviarBanderaGay).grid(column=1, row=0, padx=(5, 0), pady=(10,0))
+    tk.Button(framePantallaBotons,text="sm", command=EnviarSmile     ).grid(column=2, row=0, padx=(5, 0), pady=(10,0))
+    tk.Button(framePantallaBotons,text="cd", command=EnviarCountdown ).grid(column=3, row=0, padx=(5, 0), pady=(10,0))
+    tk.Button(framePantallaBotons,text="rs", command=EnviarRosa      ).grid(column=4, row=0, padx=(5, 0), pady=(10,0))
+    tk.Button(framePantallaBotons,text="au", command=EnviarAutomatic ).grid(column=5, row=0, padx=(5, 0), pady=(10,0))
+
     
     
     
@@ -1463,7 +1556,7 @@ if __name__ == '__main__':
     #procesSimular = Process(target=procesLlegirBotoneraUSB, args=(eventGestonarUSBBotons,))
     #procesSimular.start()
 
-    root.after(100, procesLlegirBotoneraUSB)
+    root.after(10000, procesLlegirBotoneraUSB)
     
     
     try:

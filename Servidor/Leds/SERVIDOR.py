@@ -342,7 +342,7 @@ if __name__ == '__main__':
                                     ######################################################################################################
                                     elif comanda[0] == "PANTALLA":      
                                         if ser is not None:
-                                            print("Llancem una comanda a la pantalla led" + data[10::])
+                                            print("Llancem una comanda a la pantalla led: " + data[10::])
                                             ser.write(data[10::].encode('utf-8'))
                                             ser.write(b"\n")
                                             ser.flush()

@@ -1,0 +1,201 @@
+0.000 # @REPRODUIR: start cmd /C C:\Users\xbrunet\AppData\Roaming\AccessPaquets\plink.exe 192.168.1.144 -l pi -pw raspberry "bash /home/pi/rpi-ws281x-python/xevi/xeviLecturaTemps.sh /home/pi/rpi-ws281x-python/xevi/prova.time" && sleep 0.35 && start C:\Users\xbrunet\Videos\FUMFUMFUM.mp3
+0.000 # @GRABAR:  start 20201231ControladoraLedTCPIP.py && sleep 0 && start C:\Users\xbrunet\Videos\FUMFUMFUM.mp3
+0.000 # |NetejarDespresEvent
+
+0.100 # @El 25 de desembre, fum, fum, fum
+0.100 # |color A |creixer 2200
+2.458 # |PanicBlanc
+2.472 # gpio -g write 10 1
+2.548 # |PanicBlack
+2.558 # gpio -g write 10 0
+3.021 # |PanicBlanc
+3.032 # gpio -g write 10 1
+3.100 # |PanicBlack
+3.108 # gpio -g write 10 0
+3.568 # |PanicBlanc
+3.583 # gpio -g write 10 1
+3.637 # |PanicBlack
+3.668 # gpio -g write 10 0
+
+4.500 # @El 25 de desembre, fum, fum, fum
+4.500 # |color A |creixer 2200
+7.052 # |PanicBlanc
+7.147 # gpio -g write 10 1
+7.147 # |PanicBlack
+7.227 # gpio -g write 10 0
+7.596 # |PanicBlanc
+7.611 # gpio -g write 10 1
+7.677 # |PanicBlack
+7.697 # gpio -g write 10 0
+8.132 # |PanicBlanc
+8.167 # gpio -g write 10 1
+8.188 # |PanicBlack
+8.246 # gpio -g write 10 0
+
+
+9.000 # @Ha nascut un minyonet
+9.000 # @Ros i blanquet, ros i blanquet
+9.000 # @Fill de la verge maria
+9.000 # |NoNetejarDespresEvent
+9.200 # |color A |creixer 4000
+13.733 # |color A |decreixer 2000
+15.869 # |color A |intensitat 255|vano 1500 3
+16.000 # @Es nascut a una establia
+16.000 # |NetejarDespresEvent
+
+
+17.400 # @fum, fum, fum
+17.459 # |PanicBlanc
+17.491 # gpio -g write 10 1
+17.559 # |PanicBlack
+17.581 # gpio -g write 10 0
+18.018 # |PanicBlanc
+18.033 # gpio -g write 10 1
+18.101 # |PanicBlack
+18.108 # gpio -g write 10 0
+18.566 # |PanicBlanc
+18.570 # gpio -g write 10 1
+18.636 # |PanicBlack
+18.658 # gpio -g write 10 0
+
+
+
+19.000 # @Ha nascut un minyonet
+19.000 # @Ros i blanquet, ros i blanquet
+19.000 # @Fill de la verge maria
+19.000 # |NoNetejarDespresEvent
+19.534 # |color A |creixer 4000
+23.733 # |color A |decreixer 2000
+25.869 # |color A |intensitat 255|vano 1500 3
+26.000 # @Es nascut a una establia
+26.000 # |NetejarDespresEvent
+
+
+
+
+27.400 # @fum, fum, fum
+27.804 # |PanicBlanc
+27.830 # gpio -g write 10 1
+27.913 # |PanicBlack
+27.930 # gpio -g write 10 0
+28.338 # |PanicBlanc
+28.347 # gpio -g write 10 1
+28.418 # |PanicBlack
+28.457 # gpio -g write 10 0
+28.888 # |PanicBlanc
+28.898 # gpio -g write 10 1
+28.957 # |PanicBlack
+28.978 # gpio -g write 10 0
+
+32.400 # @fum, fum, fum
+32.733 # |PanicBlanc
+32.848 # gpio -g write 10 1
+32.848 # |PanicBlack
+32.933 # gpio -g write 10 0
+33.208 # |PanicBlanc
+33.226 # gpio -g write 10 1
+33.277 # |PanicBlack
+33.299 # gpio -g write 10 0
+33.708 # |PanicBlanc
+33.720 # gpio -g write 10 1
+33.800 # |PanicBlack
+33.801 # gpio -g write 10 0
+
+37.300 # @fum, fum, fum
+37.325 # |PanicBlanc
+37.358 # gpio -g write 10 1
+37.418 # |PanicBlack
+37.439 # gpio -g write 10 0
+37.870 # |PanicBlanc
+37.881 # gpio -g write 10 1
+37.958 # |PanicBlack
+37.967 # gpio -g write 10 0
+38.421 # |PanicBlanc
+38.434 # gpio -g write 10 1
+38.519 # |PanicBlack
+38.538 # gpio -g write 10 0
+
+48.000 # @fum, fum, fum
+48.038 # |PanicBlanc
+48.109 # gpio -g write 10 1
+48.138 # |PanicBlack
+48.198 # gpio -g write 10 0
+48.538 # |PanicBlanc
+48.547 # gpio -g write 10 1
+48.661 # |PanicBlack
+48.678 # gpio -g write 10 0
+49.053 # |PanicBlanc
+49.067 # gpio -g write 10 1
+49.173 # |PanicBlack
+49.185 # gpio -g write 10 0
+
+
+58.400 # @fum, fum, fum
+58.493 # |PanicBlanc
+58.565 # gpio -g write 10 1
+58.598 # |PanicBlack
+58.638 # gpio -g write 10 0
+58.988 # |PanicBlanc
+59.015 # gpio -g write 10 1
+59.108 # |PanicBlack
+59.118 # gpio -g write 10 0
+59.541 # |PanicBlanc
+59.548 # gpio -g write 10 1
+59.628 # |PanicBlack
+59.638 # gpio -g write 10 0
+
+63.200 # @fum, fum, fum
+63.278 # |PanicBlanc
+63.368 # gpio -g write 10 1
+63.390 # |PanicBlack
+63.457 # gpio -g write 10 0
+63.808 # |PanicBlanc
+63.818 # gpio -g write 10 1
+63.918 # |PanicBlack
+63.933 # gpio -g write 10 0
+64.363 # |PanicBlanc
+64.368 # gpio -g write 10 1
+64.460 # |PanicBlack
+64.468 # gpio -g write 10 0
+
+67.400 # @fum, fum, fum
+67.941 # |PanicBlanc
+67.968 # gpio -g write 10 1
+68.068 # |PanicBlack
+68.078 # gpio -g write 10 0
+68.485 # |PanicBlanc
+68.495 # gpio -g write 10 1
+68.578 # |PanicBlack
+68.588 # gpio -g write 10 0
+69.068 # |PanicBlanc
+69.087 # gpio -g write 10 1
+69.188 # |PanicBlack
+69.198 # gpio -g write 10 0
+
+78.400 # @fum, fum, fum
+78.813 # |PanicBlanc
+78.934 # gpio -g write 10 1
+78.940 # |PanicBlack
+79.014 # gpio -g write 10 0
+79.325 # |PanicBlanc
+79.338 # gpio -g write 10 1
+79.421 # |PanicBlack
+79.430 # gpio -g write 10 0
+79.868 # |PanicBlanc
+79.888 # gpio -g write 10 1
+79.978 # |PanicBlack
+79.998 # gpio -g write 10 0
+
+89.400 # @fum, fum, fum FINAL
+89.887 # |PanicBlanc
+89.898 # gpio -g write 10 1
+90.020 # |PanicBlack
+90.048 # gpio -g write 10 0
+90.613 # |PanicBlanc
+90.624 # gpio -g write 10 1
+90.749 # |PanicBlack
+90.764 # gpio -g write 10 0
+91.532 # |PanicBlanc
+91.545 # gpio -g write 10 1
+94.241 # |PanicBlack
+94.298 # gpio -g write 10 0

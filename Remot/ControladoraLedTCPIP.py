@@ -1,4 +1,5 @@
 # coding: latin-1
+#python.exe -m pip install --upgrade pip
 #python -m pip install paramiko
 
 from paramiko import SSHClient, AutoAddPolicy
@@ -16,7 +17,7 @@ import serial  # per la comunicació amb el USB per a la botonera
 from multiprocessing  import Queue 
 #from xeviClientBotonsUSB import *
 
-
+#python -m pip install pygame
 import pygame # per la musica
 
 from multiprocessing import Process, Event  # procés en background per la reproducció dels clips generats
@@ -269,20 +270,20 @@ def PanicCelestialOff(event):
 
     
     
-def ApagarGPIO(event=None):
-    EnviarComandaAServidor('|desactivarCanalI2C 15' )
-    global activat220vI2C15
-    activat220vI2C15=False
-    btn_textEncendreI2C15.set("Encendre 220v I2C (canal 15)")
-    
-    stdin, stdout, stderr = client.exec_command('gpio -g write 10 0')
-    global activatGPIO10
-    activatGPIO10=False
-    btn_textEncendreGPIO10.set("Encendre leds GPIO-10")
-    RegistrarComanda( "gpio -g write 10 0")
-    
-    #stdin, stdout, stderr = client.exec_command('gpio -g write 13 0')
-    #RegistrarComanda( "gpio -g write 13 0 ")
+#def ApagarGPIO(event=None):
+#    EnviarComandaAServidor('|desactivarCanalI2C 15' )
+#    global activat220vI2C15
+#    activat220vI2C15=False
+#    btn_textEncendreI2C15.set("Encendre 220v I2C (canal 15)")
+#    
+#    stdin, stdout, stderr = client.exec_command('gpio -g write 10 0')
+#    global activatGPIO10
+#    activatGPIO10=False
+#    btn_textEncendreGPIO10.set("Encendre leds GPIO-10")
+#    RegistrarComanda( "gpio -g write 10 0")
+#    
+#    #stdin, stdout, stderr = client.exec_command('gpio -g write 13 0')
+#    #RegistrarComanda( "gpio -g write 13 0 ")
     
 
 
@@ -332,11 +333,11 @@ def Encendre220vI2C14(event=None):
     if activat220vI2C14:  
         EnviarComandaAServidor('|desactivarCanalI2C 14' )
         activat220vI2C14=False
-        btn_textEncendreI2C15.set("Encendre 220v I2C (canal 14)")
+        btn_textEncendreI2C14.set("Encendre 220v I2C (canal 14)")
     else:                     
         EnviarComandaAServidor('|activarCanalI2C 14' )
         activat220vI2C14=True
-        btn_textEncendreI2C15.set("Apagar 220v I2C (canal 14)")
+        btn_textEncendreI2C14.set("Apagar 220v I2C (canal 14)")
 
     
 #def RGBCanal1On(event):
@@ -603,9 +604,10 @@ def EnviarAutomatic(even=None):
 
 
     
-
-FITXER_MP3=str(Path.home())+'\\Videos\\FUMFUMFUM.mp3'
-FITXER_INSTRUCCIONS=str(Path.home())+'\\Downloads\\prova.time.xev'
+#FITXER_MP3=str(Path.home())+'.\\data\\FUMFUMFUM.mp3'
+FITXER_MP3='.\\data\\FUMFUMFUM.mp3'
+#FITXER_INSTRUCCIONS=str(Path.home())+'\\Downloads\\prova.time.xev'
+FITXER_INSTRUCCIONS='.\\data\\FUMFUMFUM.time'
 def menuObrirMp3():
     global FITXER_MP3
     FITXER_MP3 = filedialog.askopenfilename(initialdir = expanduser("~"),title = "Select MP3 file:",filetypes = (("mp3 files","*.mp3"),))
@@ -1020,28 +1022,28 @@ if __name__ == '__main__':
     root.bind('<F2>',PanicCelestialOn)
     
     
-    root.bind('q',ApagarGPIO)
-    root.bind('w',EncendreGPIO10)
-    root.bind('e',Encendre220vI2C15)
-    
-    root.bind('a',ApagarRGB)
-    root.bind('s',EncendreRGB)
-    root.bind('d',CreixerRGB)
-    root.bind('f',DecreixerRGB)
-    
-    root.bind('z',netejarLedAdressable)
-    root.bind('x',omplirLedAdressable)
-    root.bind('c',creixerLedAdressable)
-    root.bind('v',decreixerLedAdressable)
-    root.bind('b',wipeLedAdressable)
-    root.bind('n',incremental)
-    root.bind('m',rainbowTempsTotal)
-    root.bind(',',rainbowCycleTempsTotal)
-    root.bind('.',theaterChaseTempsTotal)
-    root.bind('-',theaterChaseRainbow)
-    
-    
-    root.bind('p',buttonPlayPausePress)
+#    root.bind('q',ApagarGPIO)
+#    root.bind('w',EncendreGPIO10)
+#    root.bind('e',Encendre220vI2C15)
+#    
+#    root.bind('a',ApagarRGB)
+#    root.bind('s',EncendreRGB)
+#    root.bind('d',CreixerRGB)
+#    root.bind('f',DecreixerRGB)
+#    
+#    root.bind('z',netejarLedAdressable)
+#    root.bind('x',omplirLedAdressable)
+#    root.bind('c',creixerLedAdressable)
+#    root.bind('v',decreixerLedAdressable)
+#    root.bind('b',wipeLedAdressable)
+#    root.bind('n',incremental)
+#    root.bind('m',rainbowTempsTotal)
+#    root.bind(',',rainbowCycleTempsTotal)
+#    root.bind('.',theaterChaseTempsTotal)
+#    root.bind('-',theaterChaseRainbow)
+#    
+#    
+#    root.bind('p',buttonPlayPausePress)
 
     
     #<Tab>

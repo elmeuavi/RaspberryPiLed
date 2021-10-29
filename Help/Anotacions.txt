@@ -201,3 +201,9 @@ https://robojax.com/products.php?pid=133
 
 
 
+
+
+per a fer esquemes de les connexions
+https://sourceforge.net/projects/fritzing-portable/
+... i afegir-hi la llibreria de arduino i raspberrypi
+https://github.com/adafruit/Fritzing-Library

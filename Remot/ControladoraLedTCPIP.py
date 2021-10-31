@@ -210,11 +210,11 @@ def PanicCelestialOn(event):
     EnviarComandaAServidor('|PanicBlanc')
     
     
-    stdin, stdout, stderr = client.exec_command('gpio -g write 10 1')
-    global activatGPIO10
-    activatGPIO10=True
-    btn_textEncendreGPIO10.set("Apagar leds GPIO-10")    
-    RegistrarComanda( "gpio -g write 10 1") 
+#    stdin, stdout, stderr = client.exec_command('gpio -g write 10 1')
+#    global activatGPIO10
+#    activatGPIO10=True
+#    btn_textEncendreGPIO10.set("Apagar leds GPIO-10")    
+#    RegistrarComanda( "gpio -g write 10 1") 
 
 
     #EnviarComandaAServidor('|activarCanalI2C 15' )
@@ -226,6 +226,16 @@ def PanicCelestialOn(event):
     global activat220vI2C14
     activat220vI2C14=True
     btn_textEncendreI2C14.set("Apagar 220v I2C (canal 14)")
+
+    #EnviarComandaAServidor('|activarCanalI2C 13' )
+    global activat220vI2C13
+    activat220vI2C13=True
+    btn_textEncendreI2C13.set("Apagar 220v I2C (canal 13)")
+
+    #EnviarComandaAServidor('|activarCanalI2C 12' )
+    global activat220vI2C12
+    activat220vI2C12=True
+    btn_textEncendreI2C12.set("Apagar 220v I2C (canal 12)")
 
 
     #stdin, stdout, stderr = client.exec_command('gpio -g write 13 1')
@@ -248,11 +258,11 @@ def PanicCelestialOff(event):
     
     #ApagarGPIO()    
     
-    stdin, stdout, stderr = client.exec_command('gpio -g write 10 0')
-    global activatGPIO10
-    activatGPIO10=False
-    btn_textEncendreGPIO10.set("Encendre leds GPIO-10")
-    RegistrarComanda( "gpio -g write 10 0")
+#    stdin, stdout, stderr = client.exec_command('gpio -g write 10 0')
+#    global activatGPIO10
+#    activatGPIO10=False
+#    btn_textEncendreGPIO10.set("Encendre leds GPIO-10")
+#    RegistrarComanda( "gpio -g write 10 0")
     
     #stdin, stdout, stderr = client.exec_command('gpio -g write 13 0')
     #RegistrarComanda( "gpio -g write 13 0 ")
@@ -266,6 +276,16 @@ def PanicCelestialOff(event):
     global activat220vI2C14
     activat220vI2C14=False
     btn_textEncendreI2C14.set("Encendre 220v I2C (canal 14)")
+    
+    #EnviarComandaAServidor('|desactivarCanalI2C 13' )
+    global activat220vI2C1
+    activat220vI2C13=False
+    btn_textEncendreI2C13.set("Encendre 220v I2C (canal 13)")
+    
+    #EnviarComandaAServidor('|desactivarCanalI2C 12' )
+    global activat220vI2C12
+    activat220vI2C12=False
+    btn_textEncendreI2C12.set("Encendre 220v I2C (canal 12)")
     
 
     
@@ -339,7 +359,33 @@ def Encendre220vI2C14(event=None):
         activat220vI2C14=True
         btn_textEncendreI2C14.set("Apagar 220v I2C (canal 14)")
 
-    
+
+activat220vI2C13=False
+def Encendre220vI2C13(event=None):
+    global activat220vI2C13
+    if activat220vI2C13:  
+        EnviarComandaAServidor('|desactivarCanalI2C 13' )
+        activat220vI2C13=False
+        btn_textEncendreI2C13.set("Encendre 220v I2C (canal 13)")
+    else:                     
+        EnviarComandaAServidor('|activarCanalI2C 13' )
+        activat220vI2C13=True
+        btn_textEncendreI2C13.set("Apagar 220v I2C (canal 13)")
+        
+activat220vI2C12=False
+def Encendre220vI2C12(event=None):
+    global activat220vI2C12
+    if activat220vI2C12:  
+        EnviarComandaAServidor('|desactivarCanalI2C 12' )
+        activat220vI2C12=False
+        btn_textEncendreI2C12.set("Encendre 220v I2C (canal 12)")
+    else:                     
+        EnviarComandaAServidor('|activarCanalI2C 12' )
+        activat220vI2C12=True
+        btn_textEncendreI2C12.set("Apagar 220v I2C (canal 12)")
+
+
+
 #def RGBCanal1On(event):
 #    #if chk_color_aleatori.get():
 #        stdin, stdout, stderr = client.exec_command('sudo python3 ' + xeviTiraRGB + ' --color A  --animacio pintar --intensitat 255 &')
@@ -1126,7 +1172,24 @@ if __name__ == '__main__':
     buttonEncendreI2C14.grid(column=col, row=fila, pady=(40, 10),padx=(20, 10))
     col = 0 
     fila = fila + 1
+    btn_textEncendreI2C12 = tk.StringVar()
+    buttonEncendreI2C12 = tk.Button(frame1Led, 
+                       textvariable=btn_textEncendreI2C12,
+                       command=Encendre220vI2C12,                   
+                       fg="black")
+    btn_textEncendreI2C12.set("Encendre 220v I2C (canal 12)")
+    buttonEncendreI2C12.grid(column=col, row=fila, pady=(10, 10))
+    col = col + 1
 
+    btn_textEncendreI2C13 = tk.StringVar()
+    buttonEncendreI2C13 = tk.Button(frame1Led, 
+                       textvariable=btn_textEncendreI2C13,
+                       command=Encendre220vI2C13,                   
+                       fg="black")
+    btn_textEncendreI2C13.set("Encendre 220v I2C (canal 13)")
+    buttonEncendreI2C13.grid(column=col, row=fila, pady=(10, 10),padx=(20, 10))
+    col = 0 
+    fila = fila + 1
 
 
 

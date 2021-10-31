@@ -183,7 +183,6 @@ if __name__ == '__main__':
                                             pRGB.start()
                                         else:                  pintarTiraRGB(pca, TIRES,   COLOR_LEDS,  args.intensitat)
                                         
-                                        
                                         pca.channels[15].duty_cycle = 65534
                                         pca.channels[14].duty_cycle = 65534
                                         pca.channels[13].duty_cycle = 65534
@@ -208,6 +207,8 @@ if __name__ == '__main__':
                                         
                                         pca.channels[15].duty_cycle = 0
                                         pca.channels[14].duty_cycle = 0
+                                        pca.channels[13].duty_cycle = 0
+                                        pca.channels[12].duty_cycle = 0
                                         pca.channels[13].duty_cycle = 0
                                         pca.channels[10].duty_cycle = 0
                                         

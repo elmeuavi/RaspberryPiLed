@@ -63,7 +63,6 @@ def ParametresLlegirTires(args):
         return (1,2,3)
     elif args.tira == "'16'":
         return (15)
-            
     
     
 def ParametresLlegirColorTiraRGB(args):

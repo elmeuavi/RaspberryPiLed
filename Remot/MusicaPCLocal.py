@@ -64,7 +64,10 @@ if __name__ == '__main__':
                                     if comanda[0] == "musica": 
                                         print ('dins música')
                                         pygame.mixer.init(frequency=48000)
-                                        pygame.mixer.music.load('data\\MusicaHalloween.mp3')
+                                        if comanda[1] == "orient": 
+                                            pygame.mixer.music.load('data\\ReisOrient.mp3')
+                                        else:
+                                            pygame.mixer.music.load('data\\MusicaHalloween.mp3')
                                         pygame.mixer.music.set_volume(1)
                                         pygame.mixer.music.play()  # start=POSICIO_MP3/1000
                                     elif comanda[0] == "stop": 

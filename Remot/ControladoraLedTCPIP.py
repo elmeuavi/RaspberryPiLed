@@ -1160,7 +1160,7 @@ if __name__ == '__main__':
                        command=Encendre220vI2C15,                   
                        fg="black")
     btn_textEncendreI2C15.set("Encendre 220v I2C (canal 15)")
-    buttonEncendreI2C15.grid(column=col, row=fila, pady=(40, 10))
+    buttonEncendreI2C15.grid(column=col, row=fila, pady=(40, 5))
     col = col + 1
 
     btn_textEncendreI2C14 = tk.StringVar()
@@ -1169,7 +1169,7 @@ if __name__ == '__main__':
                        command=Encendre220vI2C14,                   
                        fg="black")
     btn_textEncendreI2C14.set("Encendre 220v I2C (canal 14)")
-    buttonEncendreI2C14.grid(column=col, row=fila, pady=(40, 10),padx=(20, 10))
+    buttonEncendreI2C14.grid(column=col, row=fila, pady=(40, 5),padx=(20, 10))
     col = 0 
     fila = fila + 1
     btn_textEncendreI2C12 = tk.StringVar()

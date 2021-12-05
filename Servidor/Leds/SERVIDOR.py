@@ -25,6 +25,9 @@ import sys
 import serial
 import select
 
+#Per controlar els pins individualment
+import RPi.GPIO as GPIO
+
 from AnimacioLed import *
 from TiraRGB import *
 from multiprocessing import Process  #, Value, Array
@@ -50,6 +53,8 @@ ser=None
 if __name__ == '__main__':
     COLOR_LEDS=Color(255, 255, 255)
     TIRES=(0,1,2,3,4,5)
+    
+    GPIO.setmode(GPIO.BCM)
         
     try:    
         ser = serial.Serial('/dev/ttyACM0', 1000000, timeout=1)
@@ -159,6 +164,7 @@ if __name__ == '__main__':
                                     #obrim tires de leds adressables a color blanc i intensitat 255
                                     #obrim 2 tires de leds canal 0-2 i 3-5 de protocol I2C a color blanc i intensitat 255
                                     #obrim canal 15 de protocol I2C
+                                    #si li afegim un paràmetre és el temps de durada
                                     elif comanda[0] == "PanicBlanc":
                                         args.color="'W'"
                                         COLOR_LEDS=ParametresLlegirColor(args)
@@ -216,8 +222,17 @@ if __name__ == '__main__':
                                             ser.write("fl:0,0,0".encode('utf-8'))
                                             ser.write(b"\n")
 
-                                        
-                                        
+                                    ######################################################################################################
+                                    #           UN PIN EN CONCRET
+                                    ######################################################################################################                  
+                                    elif comanda[0] == "GPIO_ON":
+                                        GPIO.setup(int(comanda[1]), GPIO.OUT)
+                                        GPIO.output(int(comanda[1]), GPIO.HIGH)
+
+                                    elif comanda[0] == "GPIO_OFF":
+                                        GPIO.setup(int(comanda[1]), GPIO.OUT)
+                                        GPIO.output(int(comanda[1]), GPIO.LOW)
+                                       
                                         
                                     ######################################################################################################
                                     #           TIRA LED ADRESSABLE

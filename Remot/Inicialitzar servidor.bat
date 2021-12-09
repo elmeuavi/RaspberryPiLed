@@ -1,7 +1,19 @@
 @echo off
 
-echo incialitzem servidor de la raspberry
-start plink.exe  -t -pw raspberry  -no-antispoof -ssh pi@192.168.1.144 "sudo python3 /home/pi/RaspberryPiLed/Servidor/Leds/SERVIDOR.py" 
+rem set RASPBERRY=192.168.1.144
+rem set RASPBERRY=192.168.43.240
+
+
+FOR /f "tokens=* USEBACKQ" %%G IN (`powershell.exe "(ConvertFrom-StringData(Get-Content '.\configuracio.properties' -raw)).'raspberry.ip'"`) DO (
+ set RASPBERRY=%%G
+ goto CONTINUAR
+)
+:CONTINUAR
+
+
+echo Incialitzem servidor de la raspberry
+start plink.exe  -t -pw raspberry  -no-antispoof -ssh pi@%RASPBERRY% "sudo python3 /home/pi/RaspberryPiLed/Servidor/Leds/SERVIDOR.py" 
+start plink.exe  -t -pw raspberry  -no-antispoof -ssh pi@%RASPBERRY% "sh /home/pi/RaspberryPiLed/Servidor/Leds/setupTunel.bat" 
 
 if exist %userprofile%\Documents\RaspberryPiLed\Remot\ControladoraLedTCPIP.py (
 	cd %userprofile%\Documents\RaspberryPiLed\Remot\
@@ -12,3 +24,4 @@ if exist %userprofile%\Documents\RaspberryPiLed\Remot\ControladoraLedTCPIP.py (
 	echo incialitzem controladora
 	python ControladoraLedTCPIP.py
 )
+

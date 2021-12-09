@@ -42,6 +42,9 @@ from multiprocessing import Process  #, Value, Array
 
 import traceback
 
+#Per decodificar la URL
+from urllib.parse import unquote_plus
+
 debug=False
 
 
@@ -106,7 +109,7 @@ if __name__ == '__main__':
                     connection.setblocking(0)
                     inputs.append(connection)
                     #message_queues[connection] = Queue.Queue()
-                    print ("Nova connexio arribada de " + str(client_address))
+                    print ("Nova connexio arribada: " + str(client_address) + " Connexions Actives: " + str(len(inputs)))
 
                 #mirem la conexió serial per USB cap a la arduino
                 elif s == ser:
@@ -121,6 +124,16 @@ if __name__ == '__main__':
                         print("Error al llegir")
                         data = None
                     if data:
+                        if debug: print("Rebut:" , data)
+                        if data.split(" ")[0] == "GET":
+                            #Rebuda una comunicació a partir de un tunnel SSH on hi ha molta merda i ens hem de 
+                            #quedar només amb la instrucció a llançar
+                            #ssh -R 80:localhost:10000 localhost.run
+                            data = data.split(" ")[1][1:]
+                            data = unquote_plus(data)
+                            #tanquem aquesta connexió donat que només agafem el que ve de paràmetre
+                            inputs.remove(s)
+                            s.shutdown(socket.SHUT_RDWR)
                         llista_linies_comandes=data.split("|")
                         for linia_comanda in llista_linies_comandes:
                             if linia_comanda:
@@ -389,12 +402,12 @@ if __name__ == '__main__':
                         s.close()
     #                   del message_queues[s]
             for s in exceptional:
+                print("Detectada connexió tancada")
                 inputs.remove(s)
                 if s in outputs:
                     outputs.remove(s)
                 s.close()
                 #del message_queues[s]
 
-  
     finally:
         sock.close()

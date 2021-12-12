@@ -29,6 +29,30 @@ sudo raspi-config
 # anar a interficies i habilitar el "The ARM I2C interface is enabled "
 
 
+# servidor de FTP
+sudo apt-get install vsftpd
+sudo nano /etc/vsftpd.conf
+#local_enable=YES
+#write_enable=YES
+sudo service vsftpd restart
+
+
+#servidor apache https://www.luisllamas.es/como-montar-un-servidor-web-apache-en-raspberry-pi/
+#servidor php dins apache https://www.luisllamas.es/como-instalar-php-sobre-apache-en-raspberry-pi/
+sudo apt install apache2
+sudo apt install php libapache2-mod-php php-mysql
+sudo systemctl status apache2
+sudo systemctl restart apache2
+#Afegit directori al sudo nano /etc/apache2/apache2.conf per poder veure la web del projecte
+#				Alias /ReisMags /home/pi/RaspberryPiLed/Servidor/apache
+#				<Directory /home/pi/RaspberryPiLed/Servidor/apache>
+#						AllowOverride None
+#						Require all granted
+#				</Directory>
+
+
+
+
 #Ja no m'ha calgut.
 ###git clone http://github.com/jgarff/rpi_ws281x.git
 ####cd rpi_ws281x
@@ -90,12 +114,7 @@ gpio pwm <pin> <value> #Set the pin to a PWM value (0-1023 is supported)
 
 
 
-# servidor de FTP
-sudo apt-get install vsftpd
-sudo nano /etc/vsftpd.conf
-#local_enable=YES
-#write_enable=YES
-sudo service vsftpd restart
+
 
 
 

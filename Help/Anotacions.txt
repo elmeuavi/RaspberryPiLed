@@ -7,18 +7,35 @@ sudo python3 /home/pi/RaspberryPiLed/Servidor/Leds/SERVIDOR.py &
 
 
 
+S'ha de connectar amb un carregador de mòbil de 5 vols i 3 AMPERS i un cable que ho permeti (el que tinc vermell)
+
+
+Instalar el SO littel: https://peppe8o.com/install-raspberry-pi-os-lite-in-your-raspberry-pi/
+Expandir la partició root: http://cagewebdev.com/raspberry-pi-expanding-the-root-partition-of-the-sd-card/
+
+
 
 sudo apt-get update
+sudo apt-get install python3-pip
 sudo pip3 install adafruit-circuitpython-neopixel
 sudo pip3 install rpi_ws281x
 sudo python3 -m pip install --force-reinstall adafruit-blinka
 sudo apt-get -y install build-essential python-dev git scons swig
-git clone http://github.com/jgarff/rpi_ws281x.git
-#cd rpi_ws281x
-#scons
-#cd python
-#sudo python3 setup.py build
-#sudo python3 setup.py install
+sudo pip3 install adafruit-circuitpython-pca9685
+sudo apt-get install i2c-tools
+
+# Per evitar error FileNotFoundError: [Errno 2] No such file or directory: '/dev/i2c-1'
+sudo raspi-config
+# anar a interficies i habilitar el "The ARM I2C interface is enabled "
+
+
+#Ja no m'ha calgut.
+###git clone http://github.com/jgarff/rpi_ws281x.git
+####cd rpi_ws281x
+####scons
+####cd python
+####sudo python3 setup.py build
+####sudo python3 setup.py install
 
 
 

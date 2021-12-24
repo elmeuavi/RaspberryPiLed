@@ -1,5 +1,8 @@
 #include <stdlib.h>
 
+//Adafruit_GFX.h: No such file or directory
+//Adafruit_NeoMatrix.h: No such file or directory
+
 
 //https://github.com/adafruit/Adafruit_NeoMatrix
 // Only use this functions or Serial will not work:
@@ -88,8 +91,8 @@ byte ampladaFontAEscriure;
 
 
 Adafruit_NeoMatrix *matrix = new Adafruit_NeoMatrix(MATRIU_WIDTH, MATRIU_HEIGHT, PIN,
-    //NEO_MATRIX_BOTTOM     + NEO_MATRIX_RIGHT +
-    NEO_MATRIX_TOP     + NEO_MATRIX_LEFT +
+    NEO_MATRIX_BOTTOM     + NEO_MATRIX_RIGHT +
+    //NEO_MATRIX_TOP     + NEO_MATRIX_LEFT +
     NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
     NEO_GRB            + NEO_KHZ800);
 
@@ -312,6 +315,10 @@ bool CallFuncions(char c1, char c2) {
     //Rosa de Sant Jordi
   } else if (c1 == 'r' && c2 == 's' ) {
     Rosa();
+
+    //Corona dels tres reis mags
+  } else if (c1 == 'c' && c2 == 'r' ) {
+    Corona();
 
     //COLORS SELECT
   } else if (c1 == 'c' && c2 == 's' ) {
@@ -600,6 +607,74 @@ void Somriu(unsigned long pMiliseg) {
   }
 }
 
+const int corona[] PROGMEM = {
+  0b11111,
+  0b00111,
+  0b00111,
+  0b11111,
+  0b11111,
+  0b00111,
+  0b00111,
+  0b11111
+};
+
+void Corona() {
+
+  Serial.println("Rebut Corona");
+  
+  uint16_t pixel[1];
+
+  
+  
+
+  colors[1] = 0;
+  matrix->fillScreen(colors[1]);
+
+  colors[0] = matrix->Color(255, 255, 0); //Color groc
+  for (byte i = 0; i < MATRIU_WIDTH + screenOffset ; i++) {    screen[i] = 0;  }   //Esborrar buffer screen
+
+  for (uint8_t i = 0; i < 8; i++) {
+    screen[i] = pgm_read_word(  (corona) + (i)   ) << 0;
+  }
+
+  escriureScreenLedStrip();
+  //colors[0] = matrix->Color(255, 255, 0);
+  for (byte i = 0; i < MATRIU_WIDTH + screenOffset ; i++) {    screen[i] = 0;  }   //Esborrar buffer screen
+
+  for (uint8_t i = 0; i < 8; i++) {
+    screen[i+10] = pgm_read_word(  (corona) + (i)   ) << 4;
+  }
+
+  sobreEscriureScreenLedStrip();
+  //colors[0] = matrix->Color(255, 255, 0);
+  for (byte i = 0; i < MATRIU_WIDTH + screenOffset ; i++) {    screen[i] = 0;  }   //Esborrar buffer screen
+
+  for (uint8_t i = 0; i < 8; i++) {
+    screen[i+20] = pgm_read_word(  (corona) + (i)   ) << 0;
+  }
+  
+  sobreEscriureScreenLedStrip();
+  //escriureScreenUSB();
+/*
+  //Esborrar buffer screen
+  for (byte i = 0; i < MATRIU_WIDTH + screenOffset ; i++) {
+    screen[i] = 0;
+  }
+
+  colors[0] = matrix->Color(0, 255, 0);
+  for (uint8_t i = 0; i < 24; i++) {
+    screen[i + 4] = pgm_read_word( tija + i);
+  }
+  sobreEscriureScreenLedStrip();
+*/
+  //tornem a posar els valors per defecte blanc
+  colors[0] = matrix->Color(255, 255, 255);
+  //Esborrar buffer screen
+  for (byte i = 0; i < MATRIU_WIDTH + screenOffset ; i++) {    screen[i] = 0;  }
+
+}
+
+
 
 
 const  int  capullo[] PROGMEM = {
@@ -639,8 +714,8 @@ const int tija[] PROGMEM = {
   0b0000100000,
   0b0000100000,
   0b0000100000,
-
 };
+
 void Rosa() {
 
   //Serial.println("Rebut Rosa");

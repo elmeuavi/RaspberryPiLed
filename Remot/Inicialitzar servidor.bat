@@ -11,9 +11,10 @@ FOR /f "tokens=* USEBACKQ" %%G IN (`powershell.exe "(ConvertFrom-StringData(Get-
 :CONTINUAR
 
 
-echo Incialitzem servidor de la raspberry
+
+echo Incialitzem servidor de la raspberry %RASPBERRY%
 start plink.exe  -t -pw raspberry  -no-antispoof -ssh pi@%RASPBERRY% "sudo python3 /home/pi/RaspberryPiLed/Servidor/Leds/SERVIDOR.py" 
-start plink.exe  -t -pw raspberry  -no-antispoof -ssh pi@%RASPBERRY% "sh /home/pi/RaspberryPiLed/Servidor/Leds/setupTunel.bat" 
+rem start plink.exe  -t -pw raspberry  -no-antispoof -ssh pi@%RASPBERRY% "sh /home/pi/RaspberryPiLed/Servidor/Leds/setupTunel.bat" 
 
 if exist %userprofile%\Documents\RaspberryPiLed\Remot\ControladoraLedTCPIP.py (
 	cd %userprofile%\Documents\RaspberryPiLed\Remot\

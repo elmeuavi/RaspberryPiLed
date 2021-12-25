@@ -22,7 +22,7 @@
   https://www.arduino.cc/en/Tutorial/BuiltInExamples/Blink
 */
 
-#define PrimerPin 31
+#define PrimerPin 2
 #define MAXPINS 8;
 
 #define SERIAL_BAUD 1000000
@@ -34,7 +34,7 @@ char inputString[255] = "";
 bool stringComplete = false;     // whether the string is complete
 
 
-uint16_t NUMEROPINS =8;
+uint8_t NUMEROPINS =8;
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -102,7 +102,7 @@ void loop() {
 //-------------------------------------------------------------
 
 bool CallFuncions(char c1, char c2) {
- //COUNT DOWN
+ 
   if (c1 == 'i' && c2 == 't' ) {
     Iterar();
   }
@@ -112,6 +112,36 @@ bool CallFuncions(char c1, char c2) {
     sscanf(&inputString[3], "%ul",  &NUMEROPINS);
     Serial.println(String("Canviat a ") + NUMEROPINS);
   }
+
+  //on:x
+  else if (c1 == 'o' && c2 == 'n' ) {
+    uint8_t pinTractar;
+    sscanf(&inputString[3], "%ul",  &pinTractar);
+    digitalWrite(PrimerPin+pinTractar, HIGH);
+  }
+
+  //off:x
+  else if (c1 == 'o' && c2 == 'f' ) {
+    uint8_t pinTractar;
+    sscanf(&inputString[3], "%ul",  &pinTractar);
+    digitalWrite(PrimerPin+pinTractar, LOW);
+  }
+
+   //pb:   panic black
+  else if (c1 == 'p' && c2 == 'b' ) {
+      for (uint8_t i=0;i<NUMEROPINS;i++){
+        digitalWrite(PrimerPin+i, LOW);
+      }
+  }
+
+
+   //pw:   panic white
+  else if (c1 == 'p' && c2 == 'w' ) {
+      for (uint8_t i=0;i<NUMEROPINS;i++){
+        digitalWrite(PrimerPin+i, HIGH);
+      }
+  }
+
 
 }
 

@@ -71,8 +71,15 @@ if __name__ == '__main__':
         ser = serial.Serial('/dev/ttyACM0', 1000000, timeout=1)
         ser.flush()
     except:
-        print ("No hi ha USB")
+        print ("No hi ha USB a /dev/ttyACM0")
         None
+
+        try:    
+            ser = serial.Serial('/dev/ttyUSB0', 1000000, timeout=1)
+            ser.flush()
+        except:
+            print ("No hi ha USB a /dev/ttyUSB0")
+            None        
 
     # Create a TCP/IP socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

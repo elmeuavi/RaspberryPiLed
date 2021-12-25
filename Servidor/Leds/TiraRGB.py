@@ -104,9 +104,17 @@ def netejarTiraRGB(pca, tires):
 def pintarTiraRGB(pca,  tires, pColor, intensitat=255):
 
     for i in range(1,len(tires),3):
-        pca.channels[tires[i-1]].duty_cycle = int(ObteVermellHex(pColor) * float(intensitat) / float(255))
-        pca.channels[tires[i]].duty_cycle = int(ObteVerdHex(pColor) * float(intensitat) / float(255))
-        pca.channels[tires[i+1]].duty_cycle = int(ObteBlauHex(pColor) * float(intensitat) / float(255))
+        if tires[i] == 5 and ObteVermellHex(pColor) == ObteVerdHex(pColor) == ObteBlauHex(pColor):
+            #Si estem mirant la segona tira 4,5,6 que té blanc (RGBW) i el color és un to de blanc, pintem només la tira de Blanc 7-W
+            pca.channels[7].duty_cycle = int(ObteVermellHex(pColor) * float(intensitat) / float(255))
+            pca.channels[4].duty_cycle = 0
+            pca.channels[5].duty_cycle = 0
+            pca.channels[6].duty_cycle = 0
+        else:
+            pca.channels[7].duty_cycle = 0
+            pca.channels[tires[i-1]].duty_cycle = int(ObteVermellHex(pColor) * float(intensitat) / float(255))
+            pca.channels[tires[i]].duty_cycle = int(ObteVerdHex(pColor) * float(intensitat) / float(255))
+            pca.channels[tires[i+1]].duty_cycle = int(ObteBlauHex(pColor) * float(intensitat) / float(255))
     
 
 

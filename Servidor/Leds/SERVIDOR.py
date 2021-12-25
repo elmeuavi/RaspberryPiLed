@@ -40,6 +40,7 @@ from AnimacioLed import *
 from TiraRGB import *
 from multiprocessing import Process  #, Value, Array
 
+
 import traceback
 
 #Per decodificar la URL
@@ -58,7 +59,8 @@ class args:
 
     
 #Connexió serial per USB cap a aduino (pantalla led)
-ser=None
+Usb_Pantalla=None
+Usb_ArduinoOne=None
 
 
 if __name__ == '__main__':
@@ -66,20 +68,24 @@ if __name__ == '__main__':
     TIRES=(0,1,2,3,4,5)
     
     GPIO.setmode(GPIO.BCM)
-        
+    
+    
+    #/usr/bin/dmesg | grep -i USB | grep 'attached to'
     try:    
-        ser = serial.Serial('/dev/ttyACM0', 1000000, timeout=1)
-        ser.flush()
+        Usb_ArduinoOne = serial.Serial('/dev/ttyACM0', 1000000, timeout=1)
+        Usb_ArduinoOne.flush()
+        print ("Trobat USB a /dev/ttyACM0  (Arduino One)")
     except:
-        print ("No hi ha USB a /dev/ttyACM0")
+        print ("No hi ha USB a /dev/ttyACM0 (Arduino One)")
         None
 
-        try:    
-            ser = serial.Serial('/dev/ttyUSB0', 1000000, timeout=1)
-            ser.flush()
-        except:
-            print ("No hi ha USB a /dev/ttyUSB0")
-            None        
+    try:    
+        Usb_Pantalla = serial.Serial('/dev/ttyUSB0', 1000000, timeout=1)
+        Usb_Pantalla.flush()
+        print ("Trobat USB a /dev/ttyUSB0  (Arduino Mega)")
+    except:
+        print ("No hi ha USB a /dev/ttyUSB0 (Arduino Mega)")
+        None        
 
     # Create a TCP/IP socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -91,8 +97,10 @@ if __name__ == '__main__':
     inputs = [sock]
     outputs = []
     message_queues = {}
-    if ser is not None:
-        inputs.append(ser)
+    if Usb_ArduinoOne is not None:
+        inputs.append(Usb_ArduinoOne)
+    if Usb_Pantalla is not None:
+        inputs.append(Usb_Pantalla)
 
     
     
@@ -119,10 +127,12 @@ if __name__ == '__main__':
                     print ("Nova connexio arribada: " + str(client_address) + " Connexions Actives: " + str(len(inputs)))
 
                 #mirem la conexió serial per USB cap a la arduino
-                elif s == ser:
-                     line=""
-                     line = ser.readline().decode('utf-8').rstrip()
-                     print("Rebut de comunicacio USB: " + line)
+                elif s == Usb_Pantalla:
+                     print("Rebut de comunicacio USB Arduino Mega (pantalla): " + Usb_Pantalla.readline().decode('utf-8').rstrip())
+                    
+                #mirem la conexió serial per USB cap a la arduino
+                elif s == Usb_ArduinoOne:
+                     print("Rebut de comunicacio USB Arduino One (rele): " + Usb_ArduinoOne.readline().decode('utf-8').rstrip())
                     
                 else:
                     try:
@@ -223,14 +233,19 @@ if __name__ == '__main__':
                                         pRGB.start()
                                     else:                  pintarTiraRGB(pca, TIRES,   COLOR_LEDS,  args.intensitat)
                                     
+                                    #reles oberts
                                     pca.channels[15].duty_cycle = 65534
                                     pca.channels[14].duty_cycle = 65534
                                     pca.channels[13].duty_cycle = 65534
                                     pca.channels[12].duty_cycle = 65534
                                     
-                                    if ser is not None:
-                                        ser.write("fl:255,255,255".encode('utf-8'))
-                                        ser.write(b"\n")
+                                    if Usb_Pantalla is not None:
+                                        Usb_Pantalla.write("fl:255,255,255".encode('utf-8'))
+                                        Usb_Pantalla.write(b"\n")
+
+                                    if Usb_ArduinoOne is not None:
+                                        Usb_ArduinoOne.write("pw:".encode('utf-8'))
+                                        Usb_ArduinoOne.write(b"\n")
 
                                     
                                 #taquem tires de leds adressables
@@ -252,9 +267,14 @@ if __name__ == '__main__':
                                     pca.channels[13].duty_cycle = 0
                                     pca.channels[10].duty_cycle = 0
                                     
-                                    if ser is not None:
-                                        ser.write("fl:0,0,0".encode('utf-8'))
-                                        ser.write(b"\n")
+                                    if Usb_Pantalla is not None:
+                                        Usb_Pantalla.write("fl:0,0,0".encode('utf-8'))
+                                        Usb_Pantalla.write(b"\n")
+
+                                    if Usb_ArduinoOne is not None:
+                                        Usb_ArduinoOne.write("pb:".encode('utf-8'))
+                                        Usb_ArduinoOne.write(b"\n")
+
 
 
 
@@ -390,14 +410,27 @@ if __name__ == '__main__':
 
 
                                 ######################################################################################################
-                                #           PANTALLA LED
+                                #           PANTALLA LED VIA USB ARDUINO MEGA
                                 ######################################################################################################
                                 elif comanda[0] == "PANTALLA":      
-                                    if ser is not None:
+                                    if Usb_Pantalla is not None:
                                         print("Llancem una comanda a la pantalla led: " + linia_comanda[9::])
-                                        ser.write(linia_comanda[9::].encode('utf-8'))
-                                        ser.write(b"\n")
-                                        ser.flush()
+                                        Usb_Pantalla.write(linia_comanda[9::].encode('utf-8'))
+                                        Usb_Pantalla.write(b"\n")
+                                        Usb_Pantalla.flush()
+
+
+                                ######################################################################################################
+                                #           ARDUINO AMB ELS RELES VIA USB ARDUINO UNO
+                                ######################################################################################################
+                                elif comanda[0] == "RELES":      
+                                    if Usb_ArduinoOne is not None:
+                                        print("Llancem una comanda a l'Arduino Uno: " + linia_comanda[len(comanda[0])+1::])
+                                        Usb_ArduinoOne.write(linia_comanda[len(comanda[0])+1::].encode('utf-8'))
+                                        Usb_ArduinoOne.write(b"\n")
+                                        Usb_ArduinoOne.flush()
+
+
 
                                 else:
                                     break
@@ -417,4 +450,5 @@ if __name__ == '__main__':
                 #del message_queues[s]
 
     finally:
+        print("Anem a tancar les connexions")
         sock.close()

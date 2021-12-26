@@ -429,15 +429,18 @@ if __name__ == '__main__':
         #               estat_connectat = False
         #               if s in outputs:
         #                      outputs.remove(s)
+                        host, port = s.getpeername()
                         inputs.remove(s)
                         s.close()
+                        print("Detectada connexió tancada (" + host + ", " +  str(port) + ") Connexions Actives: " + str(len(inputs)))
     #                   del message_queues[s]
             for s in exceptional:
-                print("Detectada connexió tancada")
+                host, port = s.getpeername()
                 inputs.remove(s)
                 if s in outputs:
                     outputs.remove(s)
                 s.close()
+                print("Detectada connexió en exceptional (" + host + ", " +  str(port) + ") Connexions Actives: " + str(len(inputs)))
                 #del message_queues[s]
 
     except Exception as e: 

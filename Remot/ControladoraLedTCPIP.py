@@ -396,9 +396,9 @@ def Encendre220vI2C12(event=None):
 #    stdin, stdout, stderr = client.exec_command('sudo python3 ' + xeviTiraRGB + ' --colorR 1 --colorG 1 --colorB 1  --animacio pintar --intensitat 1 &')
 
     
-sTotesTires = '1,2,3,4,5,6'
-sTiresCanal1 = '1,2,3'
-sTiresCanal2 = '4,5,6'
+sTotesTires = '0,1'
+sTiresCanal1 = '0'
+sTiresCanal2 = '1'
     
 def ApagarRGB(event=None):
     EnviarComandaAServidor('|seleccionarTiraRGB '+sTotesTires+'|netejarTiraRGB')

@@ -9,6 +9,11 @@ Alias /ReisMags /home/pi/RaspberryPiLed/Servidor/apache
         Require all granted
 </Directory>
 
+
+
+
+include 'config.php';
+
 ?>
 <html >
 <head>
@@ -181,12 +186,12 @@ boto3D=""
 
 
   <?php
-if (false){
-	$addressMusica="192.168.1.189";
-	$port="20000";
+if ($config['musica']['actiu'] ){
+	#$addressMusica="192.168.1.189";
+	#$port="20000";
 	$sockMusica=socket_create(AF_INET,SOCK_STREAM,0);
 	$tenimMusica = false;
-	if (socket_connect($sockMusica,$addressMusica,$port)){
+	if (socket_connect($sockMusica,$config['musica']['ip'],$config['musica']['port'])){
 		$tenimMusica = true;
 		socket_write($sockMusica,"musica orient");
 		sleep(1);

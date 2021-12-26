@@ -30,7 +30,6 @@ if __name__ == '__main__':
     while True:
         print  ('Waiting for a new connection')
         connection, client_address = sock.accept()
-        estat_connectat = True
         try:
             print  ('client connected:', client_address)
             while True:
@@ -63,28 +62,36 @@ if __name__ == '__main__':
                                     print ("-" + comanda[0] + "-")
                                     if comanda[0] == "musica": 
                                         print ('dins música')
-                                        pygame.mixer.init(frequency=48000)
-                                        if comanda[1] == "orient": 
-                                            pygame.mixer.music.load('data\\ReisOrient.mp3')
+                                        if pygame.mixer.music.get_busy:
+                                            print('Ja estem reproduint música, no fem res!')
                                         else:
-                                            pygame.mixer.music.load('data\\MusicaHalloween.mp3')
-                                        pygame.mixer.music.set_volume(1)
-                                        pygame.mixer.music.play()  # start=POSICIO_MP3/1000
+                                            pygame.mixer.init(frequency=48000)
+                                            if comanda[1] == "orient": 
+                                                pygame.mixer.music.load('data\\ReisOrient.mp3')
+                                            else:
+                                                pygame.mixer.music.load('data\\MusicaHalloween.mp3')
+                                            pygame.mixer.music.set_volume(1)
+                                            pygame.mixer.music.play()  # start=POSICIO_MP3/1000
                                     elif comanda[0] == "stop": 
                                         pygame.mixer.music.stop()
                                     elif comanda[0] == "close": 
                                         sys.exit()
                                         
                         else:
-                           estat_connectat = False
+                           print("Client desconectat")
+                           s.close();
                           
                 #Mirem si s'ha tancat la connexió
                 if connection in exceptional: 
                     print("Connexió amb excepció")
                     break;
-                if not estat_connectat:
-                    print("Detectada connexió tancada")
-                    break;            
-            
+
+
+        except Exception as e: 
+            print("Tenim una excepció i anem a tancar les connexions")
+            print(e)
+            traceback.print_exc()
+            sock.close()
         finally:
-            connection.close()
+            print("Anem a tancar les connexions")
+            sock.close()

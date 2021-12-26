@@ -1,13 +1,13 @@
 <?php 
 //http://192.168.1.144/ReisMags/controladoraBotons.php
 
-Configurar a /etc/apache2/apache2.conf
-
-Alias /ReisMags /home/pi/RaspberryPiLed/Servidor/apache
-<Directory /home/pi/RaspberryPiLed/Servidor/apache>
-        AllowOverride None
-        Require all granted
-</Directory>
+//Configurar a /etc/apache2/apache2.conf
+//
+//Alias /ReisMags /home/pi/RaspberryPiLed/Servidor/apache
+//<Directory /home/pi/RaspberryPiLed/Servidor/apache>
+//        AllowOverride None
+//        Require all granted
+//</Directory>
 
 
 
@@ -144,9 +144,9 @@ boto3D=""
  
 </head>
 
-<body onload="Javascript:init()">
+<body onload="Javascript:init()" style="max-width: 800px;">
 
-<img src="https://esplaiespurnes.files.wordpress.com/2014/12/3-reis.jpg?w=1600&h=598&crop=1" width="100%">
+<img src="https://esplaiespurnes.files.wordpress.com/2014/12/3-reis.jpg?w=1600&h=598&crop=1" width="100%" >
 <div class="grid-layout">
 
 <div class="circle"></div>
@@ -194,7 +194,7 @@ if ($config['musica']['actiu'] ){
 	if (socket_connect($sockMusica,$config['musica']['ip'],$config['musica']['port'])){
 		$tenimMusica = true;
 		socket_write($sockMusica,"musica orient");
-		sleep(1);
+		sleep(5);
 		socket_close($sockMusica);
 	}
 		echo $tenimMusica;

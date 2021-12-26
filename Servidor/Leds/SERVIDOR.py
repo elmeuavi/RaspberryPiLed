@@ -4,7 +4,7 @@
 
 
 #PER INICIAR EL SERVIDOR TCP/IP
-#sudo python3 servidor.py
+#sudo python3 SERVIDOR.py
 
 #PER ATACAR EL SERVIDOR VIA SHELL
 #exec 3<>/dev/tcp/hostname/port
@@ -14,7 +14,7 @@
 #exec 3<&-
 
 #PER ATACAR EL SERVIDOR VIA COMPADA WINDOWS
-#curl -H "Host:" -H "User-Agent:" -H "Accept:" -H "Content-Length:" -H "Content-Type:" -d "hola" -X POST --max-time 0,1 192.168.1.144:10000  
+#curl -H "Host:" -H "User-Agent:" -H "Accept:" -H "Content-Length:" -H "Content-Type:" -d "hola" -X POST --max-time 0.1 192.168.1.144:10000  
 
 
 #PER ATACAR EL SERVIDOR VIA PYTHON
@@ -37,7 +37,7 @@ import RPi.GPIO as GPIO
 
 
 from AnimacioLed import *
-from TiraRGB import *
+from controlTiresRGB import *
 from multiprocessing import Process  #, Value, Array
 
 
@@ -65,7 +65,7 @@ Usb_ArduinoOne=None
 
 if __name__ == '__main__':
     COLOR_LEDS=Color(255, 255, 255)
-    TIRES=(0,1,2,3,4,5)
+    TIRES=(0,1)
     
     GPIO.setmode(GPIO.BCM)
     
@@ -132,7 +132,10 @@ if __name__ == '__main__':
                     
                 #mirem la conexió serial per USB cap a la arduino
                 elif s == Usb_ArduinoOne:
-                     print("Rebut de comunicacio USB Arduino One (rele): " + Usb_ArduinoOne.readline().decode('utf-8').rstrip())
+                    try:
+                        print("Rebut de comunicacio USB Arduino One (rele): " + Usb_ArduinoOne.readline().decode('utf-8').rstrip())
+                    except:
+                        print("No he pogut llegir de la USB Arduino One (rele)")
                     
                 else:
                     try:
@@ -192,14 +195,6 @@ if __name__ == '__main__':
                                     strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
                                     strip.begin()
 
-                                elif comanda[0] == "NetejarDespresEvent":
-                                    bNetejarTiraRGBDespresEvent=True
-                                    bNetejarTiraAdresablesDespresEvent=True
-                                elif comanda[0] == "NoNetejarDespresEvent":
-                                    bNetejarTiraRGBDespresEvent=False
-                                    bNetejarTiraAdresablesDespresEvent=False
-                                    
-                                    
                                     
                                     
                                 ######################################################################################################
@@ -218,7 +213,7 @@ if __name__ == '__main__':
                                     
                                     args.intensitat=255 # definir la intensitat per la tira de leds NO adressables 0-255
                                     
-                                    TIRES = eval('[1,2,3,4,5,6]')
+                                    TIRES = eval('[0,1]')
                                     
                                     if 'p' in locals() and p and p.is_alive():   p.terminate()
                                     if len(comanda) > 1:   
@@ -229,9 +224,9 @@ if __name__ == '__main__':
                                     
                                     if 'pRGB' in locals() and pRGB and pRGB.is_alive():   pRGB.terminate();
                                     if len(comanda) > 1:   
-                                        pRGB = Process(target=pintarTiraRGBTemps, args=(pca, TIRES,   COLOR_LEDS,  args.intensitat, int(comanda[1])))
+                                        pRGB = Process(target=pintarTiraRGBTemps, args=(TIRES,   COLOR_LEDS,  args.intensitat, int(comanda[1])))
                                         pRGB.start()
-                                    else:                  pintarTiraRGB(pca, TIRES,   COLOR_LEDS,  args.intensitat)
+                                    else:                  pintarTiraRGB(TIRES,   COLOR_LEDS,  args.intensitat)
                                     
                                     #reles oberts
                                     pca.channels[15].duty_cycle = 65534
@@ -255,17 +250,14 @@ if __name__ == '__main__':
                                     if 'p' in locals() and p and p.is_alive():   p.terminate();
                                     netejar(strip)
                                     
-                                    TIRES = eval('[1,2,3,4,5,6]')
+                                    TIRES = eval('[0,1]')
                                     if 'pRGB' in locals() and pRGB and pRGB.is_alive():   pRGB.terminate();
-                                    pRGB = Process(target=netejarTiraRGB, args=(pca, TIRES))
-                                    pRGB.start()
+                                    netejarTiraRGB(TIRES)
                                     
                                     pca.channels[15].duty_cycle = 0
                                     pca.channels[14].duty_cycle = 0
                                     pca.channels[13].duty_cycle = 0
                                     pca.channels[12].duty_cycle = 0
-                                    pca.channels[13].duty_cycle = 0
-                                    pca.channels[10].duty_cycle = 0
                                     
                                     if Usb_Pantalla is not None:
                                         Usb_Pantalla.write("fl:0,0,0".encode('utf-8'))
@@ -374,24 +366,23 @@ if __name__ == '__main__':
                                 elif comanda[0] == "pintarTiraRGB":  
                                     if 'pRGB' in locals() and pRGB and pRGB.is_alive():   pRGB.terminate();
                                     
-                                    if len(comanda) > 1:   pRGB = Process(target=pintarTiraRGBTemps, args=(pca, TIRES,   COLOR_LEDS,  args.intensitat,int(comanda[1])))
-                                    else:                  pRGB = Process(target=pintarTiraRGB, args=(pca, TIRES,   COLOR_LEDS,  args.intensitat))
+                                    if len(comanda) > 1:   pRGB = Process(target=pintarTiraRGBTemps, args=( TIRES,   COLOR_LEDS,  args.intensitat,int(comanda[1])))
+                                    else:                  pRGB = Process(target=pintarTiraRGB, args=( TIRES,   COLOR_LEDS,  args.intensitat))
                                     
                                     pRGB.start()
                                 
                                 elif comanda[0] == "netejarTiraRGB":
                                     if 'pRGB' in locals() and pRGB and pRGB.is_alive():   pRGB.terminate();
-                                    pRGB = Process(target=netejarTiraRGB, args=(pca, TIRES))
-                                    pRGB.start()
+                                    netejarTiraRGB(TIRES)
 
                                 elif comanda[0] == "creixerTiraRGB":          #PARM1:temps total ms
                                     if 'pRGB' in locals() and pRGB and pRGB.is_alive():   pRGB.terminate();
-                                    pRGB = Process(target=creixerTiraRGB, args=(pca, TIRES,   COLOR_LEDS,  int(comanda[1])))
+                                    pRGB = Process(target=creixerTiraRGB, args=( TIRES,   COLOR_LEDS,  int(comanda[1])))
                                     pRGB.start()
                                 
                                 elif comanda[0] == "decreixerTiraRGB":          #PARM1:temps total ms
                                     if 'pRGB' in locals() and pRGB and pRGB.is_alive():   pRGB.terminate();
-                                    pRGB = Process(target=creixerTiraRGB, args=(pca, TIRES,   COLOR_LEDS,  int(comanda[1]), True))
+                                    pRGB = Process(target=creixerTiraRGB, args=( TIRES,   COLOR_LEDS,  int(comanda[1]), True))
                                     pRGB.start()
 
 
@@ -449,6 +440,11 @@ if __name__ == '__main__':
                 s.close()
                 #del message_queues[s]
 
+    except Exception as e: 
+        print("Tenim una excepció i anem a tancar les connexions")
+        print(e)
+        traceback.print_exc()
+        sock.close()
     finally:
         print("Anem a tancar les connexions")
         sock.close()

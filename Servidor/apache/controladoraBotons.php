@@ -1,4 +1,15 @@
+<?php 
+//http://192.168.1.144/ReisMags/controladoraBotons.php
 
+Configurar a /etc/apache2/apache2.conf
+
+Alias /ReisMags /home/pi/RaspberryPiLed/Servidor/apache
+<Directory /home/pi/RaspberryPiLed/Servidor/apache>
+        AllowOverride None
+        Require all granted
+</Directory>
+
+?>
 <html >
 <head>
 

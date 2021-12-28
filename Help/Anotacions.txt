@@ -6,6 +6,8 @@ Per autoinicialitzar un programa al arrencar la raspberry: afegir-lo al /etc/rc.
 sudo python3 /home/pi/RaspberryPiLed/Servidor/Leds/SERVIDOR.py &
 sudo shutdown -h now
 
+sudo openvpn --config /home/pi/openvpn/VPNConfig.ovpn
+
 
 S'ha de connectar amb un carregador de mòbil de 5 vols i 3 AMPERS i un cable que ho permeti (el que tinc vermell)
 

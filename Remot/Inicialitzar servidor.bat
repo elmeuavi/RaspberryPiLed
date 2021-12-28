@@ -8,7 +8,8 @@ rem set RASPBERRY=192.168.43.240
 call:LlegirPropietat raspberry.ip RASPBERRY 
 call:LlegirPropietat musica.actiu MUSICA
 call:LlegirPropietat tunnelSSH.actiu TUNELSSH
-
+call:LlegirPropietat tunnelSSH.actiu TUNELSSH
+call:LlegirPropietat botonera.mode BOTONERA
 echo RASPBERRY %RASPBERRY%
 echo MUSICA %MUSICA%
 
@@ -22,6 +23,14 @@ if TUNELSSH EQU 1 (
 	start plink.exe  -t -pw raspberry  -no-antispoof -ssh pi@%RASPBERRY% "sh /home/pi/RaspberryPiLed/Servidor/Leds/setupTunel.bat" 
 )else (
 	echo NO inicialitzarem el tunnel SSH
+)
+
+
+if BOTONERA EQU 2 (
+	echo Inicialitzem la botonera
+	rem start plink.exe  -t -pw raspberry  -no-antispoof -ssh pi@%RASPBERRY% "sh /home/pi/RaspberryPiLed/Servidor/Leds/setupTunel.bat" 
+)else (
+	echo NO inicialitzarem la botonera
 )
 
 
@@ -46,7 +55,7 @@ goto:eof
 
 :LlegirPropietat
 
-FOR /f "tokens=* USEBACKQ" %%G IN (`powershell.exe "(ConvertFrom-StringData(Get-Content '.\configuracio.properties' -raw)).'%~1'"`) DO (
+FOR /f "tokens=* USEBACKQ" %%G IN (`powershell.exe "(Get-Content '.\configuracio.properties'  | Select-String -pattern @('^#', '^\[') -notMatch | ConvertFrom-StringData ).'%~1'"`) DO (
  set %~2=%%G
  goto CONTINUAR
 )

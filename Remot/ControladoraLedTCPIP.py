@@ -44,8 +44,11 @@ xeviAnimacioLed = "~/rpi-ws281x-python/xevi/lib/xeviAnimacioLed.py"
 xeviTiraRGB = "~/rpi-ws281x-python/xevi/lib/xeviTiraRGB.py"
 killxevi = "~/rpi-ws281x-python/xevi/killxevi.sh "
 servidorTCPIP = "~/rpi-ws281x-python/xevi/lib/servidor.py "
-sIpRaspberry = "192.168.1.144"
-iPort = 10000
+
+#"192.168.1.144"
+sIpRaspberry = None
+#10000
+iPort = None
 
 PORTBOTONERA="COM8"
 
@@ -53,7 +56,8 @@ start_time = time.time()
 client = None
 sock = None
 connexioSerialUSB = None
-configBotonera = None
+configControladora = configparser.RawConfigParser()
+configBotonera = configparser.RawConfigParser()
 
 
 
@@ -63,12 +67,43 @@ def INICIALITZACONNEXIONS():
     global sock
     global connexioSerialUSB
     global configBotonera
+    global sIpRaspberry
+    global iPort
     
     debug=False
+    MirarBotonera=False
+    BotoneraVelocitat=500000
     
+    
+    
+    configControladora.read(       os.path.join(os.path.dirname(os.path.abspath(__file__)), 'configuracio.properties')             )
+    
+    try:
+        sIpRaspberry = configControladora.get('LEDS REMOT','raspberry.ip')
+        iPort = configControladora.get('LEDS REMOT','raspberry.port')
+        MirarBotonera = configControladora.get('LEDS REMOT','botonera.mode') == '1' #0-desactivada 1-integradaRemota 2-independentRemota 3-IntegradaServidor
+        BotoneraVelocitat = int(configControladora.get('LEDS REMOT','botonera.velocitat'))
+    except NoOptionError:
+        sIpRaspberry = "192.168.1.144"
+        iPort = 10000
+    
+
+    # IMPORTANT haver engegat el servidor de la tira LED adressable en remot
+    #stdin, stdout, stderr = client.exec_command('sh ' + killxevi +  ' servidor.py')
+    #client.exec_command('sudo nohup python3 ' + servidorTCPIP + ' &')
+
+    if not is_socket_opened(sock):
+        print('inicialitzem el client socket TCP/IP contra la IP ' +sIpRaspberry+':'+iPort)
+        # Create a TCP/IP socket per al led adresable
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # Connect the socket to the port on the server given by the caller
+        server_address = (sIpRaspberry, int(iPort))
+        sock.connect(server_address)
+
+
     #Crear una sessió SSH contra la raspberry per a la resta d'elements
     if client is None or  client.get_transport() is None:
-        if debug: print('inicialitzem el client ssh')
+        print('inicialitzem el client ssh contra la IP ' +sIpRaspberry+':'+iPort)
         client = SSHClient()
         client.set_missing_host_key_policy(AutoAddPolicy())
         client.connect(sIpRaspberry, username='pi', password='raspberry')
@@ -78,55 +113,46 @@ def INICIALITZACONNEXIONS():
     stdin, stdout, stderr = client.exec_command('gpio -g mode 10 out')
 
 
-    # IMPORTANT engego el servidor de la tira LED adressable en remot
-    #stdin, stdout, stderr = client.exec_command('sh ' + killxevi +  ' servidor.py')
-    #client.exec_command('sudo nohup python3 ' + servidorTCPIP + ' &')
 
 
-    if not is_socket_opened(sock):
-        if debug: print('inicialitzem el client socket TCP/IP')
-        # Create a TCP/IP socket per al led adresable
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # Connect the socket to the port on the server given by the caller
-        server_address = (sIpRaspberry, iPort)
-        if debug: print ( 'connecting to %s port %s' % server_address)
-        sock.connect(server_address)
 
+    if not MirarBotonera:
+        print('NO configurarem la botonera de forma integrada')
+    else:
 
-    configBotonera = configparser.RawConfigParser()
-    thisfolder = os.path.dirname(os.path.abspath(__file__))
-    configBotonera.read(os.path.join(thisfolder, 'controladora.properties'))
+        configBotonera.read(               os.path.join(os.path.dirname(os.path.abspath(__file__)), 'controladora.properties')              )
 
+            
+        #mirem quins ports serie hi ha connectats
+        #import serial.tools.list_ports    
+        #myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
+        #print( myports)
         
-        
-    #mirem quins ports serie hi ha connectats
-    #import serial.tools.list_ports    
-    #myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
-    #print( myports)
-    
-    try:
-        print('provem connexió al port '+PORTBOTONERA)
-        connexioSerialUSB = serial.Serial(PORTBOTONERA,500000) # ,timeout = None
-    except:
-        None
-		
-	#si no ha funcionat amb l'anterior, provem amb el port usb que tinc a l'altre portàtil
-    if connexioSerialUSB is None:		
         try:
-            print('provem connexió al port COM6')
-            connexioSerialUSB = serial.Serial('COM6',500000) # ,timeout = None
+            print('provem connexió al port '+PORTBOTONERA)
+            connexioSerialUSB = serial.Serial(PORTBOTONERA,BotoneraVelocitat) # ,timeout = None
+            print('Connexió USB amb la caixa botonera realitzada correctament al port '+PORTBOTONERA)
         except:
             None
-	#si no ha funcionat amb l'anterior, provem amb el port usb que tinc a l'altre portàtil			
-    if connexioSerialUSB is None:
-        try:
-            print('provem connexió al port COM5')
-            connexioSerialUSB = serial.Serial('COM5',500000) # ,timeout = None
-        except:
-            print('no tenim port USB on trobar la botonera')
-            None
-    if connexioSerialUSB is not None:
-        print('Connexió USB realitzada correctament')
+            
+        #si no ha funcionat amb l'anterior, provem amb el port usb que tinc a l'altre portàtil
+        if connexioSerialUSB is None:		
+            try:
+                print('provem connexió al port COM6')
+                connexioSerialUSB = serial.Serial('COM6',BotoneraVelocitat) # ,timeout = None
+                print('Connexió USB amb la caixa botonera realitzada correctament al port COM6')
+            except:
+                None
+        #si no ha funcionat amb l'anterior, provem amb el port usb que tinc a l'altre portàtil			
+        if connexioSerialUSB is None:
+            try:
+                print('provem connexió al port COM5')
+                connexioSerialUSB = serial.Serial('COM5',BotoneraVelocitat) # ,timeout = None
+                print('Connexió USB amb la caixa botonera realitzada correctament al port COM5')
+            except:
+                print('no tenim port USB on trobar la botonera')
+                None
+            
 
 
 

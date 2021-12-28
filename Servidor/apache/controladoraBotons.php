@@ -28,6 +28,12 @@ include 'config.php';
 		text-align: center;
 		width: 100%; 
 	}
+	
+	body{
+		max-width: 800px;
+		margin-left: auto;
+		margin-right: auto;
+	}
 
 	.grid-layout{
 		display: grid;
@@ -53,7 +59,7 @@ include 'config.php';
     .circle {
       width: 80;
       height: 80px;
-	  border: 1px solid black;
+	  //border: 1px solid black;
       -webkit-border-radius: 40px;
       -moz-border-radius: 40px;
       border-radius: 40px;
@@ -61,9 +67,19 @@ include 'config.php';
 	  align-self: center;
 	  justify-self: center;
 	  
-      background: red;
 
     }
+
+	.Vermell	{ background: url("botons.png");  background-size: 393%;  	background-position:0% 0%	}
+	.Verd		{ background: url("botons.png");  background-size: 393%;	background-position:50.5% 0%	}
+	.BlauClar	{ background: url("botons.png");  background-size: 393%;	background-position:75% 0%	}
+	.Groc		{ background: url("botons.png");  background-size: 393%;	background-position:0% 49.3%	}
+	.Negre		{ background: url("botons.png");  background-size: 393%;	background-position:50.5% 49.3%	}
+	.Blanc		{ background: url("botons.png");  background-size: 393%;	background-position:100% 49.3%	}
+	.BlauFosc	{ background: url("botons.png");  background-size: 393%;	background-position:0% 100%	}
+	.Taronja	{ background: url("botons.png");  background-size: 393%;	background-position:50.5% 100%	}
+	.Rosa		{ background: url("botons.png");  background-size: 393%;	background-position:50.5% 0%	}
+	
 
 
 
@@ -112,11 +128,20 @@ boto3D=""
 		function PintarBotons(){
 			//taula de colors
 			//https://www.w3schools.com/tags/ref_colornames.asp
-			const arrayColor = ["AliceBlue","AntiqueWhite","Aqua","Aquamarine","Azure","Beige","Bisque","Black","BlanchedAlmond","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGoldenRod","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","DarkOrange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick","FloralWhite"/*,"ForestGreen"*/,"Fuchsia","Gainsboro","GhostWhite","Gold","GoldenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed ","Indigo  ","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","RebeccaPurple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","White","WhiteSmoke","Yellow","YellowGreen"];
-
+			//const arrayColor = ["AliceBlue","AntiqueWhite","Aqua","Aquamarine","Azure","Beige","Bisque","Black","BlanchedAlmond","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGoldenRod","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","DarkOrange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick","FloralWhite"/*,"ForestGreen"*/,"Fuchsia","Gainsboro","GhostWhite","Gold","GoldenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed ","Indigo  ","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","RebeccaPurple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","White","WhiteSmoke","Yellow","YellowGreen"];
+			const arrayColor = ["Vermell","Negre","Verd","Groc","Vermell",
+								"Taronja","Groc","Blanc","Taronja","BlauFosc",
+								"BlauFosc","Vermell","BlauFosc","Groc","Verd",
+								"Negre","Verd","Taronja","Negre","Blanc",
+								"BlauFosc","Groc","Blanc","Vermell","Groc",
+								"Taronja","Negre","Verd","BlauFosc","Blanc"]
 
 			var els = document.getElementsByClassName("circle");
-			[].forEach.call(els, function (el,index) { el.setAttribute("NBoto", index);el.style.background=arrayColor[Math.floor(Math.random() * arrayColor.length)]; /* console.log(el,index)*/} );
+			//[].forEach.call(els, function (el,index) { el.setAttribute("NBoto", index);el.style.background=arrayColor[Math.floor(Math.random() * arrayColor.length)]; /* console.log(el,index)*/} );
+			[].forEach.call(els, function (el,index) { 
+										el.setAttribute("NBoto", index);
+										el.classList.add(arrayColor[index]); /* console.log(el,index)*/
+			} );
 		}		
 		
 		function init(){
@@ -144,7 +169,7 @@ boto3D=""
  
 </head>
 
-<body onload="Javascript:init()" style="max-width: 800px;">
+<body onload="Javascript:init()" >
 
 <img src="https://esplaiespurnes.files.wordpress.com/2014/12/3-reis.jpg?w=1600&h=598&crop=1" width="100%" >
 <div class="grid-layout">

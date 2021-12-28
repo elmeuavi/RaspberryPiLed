@@ -13,6 +13,8 @@ from tkinter import filedialog
 
 #pip install pyserial
 import serial  # per la comunicació amb el USB per a la botonera
+import serial.tools.list_ports  
+import subprocess
 
 from multiprocessing  import Queue 
 #from xeviClientBotonsUSB import *
@@ -50,7 +52,7 @@ sIpRaspberry = None
 #10000
 iPort = None
 
-PORTBOTONERA="COM8"
+
 
 start_time = time.time()
 client = None
@@ -121,41 +123,39 @@ def INICIALITZACONNEXIONS():
     else:
 
         configBotonera.read(               os.path.join(os.path.dirname(os.path.abspath(__file__)), 'controladora.properties')              )
-
             
-        #mirem quins ports serie hi ha connectats
-        #import serial.tools.list_ports    
-        #myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
-        #print( myports)
+        PORTBOTONERA=LlistarUSB()
         
         try:
-            print('provem connexió al port '+PORTBOTONERA)
+            print('provem connexió al port '+PORTBOTONERA + ' amb velocitat ' + str(BotoneraVelocitat))
             connexioSerialUSB = serial.Serial(PORTBOTONERA,BotoneraVelocitat) # ,timeout = None
             print('Connexió USB amb la caixa botonera realitzada correctament al port '+PORTBOTONERA)
         except:
+            print('no tenim port USB on trobar la botonera')
             None
+        
+
+
+def LlistarUSB():
+
+    #Primera forma de mirar els elements connectats via USB
+    myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
+    print( myports)
+
+    #Segona forma de mirar els elements connectats via USB
+    os.system(" powershell \"Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match '^USB' } | Where-Object { $_.FriendlyName -match 'CH340' } \"")
+
+
+    #una altre manera de fer-ho
+    #port = os.popen(" powershell \"$valor = Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match '^USB' } | Where-Object { $_.FriendlyName -match 'CH340' } | Select  -ExpandProperty FriendlyName; $valor2=$valor -match '(COM\\d*)' ; Write-Host $Matches.0 \"").read().rstrip()
+    #print ("Ens connectarem al port -" + port + "-")
+    
+    port = subprocess.check_output("powershell \"$valor = Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match '^USB' } | Where-Object { $_.FriendlyName -match 'CH340' } | Select  -ExpandProperty FriendlyName; $valor2=$valor -match '(COM\\d*)' ; Write-Host $Matches.0 \"", shell=True).rstrip()
+    #print ("Ens connectarem al port -" + str(port.decode("utf-8")) +"-")
+    
+    return str(port.decode("utf-8"))
             
-        #si no ha funcionat amb l'anterior, provem amb el port usb que tinc a l'altre portàtil
-        if connexioSerialUSB is None:		
-            try:
-                print('provem connexió al port COM6')
-                connexioSerialUSB = serial.Serial('COM6',BotoneraVelocitat) # ,timeout = None
-                print('Connexió USB amb la caixa botonera realitzada correctament al port COM6')
-            except:
-                None
-        #si no ha funcionat amb l'anterior, provem amb el port usb que tinc a l'altre portàtil			
-        if connexioSerialUSB is None:
-            try:
-                print('provem connexió al port COM5')
-                connexioSerialUSB = serial.Serial('COM5',BotoneraVelocitat) # ,timeout = None
-                print('Connexió USB amb la caixa botonera realitzada correctament al port COM5')
-            except:
-                print('no tenim port USB on trobar la botonera')
-                None
             
-
-
-
 
 def TANCARCONNEXIONS():
     client.close()
@@ -1022,16 +1022,14 @@ def buttonStopPress():
     
 #eventGestonarUSBBotons=None
 def procesLlegirBotoneraUSB():
-        global sock
-        global connexioSerialUSB
-        global procesSimular
-        global configBotonera
-        
-        #connexioSerialUSB=serial.Serial('COM4',9600,timeout = None)
-            
-        #la primera comanda la despreciem perquè pot arribar mitja comanda
-        #comanda= connexioSerialUSB.readline().decode("utf-8") .rstrip("\r\n")
-        
+    global sock
+    global connexioSerialUSB
+    global procesSimular
+    global configBotonera
+    
+    #la primera comanda la despreciem perquè pot arribar mitja comanda
+    #comanda= connexioSerialUSB.readline().decode("utf-8") .rstrip("\r\n")
+    if connexioSerialUSB is not None:
         try:
         #    while True:
             if connexioSerialUSB.inWaiting():

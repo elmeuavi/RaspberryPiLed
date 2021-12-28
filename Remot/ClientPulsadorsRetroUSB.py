@@ -4,8 +4,9 @@ import configparser
 from configparser import NoOptionError, NoSectionError
 import os # buscar el directori actual per trobar el fitxer de configuarció de propietats
 from paramiko import SSHClient, AutoAddPolicy
+import subprocess
 
-
+import serial.tools.list_ports  
 
             
 connexioSerialUSB = None
@@ -20,41 +21,37 @@ configControladora.read(       os.path.join(os.path.dirname(os.path.abspath(__fi
 
 
             
-def InicialitzarUSB():
+def InicialitzarUSB(pPort):
 
     global connexioSerialUSB
     
     BotoneraVelocitat = int(configControladora.get('LEDS REMOT','botonera.velocitat'))
         
-    #mirem quins ports serie hi ha connectats
-    #import serial.tools.list_ports    
-    #myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
-    #print( myports)
     
     try:
-        print('provem connexió al port '+PORTBOTONERA)
-        connexioSerialUSB = serial.Serial(PORTBOTONERA,BotoneraVelocitat) # ,timeout = None
-        print('Connexió USB amb la caixa botonera realitzada correctament al port '+PORTBOTONERA)
+        print('provem connexió al port '+pPort + ' amb velocitat ' + str(BotoneraVelocitat))
+        connexioSerialUSB = serial.Serial(pPort,BotoneraVelocitat) # ,timeout = None
+        print('Connexió USB amb la caixa botonera realitzada correctament al port '+pPort)
+#    except:
+#        None
+#        
+#    #si no ha funcionat amb l'anterior, provem amb el port usb que tinc a l'altre portàtil
+#    if connexioSerialUSB is None:		
+#        try:
+#            print('provem connexió al port COM6')
+#            connexioSerialUSB = serial.Serial('COM6',BotoneraVelocitat) # ,timeout = None
+#            print('Connexió USB amb la caixa botonera realitzada correctament al port COM6')
+#        except:
+#            None
+#    #si no ha funcionat amb l'anterior, provem amb el port usb que tinc a l'altre portàtil			
+#    if connexioSerialUSB is None:
+#        try:
+#            print('provem connexió al port COM5')
+#            connexioSerialUSB = serial.Serial('COM5',BotoneraVelocitat) # ,timeout = None
+#            print('Connexió USB amb la caixa botonera realitzada correctament al port COM5')
     except:
-        None
-        
-    #si no ha funcionat amb l'anterior, provem amb el port usb que tinc a l'altre portàtil
-    if connexioSerialUSB is None:		
-        try:
-            print('provem connexió al port COM6')
-            connexioSerialUSB = serial.Serial('COM6',BotoneraVelocitat) # ,timeout = None
-            print('Connexió USB amb la caixa botonera realitzada correctament al port COM6')
-        except:
-            None
-    #si no ha funcionat amb l'anterior, provem amb el port usb que tinc a l'altre portàtil			
-    if connexioSerialUSB is None:
-        try:
-            print('provem connexió al port COM5')
-            connexioSerialUSB = serial.Serial('COM5',BotoneraVelocitat) # ,timeout = None
-            print('Connexió USB amb la caixa botonera realitzada correctament al port COM5')
-        except:
-            print('ERROR: no tenim port USB on trobar la botonera')
-            exit(0)
+        print('ERROR: no tenim port USB on trobar la botonera')
+        exit(0)
 
     #la primera comanda la despreciem perquè pot arribar mitja comanda
     comanda= connexioSerialUSB.readline().decode("utf-8") .rstrip("\r\n")
@@ -82,24 +79,51 @@ def InicialitzarConnexions():
     sock.connect(server_address)
     
     
-    print('inicialitzem el client ssh contra la IP ' +sIpRaspberry)
+    print('Inicialitzem el client ssh contra la IP ' +sIpRaspberry)
     client = SSHClient()
     client.set_missing_host_key_policy(AutoAddPolicy())
     client.connect(sIpRaspberry, username='pi', password='raspberry')
 
+
+
+
+
+def LlistarUSB():
+
+    #Primera forma de mirar els elements connectats via USB
+    myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
+    print( myports)
+
+    #Segona forma de mirar els elements connectats via USB
+    os.system(" powershell \"Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match '^USB' } | Where-Object { $_.FriendlyName -match 'CH340' } \"")
+
+
+    #una altre manera de fer-ho
+    #port = os.popen(" powershell \"$valor = Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match '^USB' } | Where-Object { $_.FriendlyName -match 'CH340' } | Select  -ExpandProperty FriendlyName; $valor2=$valor -match '(COM\\d*)' ; Write-Host $Matches.0 \"").read().rstrip()
+    #print ("Ens connectarem al port -" + port + "-")
+    
+    port = subprocess.check_output("powershell \"$valor = Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match '^USB' } | Where-Object { $_.FriendlyName -match 'CH340' } | Select  -ExpandProperty FriendlyName; $valor2=$valor -match '(COM\\d*)' ; Write-Host $Matches.0 \"", shell=True).rstrip()
+    #print ("Ens connectarem al port -" + str(port.decode("utf-8")) +"-")
+    
+    return str(port.decode("utf-8"))
+            
+            
             
             
             
 if __name__ == '__main__':
 
+    lnkPort = LlistarUSB()
+    InicialitzarUSB(lnkPort)
     InicialitzarConnexions()
-    InicialitzarUSB()
     
-    
+    print("Configuració incial finalitzada")
     
     try:
         while True:
             if connexioSerialUSB.inWaiting():
+                comanda= connexioSerialUSB.readline().decode("utf-8") .rstrip("\r\n")
+                print("-"+comanda+"-")
 
                 #transformem el botó apretat a una comanda
                 try:

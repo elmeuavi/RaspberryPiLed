@@ -3,11 +3,15 @@
 C:\Users\xbrunet\AppData\Roaming\AccessPaquets\putty 192.168.1.144 -l pi -pw raspberry
 
 Per autoinicialitzar un programa al arrencar la raspberry: afegir-lo al /etc/rc.local
-sudo python3 /home/pi/RaspberryPiLed/Servidor/Leds/SERVIDOR.py &
+sudo python3 /home/pi/RaspberryPiLed/Servidor/Leds/SERVIDOR.py & 
 sudo shutdown -h now
 
+enegegar la VPN
 sudo openvpn --config /home/pi/openvpn/VPNConfig.ovpn
 
+Redirigir les rutes en local windows per arribar a la raspberry dins la VPN
+C:\windows\system32>route add 10.8.0.0 MASK 255.255.255.0 192.168.1.155
+ 
 
 S'ha de connectar amb un carregador de mòbil de 5 vols i 3 AMPERS i un cable que ho permeti (el que tinc vermell)
 

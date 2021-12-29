@@ -97,13 +97,59 @@ boto2="|activarCanalI2C 14"
 boto2D="|desactivarCanalI2C 14"
 boto3="|activarCanalI2C 15"
 boto3D="|desactivarCanalI2C 15"
-
 boto4="|GPIO_ON 21"
 boto4D="|GPIO_OFF 21"
 
 
-boto5="|color A |intensitat 255|omplir"
-boto5D=""
+boto5= "|color A |seleccionarTiraRGB 0 |intensitat 255|pintarTiraRGB"
+boto5D="|seleccionarTiraRGB 0|netejarTiraRGB"
+boto6= "|color A |seleccionarTiraRGB 1 |intensitat 255|pintarTiraRGB"
+boto6D="|seleccionarTiraRGB 1|netejarTiraRGB"
+boto7= "|color A |seleccionarTiraRGB 0,1 |intensitat 255|creixerTiraRGB 6000"
+boto7D="|seleccionarTiraRGB 1|netejarTiraRGB"
+boto8="|color A |seleccionarTiraRGB 0,1 |intensitat 255|decreixerTiraRGB 6000"
+boto8D="|seleccionarTiraRGB 1|netejarTiraRGB"
+boto9= "|color A |intensitat 255|omplir"
+boto9D="|netejar"
+
+boto10= "|color A |intensitat 255|vano 6000 3"
+boto10D="|netejar"
+boto11= "|color A |intensitat 255|incremental 50 3"
+boto11D="|netejar"
+boto12= "|intensitat 255|rainbowTempsTotal 50 6000"
+boto12D="|netejar"
+boto13= "|intensitat 255|rainbowCycleTempsTotal 50 6000"
+boto13D="|netejar"
+boto14= "|color A |intensitat 255|theaterChaseTempsTotal 50 6000 3"
+boto14D="|netejar"
+
+
+boto15= "|intensitat 255|theaterChaseRainbow 50 6000"
+boto15D="|netejar"
+boto16= "|PANTALLA in:150|PANTALLA ct:"
+boto16D="|PANTALLA tx:"
+boto17= "|PANTALLA in:150|PANTALLA gy:"
+boto17D="|PANTALLA tx:"
+boto18= "|PANTALLA in:150|PANTALLA sm:6000"
+boto18D="|PANTALLA tx:"
+boto19= "|PANTALLA in:150|PANTALLA cr:"
+boto19D="|PANTALLA tx:"
+
+boto20= "|PANTALLA in:150|PANTALLA cd:"
+boto20D=""
+
+
+boto25= "|PANTALLA cs:0,255,128,0|PANTALLA in:150|PANTALLA tx:En Fumera et veu quan fas malifetes"
+boto25D=""
+boto26= "|PANTALLA cs:0,0,255,255|PANTALLA in:150|PANTALLA tx:Cavalcada Reis CELRA 2022 "
+boto26D=""
+boto27= "|PANTALLA cs:0,0,255,128|PANTALLA in:150|PANTALLA tx:Portem molts regals per a tu"
+boto27D=""
+boto27= "|PANTALLA cs:0,0,255,0|PANTALLA in:150|PANTALLA tx:Aquest any t'has portat molt be"
+boto27D=""
+boto29= "|PANTALLA cs:0,255,255,255|PANTALLA in:150|PANTALLA tx:Visca els tres reis de l'orient!"
+boto29D=""
+
 
 
 		TotParat=0;

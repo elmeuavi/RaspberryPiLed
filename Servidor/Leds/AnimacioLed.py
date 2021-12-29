@@ -31,7 +31,7 @@ import random
 #########################################################PARAMETRES ###############################################################################
 
 # LED strip configuration:
-LED_COUNT = 60+(30*5)        # Number of LED pixels.
+LED_COUNT = 2*(30*5)        # Number of LED pixels.
 LED_PIN = 18          # GPIO pin connected to the pixels (18 uses PWM!).
 #LED_PIN = 12          # GPIO pin connected to the pixels (18 uses PWM!).
 # LED_PIN = 10        # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
@@ -42,7 +42,7 @@ LED_INVERT = False    # True to invert the signal (when using NPN transistor lev
 LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 
-bNetejarTiraAdresablesDespresEvent=False
+bNetejarTiraAdresablesDespresEvent=True
 
 
 

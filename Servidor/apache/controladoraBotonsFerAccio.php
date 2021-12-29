@@ -60,7 +60,7 @@ if ($config['leds']['TunnelSSH'] ){
 }
 	echo str_replace("|","<BR>",htmlspecialchars(substr($_GET["accio"],1)));
 	if ($_GET["mostrar"] != 'N'){
-		echo '<br>Espera 3 segons per obrir un altre botó';
+		echo '<br>Espera 2 segons per obrir un altre botó';
 	}
 	
 	?>

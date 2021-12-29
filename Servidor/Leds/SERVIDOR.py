@@ -427,14 +427,22 @@ if __name__ == '__main__':
                                 else:
                                     break
                     else:
-        #               estat_connectat = False
-        #               if s in outputs:
-        #                      outputs.remove(s)
-                        host, port = s.getpeername()
-                        inputs.remove(s)
-                        s.close()
-                        print("Detectada connexió tancada (" + host + ", " +  str(port) + ") Connexions Actives: " + str(len(inputs)))
-    #                   del message_queues[s]
+                        try:
+                            host, port = s.getpeername()
+                            print("Detectada connexió tancada (" + host + ", " +  str(port) + ") Connexions Actives: " + str(len(inputs)-1))
+                        except:
+                            print("Detectada connexió tancada (Ip desconeguda). Connexions Actives: " + str(len(inputs)-1))
+                            None
+                        if s in outputs:
+                            outputs.remove(s)
+                        if s in inputs:
+                            inputs.remove(s)
+                        try:
+                            s.close()
+                        except:
+                            print("he provat de tancar però ha donat error")
+                            None
+
             for s in exceptional:
                 host, port = s.getpeername()
                 inputs.remove(s)

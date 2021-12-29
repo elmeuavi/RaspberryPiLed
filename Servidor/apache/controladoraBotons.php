@@ -89,18 +89,27 @@ include 'config.php';
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
   
-boto1="|activarCanalI2C 15"
-boto1D="|desactivarCanalI2C 15"
-boto2="|GPIO_ON 21"
-boto2D="|GPIO_OFF 21"
-boto3="|color A |intensitat 255|omplir"
-boto3D=""
+boto0="|activarCanalI2C 12"
+boto0D="|desactivarCanalI2C 12"
+boto1="|activarCanalI2C 13"
+boto1D="|desactivarCanalI2C 13"
+boto2="|activarCanalI2C 14"
+boto2D="|desactivarCanalI2C 14"
+boto3="|activarCanalI2C 15"
+boto3D="|desactivarCanalI2C 15"
+
+boto4="|GPIO_ON 21"
+boto4D="|GPIO_OFF 21"
+
+
+boto5="|color A |intensitat 255|omplir"
+boto5D=""
 
 
 		TotParat=0;
 		function PararhoTot(){
 			TotParat=1;
-			setTimeout(function(){ TotParat=0; }, 3000);
+			setTimeout(function(){ TotParat=0; }, 2000);
 		}
 		
 		function FerAccio(boto){

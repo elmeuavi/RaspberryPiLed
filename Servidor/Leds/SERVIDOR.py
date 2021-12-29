@@ -420,7 +420,8 @@ if __name__ == '__main__':
                                         Usb_ArduinoOne.write(linia_comanda[len(comanda[0])+1::].encode('utf-8'))
                                         Usb_ArduinoOne.write(b"\n")
                                         Usb_ArduinoOne.flush()
-
+                                    else:
+                                        print("L'arduino uno no està disponible")
 
 
                                 else:

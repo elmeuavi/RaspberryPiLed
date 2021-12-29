@@ -1,6 +1,7 @@
 <?php
 
 //Fitxer de log de errors a     tail -f /var/log/apache2/error.log
+//Fitxer de configuració a /etc/php/7.4/apache2/php.ini
 
     // Typical configuration file
 	$config['musica']['ip']         	= '192.168.1.189';
@@ -12,5 +13,10 @@
 	$config['leds']['ip']         		= '192.168.1.144';
 	$config['leds']['port']         	= 10000;
 
-	$config['leds']['TunnelSSH']        	= 0;
+
+	#Executar la següent comanda a la rasberryPI
+	#ssh -R 80:localhost:10000 localhost.run
+
+	$config['TunnelSSH']['actiu']        	= 0;
+	$config['TunnelSSH']['ip']        	= 'https://cc4cf23627ad2d.localhost.run/';
 ?>    

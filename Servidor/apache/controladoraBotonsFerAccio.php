@@ -36,10 +36,9 @@ include 'config.php';
 if ($config['leds']['TunnelSSH'] ){
 	#Executar la següent comanda a la rasberryPI
 	#ssh -R 80:localhost:10000 localhost.run
-	$address="https://cc4cf23627ad2d.localhost.run/";
 	
 	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $address . urlencode($_GET["accio"]));
+	curl_setopt($ch, CURLOPT_URL, $config['TunnelSSH']['ip'] . urlencode($_GET["accio"]));
 	curl_setopt($ch, CURLOPT_HEADER, false);
 
 	curl_exec($ch);
@@ -59,7 +58,7 @@ if ($config['leds']['TunnelSSH'] ){
 	}
 }
 	echo str_replace("|","<BR>",htmlspecialchars(substr($_GET["accio"],1)));
-	if ($_GET["mostrar"] != 'N'){
+	if (!array_key_exists("mostrar", $_GET) || $_GET["mostrar"] != 'N'){
 		echo '<br>Espera 2 segons per obrir un altre botó';
 	}
 	

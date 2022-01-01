@@ -7,6 +7,12 @@
 	$config['musica']['ip']         	= '192.168.1.189';
 	$config['musica']['port']         	= 20000;
 	$config['musica']['actiu']          	= 0;
+	
+	$config['apache']['tempsEntrePeticions']  = 2;
+	$config['apache']['tempsDuradaEvent']  	  = 6; 
+	$config['apache']['maxCaractersText']  	  = 40; 
+	$config['apache']['EnviamentActiu']  	  = 1; 
+	
 
 	//$config['leds']['ip']         	= '127.0.0.1';
 	//$config['leds']['ip']                 = '10.8.0.10';

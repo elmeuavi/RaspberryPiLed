@@ -34,14 +34,30 @@ include 'config.php';
 		margin-left: auto;
 		margin-right: auto;
 	}
+	
+	label, input{
+		 font-size: 2em;
+	}
+	
+	label img{
+		vertical-align: middle
+	}
+	
+	#EntradaText{
+		margin-top: 60px;
+	}
+	input{
+		margin-top: 20px;
+		margin-bottom: 20px;
+		font-size: 2em;
+	}
 
 	.grid-layout{
 		display: grid;
 		grid-template-columns: auto auto auto auto auto;
 		background: ForestGreen;
 		padding:20px;
-		margin:20px;
-		margin-top:40px;		 
+			 
 
 		 //box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 		 
@@ -53,6 +69,7 @@ include 'config.php';
 		 text-align: left;
 		 margin: 0px auto;
 		 margin-bottom: 20px;
+		 margin-top:20px;	
 		 
 	}
  
@@ -66,9 +83,9 @@ include 'config.php';
 	  margin:20px;
 	  align-self: center;
 	  justify-self: center;
-	  
-
     }
+
+
 
 	.Vermell	{ background: url("botons.png");  background-size: 393%;  	background-position:0% 0%	}
 	.Verd		{ background: url("botons.png");  background-size: 393%;	background-position:50.5% 0%	}
@@ -81,6 +98,13 @@ include 'config.php';
 	.Rosa		{ background: url("botons.png");  background-size: 393%;	background-position:50.5% 0%	}
 	
 
+	.amagat   {display:none;visibility :hidden}
+	.visible{}
+	
+	.error{ color: red ;font-size: 2em;}
+	
+	#resulatTextEntrat{margin-top:40px;	}
+
 
 
 </style>
@@ -91,14 +115,28 @@ include 'config.php';
   
 boto0="|activarCanalI2C 12"
 boto0D="|desactivarCanalI2C 12"
+comentari0= "Encesa la llum de 12";
+comentari0D="Apagada la llum de 12";
+
 boto1="|activarCanalI2C 13"
 boto1D="|desactivarCanalI2C 13"
+comentari1= "Encesa la llum de 13";
+comentari1D="Apagada la llum de 13";
+
 boto2="|activarCanalI2C 14"
 boto2D="|desactivarCanalI2C 14"
+comentari2= "Encesa la llum de 14";
+comentari2D="Apagada la llum de 14";
+
 boto3="|activarCanalI2C 15"
 boto3D="|desactivarCanalI2C 15"
+comentari3= "Encesa la llum de 15";
+comentari3D="Apagada la llum de 15";
+
 boto4="|GPIO_ON 21"
 boto4D="|GPIO_OFF 21"
+comentari4= "Encesa la llum del pesebre";
+comentari4D="Apagada la llum del pesebre";
 
 
 boto5= "|color A |seleccionarTiraRGB 0 |intensitat 255|pintarTiraRGB"
@@ -114,17 +152,17 @@ boto9D="|netejar"
 
 boto10= "|color A |intensitat 255|vano 6000 3"
 boto10D="|netejar"
-boto11= "|color A |intensitat 255|incremental 50 3"
-boto11D="|netejar"
-boto12= "|intensitat 255|rainbowTempsTotal 50 6000"
-boto12D="|netejar"
-boto13= "|intensitat 255|rainbowCycleTempsTotal 50 6000"
-boto13D="|netejar"
-boto14= "|color A |intensitat 255|theaterChaseTempsTotal 50 6000 3"
+boto11= "|color A |intensitat 255|incremental 5 2"
+boto11D=""
+boto12= "|intensitat 255|rainbowTempsTotal 10 10000"
+boto12D=""
+boto13= "|intensitat 255|rainbowCycleTempsTotal 10 10000"
+boto13D=""
+boto14= "|color A |intensitat 255|theaterChaseTempsTotal 80 6000 10"
 boto14D="|netejar"
 
 
-boto15= "|intensitat 255|theaterChaseRainbow 50 6000"
+boto15= "|intensitat 255|theaterChaseRainbow 100 6000"
 boto15D="|netejar"
 boto16= "|PANTALLA in:150|PANTALLA ct:"
 boto16D="|PANTALLA tx:"
@@ -135,8 +173,17 @@ boto18D="|PANTALLA tx:"
 boto19= "|PANTALLA in:150|PANTALLA cr:"
 boto19D="|PANTALLA tx:"
 
-boto20= "|PANTALLA in:150|PANTALLA cd:"
-boto20D=""
+boto20= "|RELES on: 0"
+boto20D="|RELES of: 0"
+boto21= "|RELES on: 1"
+boto21D="|RELES of: 1"
+boto22= "|RELES on: 2"
+boto22D="|RELES of: 2"
+boto23= "|RELES on: 3"
+boto23D="|RELES of: 3"
+boto24= "|RELES on: 4"
+boto24D="|RELES of: 4"
+
 
 
 boto25= "|PANTALLA cs:0,255,128,0|PANTALLA in:150|PANTALLA tx:En Fumera et veu quan fas malifetes"
@@ -145,34 +192,67 @@ boto26= "|PANTALLA cs:0,0,255,255|PANTALLA in:150|PANTALLA tx:Cavalcada Reis CEL
 boto26D=""
 boto27= "|PANTALLA cs:0,0,255,128|PANTALLA in:150|PANTALLA tx:Portem molts regals per a tu"
 boto27D=""
-boto27= "|PANTALLA cs:0,0,255,0|PANTALLA in:150|PANTALLA tx:Aquest any t'has portat molt be"
-boto27D=""
+boto28= "|PANTALLA cs:0,0,255,0|PANTALLA in:150|PANTALLA tx:Aquest any t'has portat molt be"
+boto28D=""
 boto29= "|PANTALLA cs:0,255,255,255|PANTALLA in:150|PANTALLA tx:Visca els tres reis de l'orient!"
 boto29D=""
 
 
+		function EnviarTextPersonal(){
+			document.getElementById("resulatTextEntrat").classList.add("visible");
+			document.getElementById("EntradaText").classList.add("amagat");
+				
+			document.getElementById("resulatTextEntrat").classList.remove("amagat");
+			document.getElementById("EntradaText").classList.remove("visible");
+			
+			document.getElementById("quadre").src="controladoraBotonsFerAccio.php?mostrar=N&accio="+encodeURI('|PANTALLA cs:0,255,255,255|PANTALLA in:150|PANTALLA tx:'+document.getElementById('TextEntrat').value.replace('|',''));
+			
+			setTimeout(function(){ 
+				document.getElementById("resulatTextEntrat").classList.remove("visible");
+				document.getElementById("EntradaText").classList.remove("amagat");
+			
+				document.getElementById("resulatTextEntrat").classList.add("amagat");
+				document.getElementById("EntradaText").classList.add("visible");
+				document.getElementById('TextEntrat').value = "";
+			}, <?php echo((2  * $config['apache']['tempsDuradaEvent']) . '000'); ?>);
+			
+		}
 
 		TotParat=0;
 		function PararhoTot(){
 			TotParat=1;
-			setTimeout(function(){ TotParat=0; }, 2000);
+			setTimeout(function(){ TotParat=0; }, <?php echo($config['apache']['tempsEntrePeticions'] . '000'); ?>);
 		}
 		
 		function FerAccio(boto){
+			
 			console.log(boto + " Apretat");
 			if (TotParat==1) {console.log("Estem parats encara !!");return;}
+
 			
 			PararhoTot();
 			console.log(eval("boto"+boto));
-			setTimeout(function(){ FerAccioStop(boto) }, 6000);
-			document.getElementById("quadre").src="controladoraBotonsFerAccio.php?accio="+encodeURI(eval("boto"+boto));
+			
+			strComentari = "";
+			if (eval("comentari"+boto)){
+				strComentari= "&comentari="+encodeURI(eval("comentari"+boto));
+				console.log(eval("comentari"+boto));
+			} 
+			document.getElementById("quadre").src="controladoraBotonsFerAccio.php?accio="+encodeURI(eval("boto"+boto))+strComentari;
+			setTimeout(function(){ FerAccioStop(boto) }, <?php echo($config['apache']['tempsDuradaEvent'] . '000'); ?>);
+
 		}
 		
 		function FerAccioStop(boto){
 			
 			if (eval("boto"+boto+"D") != ""){
-				console.log(boto + " DesApretat: " + eval("boto"+boto+"D"));
-				document.getElementById("quadre").src="controladoraBotonsFerAccio.php?mostrar=N&accio="+encodeURI(eval("boto"+boto+"D"));
+				console.log("DesApretat "+boto+": " + eval("boto"+boto+"D"));
+				strComentari = "";
+				if (eval("comentari"+boto+"D")) {
+					strComentari= "&comentari="+encodeURI(eval("comentari"+boto+"D"));
+					console.log(eval("comentari"+boto));
+				}
+				document.getElementById("quadre").src="controladoraBotonsFerAccio.php?mostrar=N&accio="+encodeURI(eval("boto"+boto+"D"))+strComentari;
 			} else {
 				console.log("no hi ha acció de desapretar per el boto " + boto );
 			}
@@ -195,7 +275,9 @@ boto29D=""
 			//[].forEach.call(els, function (el,index) { el.setAttribute("NBoto", index);el.style.background=arrayColor[Math.floor(Math.random() * arrayColor.length)]; /* console.log(el,index)*/} );
 			[].forEach.call(els, function (el,index) { 
 										el.setAttribute("NBoto", index);
+										el.setAttribute("role", "img text");
 										el.classList.add(arrayColor[index]); /* console.log(el,index)*/
+										el.setAttribute("title",eval("boto"+index));
 			} );
 		}		
 		
@@ -218,6 +300,10 @@ boto29D=""
 			$(".circle").click(function(){FerAccio(this.getAttribute("NBoto"))});
 		}
 		
+
+	const removeAccents = (str) => {
+	  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+	} 
 		
   </script>
   
@@ -227,7 +313,16 @@ boto29D=""
 <body onload="Javascript:init()" >
 
 <img src="https://esplaiespurnes.files.wordpress.com/2014/12/3-reis.jpg?w=1600&h=598&crop=1" width="100%" >
-<div class="grid-layout">
+
+	<?php
+if ($config['apache']['EnviamentActiu'] == 0 ){
+	echo "<div class='error'>Temporalment no disponible per manteniment o per acte reial</div>";
+}else {
+	?>
+	
+	
+<label for="botonera">Encen les llums per als Reis Mags: </label>
+<div class="grid-layout" id="botonera">
 
 <div class="circle"></div>
 <div class="circle"></div>
@@ -262,10 +357,23 @@ boto29D=""
 
 </div>
 
-  <iframe id='quadre' onload="" frameBorder="0" width="100%"  height="500px"></iframe>
+<div id=EntradaText>
+	<label for="TextEntrat">I també, diga'ns què vols que et portin els reis: </label>
+	<input type="text" name="TextEntrat" id="TextEntrat" maxlength="<?php echo($config['apache']['maxCaractersText']); ?>" size="<?php echo($config['apache']['maxCaractersText']); ?>" 
+				onkeydown ="JavaScript:document.getElementById('quedenCaracters').innerHTML  = 'Queden ' + (document.getElementById('TextEntrat').getAttribute('maxlength') - document.getElementById('TextEntrat').value.length ) + ' caràcters màxim'"; document.getElementById('TextEntrat').innerHTML = document.getElementById('TextEntrat').value.substring(0,document.getElementById('TextEntrat').getAttribute('maxlength'));" 
+				onfocusout="JavaScript:document.getElementById('quedenCaracters').innerHTML  = 'Queden ' + (document.getElementById('TextEntrat').getAttribute('maxlength') - document.getElementById('TextEntrat').value.length ) + ' caràcters màxim'";document.getElementById('TextEntrat').value = removeAccents(document.getElementById('TextEntrat').value)"></input><br>
+	<div id="quedenCaracters">Queden <script>document.write(document.getElementById('TextEntrat').getAttribute("maxlength")); </script> caràcters màxim</div>
+	<input type="button" value="Enviar" onclick="javascript:if (document.getElementById('TextEntrat').value.length > 0) EnviarTextPersonal()">
+</div>
+<div id="resulatTextEntrat" class="amagat"><label>Mira la pantalla&nbsp;&nbsp;&nbsp;&nbsp; <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Pixeles_de_telefono.jpg/220px-Pixeles_de_telefono.jpg"></label></div>
 
+  <iframe id='quadre' onload="" frameBorder="0" width="100%"  height="300px"></iframe>
+<?php
+} //temporalment no disponible
+?>
 
   <?php
+	//ini_set("default_socket_timeout", 10); 
 if ($config['musica']['actiu'] ){
 	#$addressMusica="192.168.1.189";
 	#$port="20000";
@@ -277,9 +385,10 @@ if ($config['musica']['actiu'] ){
 		sleep(5);
 		socket_close($sockMusica);
 	}
-		echo $tenimMusica;
+	#echo $tenimMusica;
 }	
 ?>
+
 
 
 

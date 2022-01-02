@@ -119,6 +119,7 @@ if __name__ == '__main__':
             
             
             for s in readable:
+                sys.stdout.flush()
                 if s is sock:
                     connection, client_address = s.accept()
                     connection.setblocking(0)
@@ -145,6 +146,7 @@ if __name__ == '__main__':
                         data = None
                     if data:
                         if debug: print("Rebut:" , data)
+                        sys.stdout.flush()
                         if data.split(" ")[0] == "GET":
                             #Rebuda una comunicació a partir de un tunnel SSH on hi ha molta merda i ens hem de 
                             #quedar només amb la instrucció a llançar

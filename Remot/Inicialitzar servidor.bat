@@ -16,7 +16,7 @@ echo BOTONERA '%BOTONERA%'
 
 
 echo Incialitzem servidor de la raspberry %RASPBERRY%
-start plink.exe  -t -pw raspberry  -no-antispoof -ssh pi@%RASPBERRY% "sudo python3 /home/pi/RaspberryPiLed/Servidor/Leds/SERVIDOR.py; read -p 'Press any key to resume ...'"   
+start plink.exe  -t -pw raspberry  -no-antispoof -ssh pi@%RASPBERRY% "sudo nohup /bin/bash -c ' sudo python3 /home/pi/RaspberryPiLed/Servidor/Leds/SERVIDOR.py  > /tmp/sortida.txt 2>&1 ' & tail -f /tmp/sortida.txt"   
 timeout 5
 
 if %TUNELSSH% EQU 1 (

@@ -3,6 +3,8 @@
 C:\Users\xbrunet\AppData\Roaming\AccessPaquets\putty 192.168.1.144 -l pi -pw raspberry
 
 Per autoinicialitzar un programa al arrencar la raspberry: afegir-lo al /etc/rc.local
+per parar l'apache sudo /etc/init.d/apache2 stop
+montar un directori sudo mount -t nfs 192.168.1.155:/volume1/web/ReisMags /mnt/
 sudo python3 /home/pi/RaspberryPiLed/Servidor/Leds/SERVIDOR.py & 
 sudo shutdown -h now
 

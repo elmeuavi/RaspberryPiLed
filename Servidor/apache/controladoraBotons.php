@@ -34,9 +34,14 @@ include 'config.php';
 		margin-left: auto;
 		margin-right: auto;
 	}
+	img {mix-blend-mode: multiply;}
+	.fosc{
+		background-color:LightGray;
+	}
 	
 	label, input{
 		 font-size: 2em;
+		 font-family: Arial, sans-serif
 	}
 	
 	label img{
@@ -50,6 +55,7 @@ include 'config.php';
 		margin-top: 20px;
 		margin-bottom: 20px;
 		font-size: 2em;
+		font-family: Arial, sans-serif
 	}
 
 	.grid-layout{
@@ -221,7 +227,12 @@ boto29D=""
 		TotParat=0;
 		function PararhoTot(){
 			TotParat=1;
-			setTimeout(function(){ TotParat=0; }, <?php echo($config['apache']['tempsEntrePeticions'] . '000'); ?>);
+			
+			document.getElementsByTagName("body")[0].classList.add("fosc");
+			setTimeout(function(){ 
+						TotParat=0; 
+						document.getElementsByTagName("body")[0].classList.remove("fosc");
+					}, <?php echo($config['apache']['tempsEntrePeticions'] . '000'); ?>);
 		}
 		
 		function FerAccio(boto){
@@ -234,10 +245,11 @@ boto29D=""
 			console.log(eval("boto"+boto));
 			
 			strComentari = "";
-			if (eval("comentari"+boto)){
+			if (eval("typeof  comentari"+boto +" !== 'undefined'") ){
 				strComentari= "&comentari="+encodeURI(eval("comentari"+boto));
-				console.log(eval("comentari"+boto));
-			} 
+				console.log("COMENTARI "+boto+": " +eval("comentari"+boto));
+			} else console.log("COMENTARI "+boto+": " + "ERROR NO HI HA COMENTARI");
+			
 			document.getElementById("quadre").src="controladoraBotonsFerAccio.php?accio="+encodeURI(eval("boto"+boto))+strComentari;
 			setTimeout(function(){ FerAccioStop(boto) }, <?php echo($config['apache']['tempsDuradaEvent'] . '000'); ?>);
 
@@ -248,13 +260,13 @@ boto29D=""
 			if (eval("boto"+boto+"D") != ""){
 				console.log("DesApretat "+boto+": " + eval("boto"+boto+"D"));
 				strComentari = "";
-				if (eval("comentari"+boto+"D")) {
+				if (eval("typeof  comentari"+boto +"D !== 'undefined'") ){
 					strComentari= "&comentari="+encodeURI(eval("comentari"+boto+"D"));
-					console.log(eval("comentari"+boto));
-				}
+					console.log("COMENTARI "+boto+"D: " + eval("comentari"+boto));
+				} else console.log("COMENTARI "+boto+"D: " + "ERROR NO HI HA COMENTARI");
 				document.getElementById("quadre").src="controladoraBotonsFerAccio.php?mostrar=N&accio="+encodeURI(eval("boto"+boto+"D"))+strComentari;
 			} else {
-				console.log("no hi ha acció de desapretar per el boto " + boto );
+				console.log("no hi ha acció de desapretar per el boto " + boto +"D");
 			}
 
 		}
@@ -312,7 +324,7 @@ boto29D=""
 
 <body onload="Javascript:init()" >
 
-<img src="https://esplaiespurnes.files.wordpress.com/2014/12/3-reis.jpg?w=1600&h=598&crop=1" width="100%" >
+<img src="3-reis.jpg" width="100%" >
 
 	<?php
 if ($config['apache']['EnviamentActiu'] == 0 ){
@@ -358,7 +370,7 @@ if ($config['apache']['EnviamentActiu'] == 0 ){
 </div>
 
 <div id=EntradaText>
-	<label for="TextEntrat">I també, diga'ns què vols que et portin els reis: </label>
+	<label for="TextEntrat">I també, diga'ns què vols que et portin els Reis: </label>
 	<input type="text" name="TextEntrat" id="TextEntrat" maxlength="<?php echo($config['apache']['maxCaractersText']); ?>" size="<?php echo($config['apache']['maxCaractersText']); ?>" 
 				onkeydown ="JavaScript:document.getElementById('quedenCaracters').innerHTML  = 'Queden ' + (document.getElementById('TextEntrat').getAttribute('maxlength') - document.getElementById('TextEntrat').value.length ) + ' caràcters màxim'"; document.getElementById('TextEntrat').innerHTML = document.getElementById('TextEntrat').value.substring(0,document.getElementById('TextEntrat').getAttribute('maxlength'));" 
 				onfocusout="JavaScript:document.getElementById('quedenCaracters').innerHTML  = 'Queden ' + (document.getElementById('TextEntrat').getAttribute('maxlength') - document.getElementById('TextEntrat').value.length ) + ' caràcters màxim'";document.getElementById('TextEntrat').value = removeAccents(document.getElementById('TextEntrat').value)"></input><br>

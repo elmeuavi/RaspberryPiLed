@@ -14,10 +14,6 @@
 	$config['apache']['EnviamentActiu']  	  = 1; 
 	
 
-	//$config['leds']['ip']         	= '127.0.0.1';
-	//$config['leds']['ip']                 = '10.8.0.10';
-	$config['leds']['ip']         		= '192.168.1.144';
-	$config['leds']['port']         	= 10000;
 
 
 	#Executar la següent comanda a la rasberryPI
@@ -25,4 +21,11 @@
 
 	$config['TunnelSSH']['actiu']        	= 0;
 	$config['TunnelSSH']['ip']        	= 'https://cc4cf23627ad2d.localhost.run/';
+	
+
+	$config['leds']['port']         	= 10000;
+	
+	//$config['leds']['ip']         	= '127.0.0.1';
+	//$config['leds']['ip']                 = '10.8.0.10';
+	$config['leds']['ip']         		= '192.168.1.144';
 ?>    

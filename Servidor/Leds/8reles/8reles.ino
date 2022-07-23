@@ -142,6 +142,15 @@ bool CallFuncions(char c1, char c2) {
       }
   }
 
+  //rd: aleatori
+  else if (c1 == 'r' && c2 == 'd' ) {
+    aleatori();
+
+    //fem un panic black
+    for (uint8_t i=0;i<NUMEROPINS;i++){ digitalWrite(PrimerPin+i, LOW); }
+    
+  }
+
 
 }
 
@@ -151,14 +160,40 @@ void Iterar(){
 
   for (uint8_t i=0;i<NUMEROPINS;i++){
     int pinAnt = (i ==0) ? PrimerPin+NUMEROPINS-1 : PrimerPin+i-1;
-    digitalWrite(pinAnt, LOW);
     digitalWrite(PrimerPin+i, HIGH);
-    delay(1000);                       // wait for a second
+    delay(100);
+    digitalWrite(pinAnt, LOW);
+    //Serial.println(PrimerPin+i,1);  
+    delay(1900);                       // wait for a second
   }
 
    digitalWrite(PrimerPin+NUMEROPINS-1, LOW);
 }
 
+
+void aleatori(){
+
+  int myPins[] = {0, 0, 0, 0, 0, 0 , 0, 0};
+  
+  for (uint8_t i=0;i<100;i++){
+    uint8_t pinaleatori=random(PrimerPin,PrimerPin+8);
+    
+    //Serial.println(String (i) + " - " + String(pinaleatori-PrimerPin) + " - " + String(myPins[pinaleatori-PrimerPin]));
+    if (myPins[pinaleatori-PrimerPin] == 0 ){
+      digitalWrite(pinaleatori,1);  
+      myPins[pinaleatori-PrimerPin] = 1;
+    } else {
+      digitalWrite(pinaleatori,0);  
+      myPins[pinaleatori-PrimerPin] = 0;
+    }
+    
+    
+    delay(200);
+    
+  }
+
+   digitalWrite(PrimerPin+NUMEROPINS-1, LOW);
+}
 
 
 

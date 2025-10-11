@@ -111,7 +111,7 @@ void init_neomatrix() {
   matrix->begin();
   //matrix->setFont(&TomThumb);
   //matrix->setTextWrap(false);
-  matrix->setBrightness(10);
+  matrix->setBrightness(100);
   //Show withe screen for 3 secons to ensure all is ok at init
   matrix->fillScreen(LED_WHITE_HIGH);
   matrix->show();
@@ -171,10 +171,14 @@ void setup() {
 }
 
 
-const  uint8_t  Jordi[]   PROGMEM = {"tx:Feli# Sant Jordi 2021"};
-const  uint8_t  Cristina[]   PROGMEM = {"tx:Aquesta rosa va dedicada a la meva Mama"};
+//const  uint8_t  Jordi[]   PROGMEM = {"tx:Feli# Sant Jordi 2021"};
+//const  uint8_t  Cristina[]   PROGMEM = {"tx:Aquesta rosa va dedicada a la meva Mama"};
+
+const  uint8_t  festa[]   PROGMEM = {"tx:Bona Festa Major 2022"};
 const  uint8_t  Masover[] PROGMEM = {"tx:Territori Masover!!"};
 const  uint8_t  Terra[]   PROGMEM = {"tx:Visca la Terra!!"};
+const  uint8_t  sparta[]   PROGMEM = {"tx:This is not Sparta, "};
+const  uint8_t  celra[]   PROGMEM = {"tx:THIS IS CELRA"};
 
 
 void Automatic(){
@@ -185,24 +189,50 @@ void Automatic(){
 
     if (EventUSB()) break;
     
-    memcpy_P (inputString, Jordi ,  (sizeof caracter) * (24+1));
+//    memcpy_P (inputString, Jordi ,  (sizeof caracter) * (24+1));
+//    writeText();
+
+ //   if (EventUSB()) break;
+
+    colors[0] = matrix->Color(255, 0, 0);
+    memcpy_P (inputString, sparta ,  (sizeof caracter) * (24+1));
+    writeText();
+    memcpy_P (inputString, celra ,  (sizeof caracter) * (24+1));
     writeText();
 
     if (EventUSB()) break;
-    
-    Rosa();
-    delay(5000);
-    if (EventUSB()) break;
-    delay(5000);
-    
-    memcpy_P (inputString, Cristina ,  (sizeof caracter) * (42+1));
-    writeText();
-    
-    FillColorRandom();
 
-    delay(5000);
+    delay(1000);
+
+
+
+        colors[0] = matrix->Color(0, 0, 255);
+    memcpy_P (inputString, festa ,  (sizeof caracter) * (24+1));
+    writeText();
+
     if (EventUSB()) break;
-    delay(5000);
+
+    delay(1000);
+    
+    colors[0] = matrix->Color(255, 128, 0);
+    Somriu(10000);
+    delay(1000);
+
+
+    
+ //   Rosa();
+ //   delay(5000);
+//    if (EventUSB()) break;
+//    delay(5000);
+    
+ //   memcpy_P (inputString, Cristina ,  (sizeof caracter) * (42+1));
+//    writeText();
+    
+//    FillColorRandom();
+
+//    delay(5000);
+//    if (EventUSB()) break;
+//    delay(5000);
 
     colors[0] = matrix->Color(0, 255, 0);
     memcpy_P (inputString, Masover ,  (sizeof caracter) * (22+1));
@@ -214,21 +244,30 @@ void Automatic(){
     Gay();
     delay(5000);
     if (EventUSB()) break;
-    delay(5000);
-    
+
+    matrix->fillScreen(colors[1]);
+    matrix->show();
+    delay(1000);
+
     memcpy_P (inputString, Terra ,  (sizeof caracter) * (19+1));
     writeText();
+    delay(1000);
+
 
     if (EventUSB()) break;
     Catalunya();
     delay(5000);
     if (EventUSB()) break;
     delay(5000);
-    
-    PixelAPixel();
-    if (EventUSB()) break;
 
-    Somriu(5000);
+    matrix->fillScreen(colors[1]);
+    matrix->show();
+    delay(1000);
+
+//    PixelAPixel();
+//    if (EventUSB()) break;
+
+//    Somriu(5000);
   }
 }
 
@@ -242,7 +281,7 @@ void Automatic(){
 */
 void loop() {
 
-
+  Automatic();
 
   if (not stringComplete) {
     //Mirem si ha arribat alguna comanada per USB a executar

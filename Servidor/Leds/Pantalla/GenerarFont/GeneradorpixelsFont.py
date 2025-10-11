@@ -11,11 +11,11 @@ from PIL import Image, ImageFont, ImageDraw
 #The output format will be an array of binary numbers in arduino text file
 
 
-lletres_grans={36,40,41,64,81,91,93,106,123,124,125,175,182,192,193,194,195,196,197,198,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221}
+lletres_grans={36,40,41,64,91,93,106,123,124,125,175,182,192,193,194,195,196,197,198,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221}
 
 cadenes =[None,None,None]
-
-for lletres in range(32,127):
+print (ord('Ç'))
+for lletres in range(199,200):
     lletra= chr(lletres)
 
     if lletres in lletres_grans:

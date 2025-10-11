@@ -25,7 +25,9 @@
 #define PrimerPin 2
 #define MAXPINS 8;
 
-#define SERIAL_BAUD 1000000
+//#define SERIAL_BAUD 1000000
+#define SERIAL_BAUD 9600
+#define TEMPS_EVENT 4900
 
 //Cadena de caracters rebuda per el USB
 char inputString[255] = "";
@@ -33,8 +35,10 @@ char inputString[255] = "";
 //String inputString = "";         // a String to hold incoming data
 bool stringComplete = false;     // whether the string is complete
 
+uint8_t MINPIN=0;
+uint8_t NUMEROPINS = 8;
 
-uint8_t NUMEROPINS =8;
+
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -49,8 +53,8 @@ void setup() {
 
   // initialize digital pin LED_BUILTIN as an output.
   pinMode(LED_BUILTIN, OUTPUT);
-  for (uint8_t i=0;  i < NUMEROPINS ; i++){
-      pinMode(PrimerPin+i, OUTPUT);
+  for (uint8_t i = 0;  i < NUMEROPINS ; i++) {
+    pinMode(PrimerPin + i, OUTPUT);
   }
 
   Serial.println("Inicialització realitzada");
@@ -62,38 +66,42 @@ void setup() {
 void loop() {
 
 
+
   if (not stringComplete) {
-      //Mirem si ha arribat alguna comanada per USB a executar
-      EventUSB();
-  
-  
+    //Mirem si ha arribat alguna comanada per USB a executar
+    EventUSB();
+    Iterar();
+    for (uint8_t i = 0; i < NUMEROPINS; i++) {
+      //digitalWrite(PrimerPin + i, LOW);
+    }
+
   } else {
-      stringComplete = false;
-  
-      Serial.println(inputString);
-  
-      if (inputString[2] == ':') {
-  
-        if (not CallFuncions(inputString[0], inputString[1])) {
-          //  Serial.println("Rebut desconegut");
-          ;
-        }
-  
-      } else {
-        Serial.println("No es instruccio");
+    stringComplete = false;
+
+    Serial.println(inputString);
+
+    if (inputString[2] == ':') {
+
+      if (not CallFuncions(inputString[0], inputString[1])) {
+         // Serial.println("Rebut desconegut");
+        ;
       }
+
+    } else {
+      Serial.println("No es instruccio");
+    }
   }
 
   /*
-  digitalWrite(PrimerPin, HIGH);
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(1000);                       // wait for a second
-  digitalWrite(PrimerPin, LOW);
-  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-  delay(1000);                       // wait for a second
+    digitalWrite(PrimerPin, HIGH);
+    digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+    delay(1000);                       // wait for a second
+    digitalWrite(PrimerPin, LOW);
+    digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+    delay(1000);                       // wait for a second
 
-*/
-  
+  */
+
 }
 
 //-------------------------------------------------------------
@@ -102,7 +110,8 @@ void loop() {
 //-------------------------------------------------------------
 
 bool CallFuncions(char c1, char c2) {
- 
+  Serial.println(c1);
+  Serial.println(c2);
   if (c1 == 'i' && c2 == 't' ) {
     Iterar();
   }
@@ -115,31 +124,33 @@ bool CallFuncions(char c1, char c2) {
 
   //on:x
   else if (c1 == 'o' && c2 == 'n' ) {
+    Serial.println("dins on");
     uint8_t pinTractar;
     sscanf(&inputString[3], "%ul",  &pinTractar);
-    digitalWrite(PrimerPin+pinTractar, HIGH);
+     Serial.println(pinTractar);
+    digitalWrite(PrimerPin + pinTractar, HIGH);
   }
 
   //off:x
   else if (c1 == 'o' && c2 == 'f' ) {
     uint8_t pinTractar;
     sscanf(&inputString[3], "%ul",  &pinTractar);
-    digitalWrite(PrimerPin+pinTractar, LOW);
+    digitalWrite(PrimerPin + pinTractar, LOW);
   }
 
-   //pb:   panic black
+  //pb:   panic black
   else if (c1 == 'p' && c2 == 'b' ) {
-      for (uint8_t i=0;i<NUMEROPINS;i++){
-        digitalWrite(PrimerPin+i, LOW);
-      }
+    for (uint8_t i = 0; i < NUMEROPINS; i++) {
+      digitalWrite(PrimerPin + i, LOW);
+    }
   }
 
 
-   //pw:   panic white
+  //pw:   panic white
   else if (c1 == 'p' && c2 == 'w' ) {
-      for (uint8_t i=0;i<NUMEROPINS;i++){
-        digitalWrite(PrimerPin+i, HIGH);
-      }
+    for (uint8_t i = 0; i < NUMEROPINS; i++) {
+      digitalWrite(PrimerPin + i, HIGH);
+    }
   }
 
   //rd: aleatori
@@ -147,8 +158,10 @@ bool CallFuncions(char c1, char c2) {
     aleatori();
 
     //fem un panic black
-    for (uint8_t i=0;i<NUMEROPINS;i++){ digitalWrite(PrimerPin+i, LOW); }
-    
+    for (uint8_t i = 0; i < NUMEROPINS; i++) {
+      digitalWrite(PrimerPin + i, LOW);
+    }
+
   }
 
 
@@ -156,43 +169,144 @@ bool CallFuncions(char c1, char c2) {
 
 
 
-void Iterar(){
+void Iterar() {
 
-  for (uint8_t i=0;i<NUMEROPINS;i++){
-    int pinAnt = (i ==0) ? PrimerPin+NUMEROPINS-1 : PrimerPin+i-1;
-    digitalWrite(PrimerPin+i, HIGH);
+Iterar1();
+Iterar2();
+Iterar3();
+Iterar4();
+Iterar5();
+}
+
+//ITERATIU UN DARRERA L'ALTRE
+void Iterar1() {
+
+  for (uint8_t i = MINPIN; i < NUMEROPINS; i++) {
+    int pinAnt = (i == 0) ? PrimerPin + NUMEROPINS - 1 : PrimerPin + i - 1;
+    digitalWrite(PrimerPin + i, HIGH);
     delay(100);
     digitalWrite(pinAnt, LOW);
-    //Serial.println(PrimerPin+i,1);  
-    delay(1900);                       // wait for a second
+    //Serial.println(PrimerPin+i,1);
+    delay(TEMPS_EVENT);                       // wait for a second
   }
 
-   digitalWrite(PrimerPin+NUMEROPINS-1, LOW);
+  digitalWrite(PrimerPin + NUMEROPINS - 1, LOW);
+} 
+
+
+
+//ELS LLUMS ES VAN ENCENENT DE DINS CAP A FORA I QUEDEN OBERTS
+void Iterar2() {
+ for (int8_t i = (NUMEROPINS/2) -1; i >= MINPIN ; i--) {
+    digitalWrite(PrimerPin + i, HIGH);
+    digitalWrite(PrimerPin + NUMEROPINS -1 - i, HIGH);
+  //  Serial.println('-------------------------',1);
+  //  Serial.println(i,1);
+  //  Serial.println(NUMEROPINS -1 - i,1);
+    delay(TEMPS_EVENT);                       // wait for a second
+  }
+
+  //panick black
+  for (uint8_t i = 0; i < NUMEROPINS; i++) {      digitalWrite(PrimerPin + i, LOW);    }
+    
 }
 
 
-void aleatori(){
 
-  int myPins[] = {0, 0, 0, 0, 0, 0 , 0, 0};
-  
-  for (uint8_t i=0;i<100;i++){
-    uint8_t pinaleatori=random(PrimerPin,PrimerPin+8);
-    
-    //Serial.println(String (i) + " - " + String(pinaleatori-PrimerPin) + " - " + String(myPins[pinaleatori-PrimerPin]));
-    if (myPins[pinaleatori-PrimerPin] == 0 ){
-      digitalWrite(pinaleatori,1);  
-      myPins[pinaleatori-PrimerPin] = 1;
-    } else {
-      digitalWrite(pinaleatori,0);  
-      myPins[pinaleatori-PrimerPin] = 0;
-    }
-    
-    
-    delay(200);
-    
+//DE FORA CAP A DINS I ES VAN APAGANT 
+void Iterar3() {
+ for (uint8_t i = MINPIN; i < NUMEROPINS/2; i++) {
+    int pinAnti = (i == 0) ? (NUMEROPINS/2) - 1 : i - 1;
+    int pinAntf =   NUMEROPINS - pinAnti - 1 ;
+    digitalWrite(PrimerPin + i, HIGH);
+    digitalWrite(PrimerPin + NUMEROPINS -1 - i, HIGH);
+    delay(100);
+    digitalWrite(PrimerPin + pinAnti, LOW);
+    digitalWrite(PrimerPin + pinAntf, LOW);
+  //  Serial.println('-------------------------',1);
+  //  Serial.println(i,1);
+  //  Serial.println(NUMEROPINS -1 - i,1);
+  //  Serial.println(pinAnti,1);
+  //  Serial.println(pinAntf,1);
+    delay(TEMPS_EVENT);                       // wait for a second
   }
 
-   digitalWrite(PrimerPin+NUMEROPINS-1, LOW);
+  //panick black
+  for (uint8_t i = 0; i < NUMEROPINS; i++) {      digitalWrite(PrimerPin + i, LOW);    }
+    
+}
+
+
+
+//ELS LLUMS ES VAN ENCENENT AMB PARELLS I SENARS
+void Iterar4() {
+
+  for (uint8_t j = 0; j < 4; j++) {
+    for (uint8_t i = MINPIN; i < NUMEROPINS/2; i++) {
+        digitalWrite(PrimerPin + (i *2)+1, HIGH);
+    }
+    delay(50);
+    for (uint8_t i = MINPIN; i < NUMEROPINS/2; i++) {
+        digitalWrite(PrimerPin + (i *2), LOW);
+    }
+    delay(TEMPS_EVENT);
+    for (uint8_t i = MINPIN; i < NUMEROPINS/2; i++) {
+        digitalWrite(PrimerPin + (i *2), HIGH);
+    }
+    delay(50);
+    for (uint8_t i = MINPIN; i < NUMEROPINS/2; i++) {
+        digitalWrite(PrimerPin + (i *2)+1, LOW);
+    }
+    delay(TEMPS_EVENT);
+  
+  
+    //panick black
+      for (uint8_t i = 0; i < NUMEROPINS; i++) {      digitalWrite(PrimerPin + i, LOW);    }
+  
+  }
+
+}
+
+
+// TOT OBERT
+void Iterar5() {
+
+  for (uint8_t i = MINPIN; i < NUMEROPINS; i++) {
+      digitalWrite(PrimerPin + i, HIGH);
+  }
+  delay(TEMPS_EVENT);
+
+ 
+  //panick black
+    for (uint8_t i = 0; i < NUMEROPINS; i++) {      digitalWrite(PrimerPin + i, LOW);    }
+
+}
+
+
+
+
+void aleatori() {
+
+  int myPins[] = {0, 0, 0, 0, 0, 0 , 0, 0};
+
+  for (uint8_t i = 0; i < 100; i++) {
+    uint8_t pinaleatori = random(PrimerPin, PrimerPin + 8);
+
+    //Serial.println(String (i) + " - " + String(pinaleatori-PrimerPin) + " - " + String(myPins[pinaleatori-PrimerPin]));
+    if (myPins[pinaleatori - PrimerPin] == 0 ) {
+      digitalWrite(pinaleatori, 1);
+      myPins[pinaleatori - PrimerPin] = 1;
+    } else {
+      digitalWrite(pinaleatori, 0);
+      myPins[pinaleatori - PrimerPin] = 0;
+    }
+
+
+    delay(200);
+
+  }
+
+  digitalWrite(PrimerPin + NUMEROPINS - 1, LOW);
 }
 
 

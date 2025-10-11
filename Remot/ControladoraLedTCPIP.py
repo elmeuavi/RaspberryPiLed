@@ -41,11 +41,11 @@ import os # buscar el directori actual per trobar el fitxer de configuarció de p
 #import turtle
 
 
-xeviEncenLedGPIO = "~/rpi-ws281x-python/xevi/lib/xeviEncenLedGPIO.sh"
-xeviAnimacioLed = "~/rpi-ws281x-python/xevi/lib/xeviAnimacioLed.py"
-xeviTiraRGB = "~/rpi-ws281x-python/xevi/lib/xeviTiraRGB.py"
-killxevi = "~/rpi-ws281x-python/xevi/killxevi.sh "
-servidorTCPIP = "~/rpi-ws281x-python/xevi/lib/servidor.py "
+#xeviEncenLedGPIO = "~/rpi-ws281x-python/xevi/lib/xeviEncenLedGPIO.sh"
+#xeviAnimacioLed = "~/rpi-ws281x-python/xevi/lib/xeviAnimacioLed.py"
+#xeviTiraRGB = "~/rpi-ws281x-python/xevi/lib/xeviTiraRGB.py"
+#killxevi = "~/rpi-ws281x-python/xevi/killxevi.sh "
+#servidorTCPIP = "~/rpi-ws281x-python/xevi/lib/servidor.py "
 
 #"192.168.1.144"
 sIpRaspberry = None

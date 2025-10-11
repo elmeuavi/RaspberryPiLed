@@ -12,8 +12,16 @@ import os # buscar el directori actual per trobar el fitxer de configuarció de 
 from paramiko import SSHClient, AutoAddPolicy       #pip install paramiko
 import subprocess
 import time
+import os
+import random
+
 #import webbrowser
 import subprocess
+import winreg
+import json
+import urllib.request
+
+
 
 import serial.tools.list_ports  
 
@@ -26,8 +34,8 @@ client = None
 configBotonera = configparser.RawConfigParser()
 configBotonera.read(               os.path.join(os.path.dirname(os.path.abspath(__file__)), 'controladoraBotonsReles.properties')              )
 
-url1 = "file:///C:/Users/Xevi/Documents/RaspberryPiLed/Remot/20251011%20Botons%20i%20reles%20nom%C3%A9s/BotonsCelPanic.html"
-url2 = "file:///C:/Users/Xevi/Documents/RaspberryPiLed/Remot/20251011%20Botons%20i%20reles%20nom%C3%A9s/BotonsCelPanic.html?data=1s2s5s7s9&premut=2"
+url1 = "file:///"+os.getcwd()+"/BotonsCelPanic.html"
+url2 = "file:///"+os.getcwd()+"/BotonsCelPanic.html?data=1s2s5s7s9&premut=2"
 
 
             
@@ -94,40 +102,71 @@ def LlistarUSB():
     
     #return str(port.decode("utf-8"))
             
+
+
+
+
+websocketBrowser = None
+
             
-def InicialitzarBrowser():            
-
-
-    chrome_path = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe"
-#
-#    webbrowser.register('chrome', None, webbrowser.BackgroundBrowser(chrome_path))
-#    webbrowser.get('chrome').open(url1)
-#    time.sleep(10)
-#    webbrowser.get('chrome').open(url2)    
-
-    profile_dir = r"C:\temp\chrome_temp_profile"
+def InicialitzarBrowser():      
     
-    # Obre la primera URL en mode pantalla completa
-    p = subprocess.Popen([
-        chrome_path,
-        f"--user-data-dir={profile_dir}",
-        "--kiosk",
-        "--new-window",
-        url1
-    ])
+    global websocketBrowser
+
+    try:
+        key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe")
+        chrome_path, _ = winreg.QueryValueEx(key, "")
+
+    except FileNotFoundError:
+        return None
+
+    if chrome_path:
+        print(f"Chrome trobat al registre: {chrome_path}")
+    else:
+        print("Chrome no trobat al registre.")
 
 
+    user_data_dir = r"C:\temp\chrome-profile"
+    port = "9222"
 
-def CanviarBrowser():      
-    
-    # Canvia la URL a la mateixa finestra mitjançant la nova URL
-    # Amb Chrome no pots “reutilitzar pestanya” fàcilment, però pots obrir la nova URL a la mateixa finestra amb:
     subprocess.Popen([
         chrome_path,
-        f"--user-data-dir={profile_dir}",
-        "--kiosk",
-        url2
+        f"--remote-debugging-port={port}",
+        f"--user-data-dir={user_data_dir}",
+        f"--remote-allow-origins=*",
+        url1
+        #,"--start-fullscreen"
     ])
+
+
+    # Connecta't a l'API local de Chrome
+    data = urllib.request.urlopen("http://localhost:9222/json").read()
+    tabs = json.loads(data)
+
+    # Agafem la primera pestanya oberta
+    tab = tabs[0]
+    websocket_url = tab["webSocketDebuggerUrl"]
+
+    # Connectem-hi per dir-li que canviï de pàgina
+    from websocket import create_connection
+
+    websocketBrowser = create_connection(websocket_url)
+
+
+
+
+
+
+def CanviarBrowser(pUrl):      
+    
+    command = json.dumps({
+        "id": 1,
+        "method": "Page.navigate",
+        "params": {"url": pUrl}
+    })
+    websocketBrowser.send(command)
+    
+
 
   
             
@@ -139,25 +178,40 @@ if __name__ == '__main__':
     InicialitzarBrowser()
     
     print("Configuració incial finalitzada")
+    
+    
+    
+
+    
+    exit()
 
     
     try:
         while True:
             if connexioSerialBotonera.inWaiting():
-                comanda= connexioSerialBotonera.readline().decode("utf-8") .rstrip("\r\n")
-                print("-"+comanda+"-")
+                idBotonera= connexioSerialBotonera.readline().decode("utf-8") .rstrip("\r\n")
+                print("-"+idBotonera+"-")
 
-                #transformem el botó apretat a una comanda
-                try:
-                    comanda = "on:" + configBotonera.get('BotoneraUSB','boto.'+comanda)
-                    
-                except NoOptionError:
-                    comanda="@Comanda desconeguda" 
-                print("-"+comanda+"-")
+                botoPremut = configBotonera.get('BotoneraUSB','boto.'+idBotonera)
+
+                numeros = sorted(random.sample(range(30), 10))
+                print(numeros)
+                CanviarBrowser(url1 + "?data="+'s'.join(str(n) for n in numeros)+"&premut="+botoPremut)
+
+
+                if valor in numeros:
+                    print(f"El número {valor} està dins la llista.")
+                    connexioSerialReles.write( ("on:0" + "\n").encode("utf-8"))    
+                else:
+                    print(f"El número {valor} no està dins la llista.")
+                    connexioSerialReles.write( ("on:5" + "\n").encode("utf-8"))    
                 
-                
-                if (not "@Comanda desconeguda" == comanda ) :
-                    connexioSerialReles.write( (comanda + "\n").encode("utf-8"))    
+                time.sleep(5)
+                connexioSerialReles.write( ("pb:" + "\n").encode("utf-8"))    
+                connexioSerialBotonera.reset_input_buffer()   #ignorem altres botons que hagi premut l'usuari
+
+
+
 
                     
             if (connexioSerialReles.inWaiting()):
@@ -172,3 +226,4 @@ if __name__ == '__main__':
     finally:
         connexioSerialBotonera.close()   
         connexioSerialReles.close()
+        websocketBrowser.close()

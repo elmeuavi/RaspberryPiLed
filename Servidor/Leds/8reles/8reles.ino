@@ -70,10 +70,12 @@ void loop() {
   if (not stringComplete) {
     //Mirem si ha arribat alguna comanada per USB a executar
     EventUSB();
-    Iterar();
+    //Iterar();
     for (uint8_t i = 0; i < NUMEROPINS; i++) {
       //digitalWrite(PrimerPin + i, LOW);
     }
+	
+	delay(200);  
 
   } else {
     stringComplete = false;

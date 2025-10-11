@@ -1,0 +1,301 @@
+<?php 
+//http://192.168.1.155/raspberry/2025Halloween/BotonsCelPanic.php?data=1s2s5s7s9&premut=2
+//http://192.168.1.155/raspberry/2025Halloween/BotonsCelPanic.php?premut=2
+
+?>
+<html >
+<head>
+
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
+<style>
+
+	html {
+		text-align: center;
+		width: 100%; 
+	}
+	
+	body{
+		background-color: #222;
+	    margin: 0;
+  		height: 100vh;
+  		display: flex;
+  		justify-content: center;   /* Centra horitzontalment */
+  		align-items: center;       /* Centra verticalment */		
+	}
+	img {mix-blend-mode: multiply;}
+	.fosc{
+		background-color:LightGray;
+	}
+	
+	label, input{
+		 font-size: 2em;
+		 font-family: Arial, sans-serif
+	}
+	
+	.grid-layout{
+		display: grid;
+		grid-template-columns: auto auto auto auto auto auto;
+		padding:40px;
+			 
+		border: 1px solid black;
+		box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+		 
+		 max-width: 1000px;
+		 text-align: left;
+		 margin: 0px auto;
+		 margin-bottom: 20px;
+		 margin-top:20px;	
+		 
+		row-gap: 20px;       /* espai entre files */
+  		column-gap: 40px;    /* espai entre columnes */
+
+		transform: perspective(1000px) rotateX(15deg) rotateY(5deg);;
+		transform-style: preserve-3d;
+  		border-radius: 10px;
+  
+    	background: linear-gradient(to bottom right, ForestGreen, #228B22, #1a4d1a);
+		
+		margin-bottom:100px
+
+	}
+ 
+    .circle {
+      width: 80;
+      height: 80px;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      border-radius: 50%;
+	  margin:20px;
+	  align-self: center;
+	  justify-self: center;
+	  //border: 20px solid transparent ;
+    }
+
+
+
+	.Vermell	{ background: url("botons.png");  background-size: 393%;  	background-position:0% 0%	}
+	.Verd		{ background: url("botons.png");  background-size: 393%;	background-position:50.5% 0%	}
+	.BlauClar	{ background: url("botons.png");  background-size: 393%;	background-position:75% 0%	}
+	.Groc		{ background: url("botons.png");  background-size: 393%;	background-position:0% 49.3%	}
+	.Negre		{ background: url("botons.png");  background-size: 393%;	background-position:50.5% 49.3%	}
+	.Blanc		{ background: url("botons.png");  background-size: 393%;	background-position:100% 49.3%	}
+	.BlauFosc	{ background: url("botons.png");  background-size: 393%;	background-position:0% 100%	}
+	.Taronja	{ background: url("botons.png");  background-size: 393%;	background-position:50.5% 100%	}
+	.Rosa		{ background: url("botons.png");  background-size: 393%;	background-position:50.5% 0%	}
+
+
+    .iluminat  {
+      border: 10px solid #ff0 !important;
+	  box-shadow: 0 0 20px #ff0, inset 0 0 5px #fff;
+	  width: 60px;
+      height: 60px;
+    }
+    .encert  {
+      border: 10px solid #0f0 !important;
+	  box-shadow: 0 0 20px #0f0, inset 0 0 5px #fff;
+	  width: 60px;
+      height: 60px;      
+    }
+    .error  {
+      border: 10px solid #f00 !important;
+	  box-shadow: 0 0 20px #f00, inset 0 0 5px #fff;
+	  width: 60px;
+      height: 60px;	  
+    }
+	.triat  {
+      border: 10px solid blue !important;
+	  box-shadow: 0 0 20px blue, inset 0 0 5px #fff;
+	  width: 60px;
+      height: 60px;	  
+    }
+	.difuminat {
+		filter: grayscale(80%) brightness(90%) contrast(80%);
+		//border: 20px solid transparent !important;
+	}
+
+	
+
+	.amagat   {display:none;visibility :hidden}
+	.visible{}
+	
+	
+
+
+</style>
+  <meta charset="utf-8">
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+
+var boto0;
+var boto1;
+var boto2;
+var boto3;
+var boto4;
+var boto5;
+var boto6;
+var boto7;
+var boto8;
+var boto9;
+var boto10;
+var boto11;
+var boto12;
+var boto13;
+var boto14;
+var boto15;
+var boto16;
+var boto17;
+var boto18;
+var boto19;
+var boto20;
+var boto21;
+var boto22;
+var boto23;
+var boto24;
+var boto25;
+var boto26;
+var boto27;
+var boto28;
+var boto29;
+
+
+		
+		function PintarBotons(){
+
+			const arrayColor = ["Vermell","BlauFosc","Verd","Blanc","Groc","Blanc",
+								"Groc", "Taronja","Groc","Negre","Vermell","BlauFosc",
+								"Verd","Blanc","BlauFosc","Taronja","Blanc","Verd",
+								"Negre","Groc","Vermell","Verd","Groc","Negre",
+								"Vermell","Taronja","BlauFosc","Negre","BlauFosc", "Taronja"]
+
+			var els = document.getElementsByClassName("circle");
+
+			[].forEach.call(els, function (el,index) { 
+										el.setAttribute("NBoto", index);
+										el.setAttribute("role", "img text");
+										el.classList.add(arrayColor[index]); /* console.log(el,index)*/
+										el.setAttribute("title",eval("boto"+index));
+			} );
+			
+
+		}		
+
+		function Resoldre(){
+			
+			const matriu = document.getElementById('botonera');
+
+			for (let i = 0; i < document.getElementsByClassName('circle').length; i++) {
+				
+				document.getElementsByClassName('circle')[i].classList.remove('difuminat');
+				document.getElementsByClassName('circle')[i].classList.remove('triat');
+				
+				if (iluminats.includes(i) && premuts.includes(i)) {
+					document.getElementsByClassName('circle')[i].classList.add('encert');
+					document.getElementsByTagName('body')[0].style.backgroundColor  = 'white';
+				} else {
+					if (iluminats.includes(i)) {
+					  document.getElementsByClassName('circle')[i].classList.add('iluminat');
+					} else  if ( premuts == i) {
+					  document.getElementsByClassName('circle')[i].classList.add('error');
+					  document.getElementsByTagName('body')[0].style.backgroundColor  = 'red';
+					} else {
+						document.getElementsByClassName('circle')[i].classList.add('difuminat');
+					}
+				}
+			}
+		}
+		
+		
+		function MostrarPremut(){
+			
+			const matriu = document.getElementById('botonera');
+
+			for (let i = 0; i < document.getElementsByClassName('circle').length; i++) {
+				
+				if ( premuts == i) {
+					  document.getElementsByClassName('circle')[i].classList.add('triat');
+				} else {
+						document.getElementsByClassName('circle')[i].classList.add('difuminat');
+				}
+			}
+		}
+		
+		function init(){
+			PintarBotons();
+
+			const params = new URLSearchParams(window.location.search);
+			const valorsStrData = params.get('data'); 
+			const valorsStrPremut = params.get('premut'); 
+
+    		if (valorsStrData){
+				iluminats = valorsStrData.split('s').map(Number);       // separa per 's' i converteix cada element a número
+				console.log(iluminats);											
+			}
+
+    		if (valorsStrPremut) {
+				premuts = valorsStrPremut.split('s').map(Number);        // separa per 's'i converteix cada element a número		
+				console.log(premuts);							 
+			}				
+
+			if (  typeof premuts !== 'undefined'   ) {
+				setTimeout(() => {MostrarPremut()    }, 1000);
+			}
+			
+			if ( typeof iluminats !== 'undefined'  && typeof premuts !== 'undefined'   ) {
+				setTimeout(() => {Resoldre()  }, 3000);
+			}
+			
+		}
+		
+		
+  </script>
+  
+ 
+</head>
+
+<body onload="Javascript:init()" >
+
+
+<div class="grid-layout" id="botonera">
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+
+</div>
+
+
+
+
+
+</body>
+</html>

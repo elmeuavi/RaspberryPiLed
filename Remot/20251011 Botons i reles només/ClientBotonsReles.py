@@ -3,7 +3,7 @@
 
 
 
-
+#pip install websocket-client
 # python.exe -m pip install --upgrade pip
 import serial     #pip install pyserial
 import configparser
@@ -180,12 +180,6 @@ if __name__ == '__main__':
     print("Configuració incial finalitzada")
     
     
-    
-
-    
-    exit()
-
-    
     try:
         while True:
             if connexioSerialBotonera.inWaiting():
@@ -196,19 +190,26 @@ if __name__ == '__main__':
 
                 numeros = sorted(random.sample(range(30), 10))
                 print(numeros)
-                CanviarBrowser(url1 + "?data="+'s'.join(str(n) for n in numeros)+"&premut="+botoPremut)
+                novaUrl = url1 + "?data="+'s'.join(str(n) for n in numeros)+"&premut="+botoPremut
+                print(novaUrl)
+                CanviarBrowser(novaUrl)
 
-
-                if valor in numeros:
-                    print(f"El número {valor} està dins la llista.")
-                    connexioSerialReles.write( ("on:0" + "\n").encode("utf-8"))    
+                time.sleep(2.8)
+                if int(botoPremut) in numeros:
+                    #encenc els reles del 4 al 7
+                    print(f"El número {botoPremut} està dins la llista.")
+                    connexioSerialReles.write( ("up:" + "\n").encode("utf-8"))        
                 else:
-                    print(f"El número {valor} no està dins la llista.")
-                    connexioSerialReles.write( ("on:5" + "\n").encode("utf-8"))    
-                
-                time.sleep(5)
+                    #encenc els reles del 0 al 3
+                    print(f"El número {botoPremut} no està dins la llista.")
+                    connexioSerialReles.write( ("dw:" + "\n").encode("utf-8"))   
+
+
+					
+                time.sleep(3)
                 connexioSerialReles.write( ("pb:" + "\n").encode("utf-8"))    
                 connexioSerialBotonera.reset_input_buffer()   #ignorem altres botons que hagi premut l'usuari
+                CanviarBrowser(url1)
 
 
 

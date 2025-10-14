@@ -3,7 +3,7 @@
 
 
 
-
+#pip install websocket-client
 # python.exe -m pip install --upgrade pip
 import serial     #pip install pyserial
 import configparser
@@ -14,7 +14,8 @@ import subprocess
 import time
 import os
 import random
-
+import traceback
+ 
 #import webbrowser
 import subprocess
 import winreg
@@ -37,12 +38,14 @@ configBotonera.read(               os.path.join(os.path.dirname(os.path.abspath(
 url1 = "file:///"+os.getcwd()+"/BotonsCelPanic.html"
 url2 = "file:///"+os.getcwd()+"/BotonsCelPanic.html?data=1s2s5s7s9&premut=2"
 
+def InicialitzarUSB():
+    InicialitzarUSBReles()
+    InicialitzarUSBBotons()
 
             
-def InicialitzarUSB():
+def InicialitzarUSBBotons():
 
     global connexioSerialBotonera
-    global connexioSerialReles
     
     wVelocitat = int(configBotonera.get('BotoneraUSB','botonera.velocitat'))
     wPort = configBotonera.get('BotoneraUSB','botonera.port')
@@ -63,6 +66,9 @@ def InicialitzarUSB():
 
     
     
+def InicialitzarUSBReles():
+
+    global connexioSerialReles
     
     wVelocitat = int(configBotonera.get('RelesUSB','reles.velocitat'))
     wPort = configBotonera.get('RelesUSB','reles.port')
@@ -180,47 +186,68 @@ if __name__ == '__main__':
     print("Configuració incial finalitzada")
     
     
-    
-
-    
-    exit()
-
-    
     try:
         while True:
-            if connexioSerialBotonera.inWaiting():
-                idBotonera= connexioSerialBotonera.readline().decode("utf-8") .rstrip("\r\n")
-                print("-"+idBotonera+"-")
+            try:
+                time.sleep(0.2)
+                if connexioSerialBotonera.inWaiting():
+                    botoPremut=None
+                    idBotonera= connexioSerialBotonera.readline().decode("utf-8") .rstrip("\r\n")
+                    print("-"+idBotonera+"-")
+                    try:
+                        botoPremut = configBotonera.get('BotoneraUSB','boto.'+idBotonera)
+                    except NoOptionError: #(option, section):
+                        print("no hem trobat ")
+                    if botoPremut:
+                        numeros = sorted(random.sample(range(30), 10))
+                        print(numeros)
+                        novaUrl = url1 + "?data="+'s'.join(str(n) for n in numeros)+"&premut="+botoPremut
+                        print(novaUrl)
+                        CanviarBrowser(novaUrl)
+                        connexioSerialBotonera.reset_input_buffer() 
 
-                botoPremut = configBotonera.get('BotoneraUSB','boto.'+idBotonera)
-
-                numeros = sorted(random.sample(range(30), 10))
-                print(numeros)
-                CanviarBrowser(url1 + "?data="+'s'.join(str(n) for n in numeros)+"&premut="+botoPremut)
-
-
-                if valor in numeros:
-                    print(f"El número {valor} està dins la llista.")
-                    connexioSerialReles.write( ("on:0" + "\n").encode("utf-8"))    
-                else:
-                    print(f"El número {valor} no està dins la llista.")
-                    connexioSerialReles.write( ("on:5" + "\n").encode("utf-8"))    
-                
-                time.sleep(5)
-                connexioSerialReles.write( ("pb:" + "\n").encode("utf-8"))    
-                connexioSerialBotonera.reset_input_buffer()   #ignorem altres botons que hagi premut l'usuari
+                        time.sleep(2.8)
+                        connexioSerialBotonera.reset_input_buffer() 
+                        if int(botoPremut) in numeros:
+                            #encenc els reles del 4 al 7
+                            print(f"El número {botoPremut} està dins la llista.")
+                            connexioSerialReles.write( ("up:" + "\n").encode("utf-8"))        
+                        else:
+                            #encenc els reles del 0 al 3
+                            print(f"El número {botoPremut} no està dins la llista.")
+                            connexioSerialReles.write( ("dw:" + "\n").encode("utf-8"))   
 
 
+                            
+                        time.sleep(3)
+                        connexioSerialReles.reset_input_buffer() 
+                        #while connexioSerialReles.is_open and connexioSerialReles.inWaiting():  
+                        #       comanda= connexioSerialReles.read(connexioSerialReles.in_waiting).decode("utf-8") .rstrip("\r\n")
+                        #       print("Els reles ens diu: "+comanda )
+                        connexioSerialReles.write( ("pb:" + "\n").encode("utf-8"))    
+                        CanviarBrowser(url1)
+                        time.sleep(0.5)
+                        connexioSerialBotonera.reset_input_buffer() 
+                        connexioSerialReles.reset_input_buffer() 
 
 
+
+                        
+                if (connexioSerialReles.inWaiting()):
+                    time.sleep(0.1)
+                    comanda= connexioSerialReles.read(connexioSerialReles.in_waiting).decode("utf-8") .rstrip("\r\n")
+                    print("La reles ens diu: "+comanda )
                     
-            if (connexioSerialReles.inWaiting()):
-                time.sleep(0.1)
-                comanda= connexioSerialReles.read(connexioSerialReles.in_waiting).decode("utf-8") .rstrip("\r\n")
-                print("La reles ens diu: "+comanda )
-                
 
-
+            except serial.SerialException:
+                print("Error del serial");
+                traceback.print_exc()
+                connexioSerialBotonera.close()
+                if not connexioSerialBotonera.is_open :
+                    print("Botonera")
+                    time.sleep(0.5)
+                    LlistarUSB()
+                    InicialitzarUSBBotons()
 
 
     finally:

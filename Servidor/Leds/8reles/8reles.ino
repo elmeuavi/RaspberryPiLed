@@ -167,6 +167,26 @@ bool CallFuncions(char c1, char c2) {
   }
 
 
+
+  //dw: "down" encenc del 0 al 3
+  else if (c1 == 'd' && c2 == 'w' ) {
+    
+    for (uint8_t i = 0; i < NUMEROPINS/2; i++) {
+      digitalWrite(PrimerPin + i, HIGH);
+    }
+
+  }
+
+
+  //up: "up" encenc del 4 al 7
+  else if (c1 == 'u' && c2 == 'p' ) {
+    
+    for (uint8_t i = NUMEROPINS/2; i < NUMEROPINS; i++) {
+      digitalWrite(PrimerPin + i, HIGH);
+    }
+
+  }
+
 }
 
 

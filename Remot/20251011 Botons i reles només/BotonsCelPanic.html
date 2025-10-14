@@ -225,7 +225,7 @@ var boto29;
 		
 		function init(){
 			PintarBotons();
-
+			
 			const params = new URLSearchParams(window.location.search);
 			const valorsStrData = params.get('data'); 
 			const valorsStrPremut = params.get('premut'); 
@@ -246,7 +246,12 @@ var boto29;
 			}
 			
 			if ( typeof iluminats !== 'undefined'  && typeof premuts !== 'undefined'   ) {
-				setTimeout(() => {Resoldre()  }, 3000);
+			
+				if (iluminats.includes(premuts[0]) ) {
+					document.getElementById('playerBona').play()
+				}else document.getElementById('playerDolenta').play()
+			
+				setTimeout(() => {Resoldre()  }, 6000);
 			}
 			
 		}
@@ -296,6 +301,16 @@ var boto29;
 
 
 
+
+<audio id="playerBona" hidden>
+  <source src="possible bona.mp3" type="audio/mpeg">
+  El teu navegador no suporta àudio.
+</audio>	
+
+<audio id="playerDolenta" hidden>
+  <source src="possible dolenta.mp3" type="audio/mpeg">
+  El teu navegador no suporta àudio.
+</audio>	
 
 
 </body>

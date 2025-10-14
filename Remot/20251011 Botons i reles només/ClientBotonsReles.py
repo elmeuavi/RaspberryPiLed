@@ -140,6 +140,7 @@ def InicialitzarBrowser():
         f"--remote-debugging-port={port}",
         f"--user-data-dir={user_data_dir}",
         f"--remote-allow-origins=*",
+        f"--autoplay-policy=no-user-gesture-required",    # IMPORTANT per poder reproduir so només obrir una web !!
         url1
         #,"--start-fullscreen"
     ])
@@ -206,7 +207,7 @@ if __name__ == '__main__':
                         CanviarBrowser(novaUrl)
                         connexioSerialBotonera.reset_input_buffer() 
 
-                        time.sleep(2.8)
+                        time.sleep(6)
                         connexioSerialBotonera.reset_input_buffer() 
                         if int(botoPremut) in numeros:
                             #encenc els reles del 4 al 7
@@ -219,7 +220,7 @@ if __name__ == '__main__':
 
 
                             
-                        time.sleep(3)
+                        time.sleep(12.5)
                         connexioSerialReles.reset_input_buffer() 
                         #while connexioSerialReles.is_open and connexioSerialReles.inWaiting():  
                         #       comanda= connexioSerialReles.read(connexioSerialReles.in_waiting).decode("utf-8") .rstrip("\r\n")

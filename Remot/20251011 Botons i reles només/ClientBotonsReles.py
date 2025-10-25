@@ -234,7 +234,7 @@ if __name__ == '__main__':
     try:
         while True:
             try:
-                time.sleep(0.2)
+                #time.sleep(0.2)
                 if connexioSerialBotonera.inWaiting():
                     botoPremut=None
                     idBotonera= connexioSerialBotonera.readline().decode("utf-8") .rstrip("\r\n")
@@ -290,7 +290,7 @@ if __name__ == '__main__':
                 connexioSerialBotonera.close()
                 if not connexioSerialBotonera.is_open :
                     print("Botonera")
-                    time.sleep(0.5)
+                    time.sleep(2)
                     #LlistarUSB()
                     InicialitzarUSBBotons()
 

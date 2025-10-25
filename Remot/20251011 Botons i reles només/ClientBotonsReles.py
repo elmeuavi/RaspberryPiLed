@@ -27,6 +27,7 @@ import urllib.request
 import serial.tools.list_ports  
 
             
+myports = None
 connexioSerialBotonera = None
 connexioSerialReles = None
 
@@ -48,7 +49,11 @@ def InicialitzarUSBBotons():
     global connexioSerialBotonera
     
     wVelocitat = int(configBotonera.get('BotoneraUSB','botonera.velocitat'))
-    wPort = configBotonera.get('BotoneraUSB','botonera.port')
+    #wPort = configBotonera.get('BotoneraUSB','botonera.port')
+
+    ch340_ports = [port for port in myports if 'CH340' in port.description]
+    wPort = ch340_ports[0].device
+
         
     try:
         print('BOTONERA: provem connexió al port '+wPort + ' amb velocitat ' + str(wVelocitat))
@@ -71,7 +76,10 @@ def InicialitzarUSBReles():
     global connexioSerialReles
     
     wVelocitat = int(configBotonera.get('RelesUSB','reles.velocitat'))
-    wPort = configBotonera.get('RelesUSB','reles.port')
+    #wPort = configBotonera.get('RelesUSB','reles.port')
+
+    ch340_ports = [port for port in myports if 'Arduino Uno' in port.description]
+    wPort = ch340_ports[0].device
         
     
     try:
@@ -91,12 +99,48 @@ def InicialitzarUSBReles():
 
 def LlistarUSB():
 
+    global myports
+
     #Primera forma de mirar els elements connectats via USB
-    myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
+    myports =  list(serial.tools.list_ports.comports())
     print( myports)
 
+    print("-" * 40)
+    for port in myports:
+        print("Port:", port.device)
+        print("Descripció:", port.description)
+        print("Fabricant:", port.manufacturer)
+        print("Producte:", port.product)
+        print("Número de sèrie:", port.serial_number)
+        print("VID:", port.vid)
+        print("PID:", port.pid)
+        print("HWID:", port.hwid)
+        print("Ubicació:", port.location)
+        print("Interfície:", port.interface)
+        print("-" * 40)
+
+
+    
+
+#    # Filtrar els ports que tenen 'CH340' a la descripció
+#    ch340_ports = [port.device for port in myports if 'CH340' in port.description]
+#
+#    # Mostrar els ports trobats
+#    print("Ports CH340 trobats:", ch340_ports)
+#
+#    # Si només vols el primer port trobat:
+#    if ch340_ports:
+#        primer_port = ch340_ports[0]
+#        print("Primer port CH340:", primer_port)
+#    else:
+#        print("No s'ha trobat cap dispositiu CH340.")
+
+
+
+
+
     #Segona forma de mirar els elements connectats via USB
-    os.system(" powershell \"Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match '^USB' } | Where-Object { $_.FriendlyName -match 'CH340' } \"")
+    #os.system(" powershell \"Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match '^USB' } | Where-Object { $_.FriendlyName -match 'CH340' } \"")
 
 
     
@@ -247,7 +291,7 @@ if __name__ == '__main__':
                 if not connexioSerialBotonera.is_open :
                     print("Botonera")
                     time.sleep(0.5)
-                    LlistarUSB()
+                    #LlistarUSB()
                     InicialitzarUSBBotons()
 
 

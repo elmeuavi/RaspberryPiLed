@@ -98,7 +98,7 @@
 ]
 </property>
   <property name="kdenlive:docproperties.kdenliveversion">21.08.1</property>
-  <property name="kdenlive:docproperties.position">495</property>
+  <property name="kdenlive:docproperties.position">463</property>
   <property name="kdenlive:docproperties.previewextension"/>
   <property name="kdenlive:docproperties.previewparameters"/>
   <property name="kdenlive:docproperties.profile">atsc_1080p_25</property>
@@ -127,7 +127,7 @@
   <property name="kdenlive:docproperties.rendertcoverlay">0</property>
   <property name="kdenlive:docproperties.rendertctype">0</property>
   <property name="kdenlive:docproperties.rendertwopass">0</property>
-  <property name="kdenlive:docproperties.renderurl">possible bona.mp3</property>
+  <property name="kdenlive:docproperties.renderurl">possible bona v2.mp3</property>
   <property name="kdenlive:docproperties.renderzone">0</property>
   <property name="kdenlive:docproperties.scrollPos">0</property>
   <property name="kdenlive:docproperties.seekOffset">30000</property>
@@ -144,7 +144,7 @@
   <entry producer="producer1" in="00:00:00.000" out="01:51:19.440"/>
   <entry producer="producer2" in="00:00:00.000" out="00:05:54.480"/>
  </playlist>
- <producer id="black_track" in="00:00:00.000" out="00:23:32.920">
+ <producer id="black_track" in="00:00:00.000" out="00:20:18.520">
   <property name="length">2147483647</property>
   <property name="eof">continue</property>
   <property name="resource">black</property>
@@ -153,48 +153,13 @@
   <property name="mlt_image_format">rgb24a</property>
   <property name="set.test_audio">0</property>
  </producer>
- <producer id="producer3" in="00:00:00.000" out="00:05:54.480">
-  <property name="length">8863</property>
-  <property name="eof">pause</property>
-  <property name="resource">C:/Users/xbrun/Downloads/Aleluya  Hallelujah - AVIVAMIENTO - Avivamiento (youtube).mp3</property>
-  <property name="meta.media.nb_streams">1</property>
-  <property name="meta.media.0.stream.type">audio</property>
-  <property name="meta.media.0.codec.sample_fmt">fltp</property>
-  <property name="meta.media.0.codec.sample_rate">44100</property>
-  <property name="meta.media.0.codec.channels">2</property>
-  <property name="meta.media.0.codec.name">mp3float</property>
-  <property name="meta.media.0.codec.long_name">MP3 (MPEG audio layer 3)</property>
-  <property name="meta.media.0.codec.bit_rate">320000</property>
-  <property name="seekable">1</property>
-  <property name="audio_index">0</property>
-  <property name="video_index">-1</property>
-  <property name="mute_on_pause">0</property>
-  <property name="mlt_service">avformat-novalidate</property>
-  <property name="kdenlive:clipname"/>
-  <property name="kdenlive:folderid">-1</property>
-  <property name="kdenlive:id">4</property>
-  <property name="kdenlive:file_size">14180310</property>
-  <property name="kdenlive:file_hash">14fb8ee4f1db00028535b543e7372ee6</property>
-  <property name="kdenlive:audio_max0">239</property>
-  <property name="xml">was here</property>
-  <property name="set.test_audio">0</property>
-  <property name="set.test_image">1</property>
- </producer>
  <playlist id="playlist0">
   <property name="kdenlive:audio_track">1</property>
-  <blank length="00:00:24.880"/>
-  <entry producer="producer3" in="00:01:51.800" out="00:02:03.200">
-   <property name="kdenlive:id">4</property>
-  </entry>
-  <blank length="00:00:10.480"/>
-  <entry producer="producer3" in="00:00:00.000" out="00:02:46.080">
-   <property name="kdenlive:id">4</property>
-  </entry>
  </playlist>
  <playlist id="playlist1">
   <property name="kdenlive:audio_track">1</property>
  </playlist>
- <tractor id="tractor0" in="00:00:00.000" out="00:03:32.880">
+ <tractor id="tractor0" in="00:00:00.000">
   <property name="kdenlive:audio_track">1</property>
   <property name="kdenlive:trackheight">67</property>
   <property name="kdenlive:timeline_active">1</property>
@@ -223,7 +188,7 @@
    <property name="disable">1</property>
   </filter>
  </tractor>
- <producer id="producer4" in="00:00:00.000" out="00:04:42.520">
+ <producer id="producer3" in="00:00:00.000" out="00:04:42.520">
   <property name="length">7064</property>
   <property name="eof">pause</property>
   <property name="resource">C:/Users/xbrun/Downloads/Músicas de Terror no Piano [Horror Themes Medley on Piano] - Pianeiro (youtube).mp3</property>
@@ -250,7 +215,7 @@
   <property name="set.test_audio">0</property>
   <property name="set.test_image">1</property>
  </producer>
- <producer id="producer5" in="00:00:00.000" out="00:05:54.480">
+ <producer id="producer4" in="00:00:00.000" out="00:05:54.480">
   <property name="length">8863</property>
   <property name="eof">pause</property>
   <property name="resource">C:/Users/xbrun/Downloads/Aleluya  Hallelujah - AVIVAMIENTO - Avivamiento (youtube).mp3</property>
@@ -279,21 +244,17 @@
  </producer>
  <playlist id="playlist2">
   <property name="kdenlive:audio_track">1</property>
-  <entry producer="producer4" in="00:01:50.800" out="00:01:56.880">
+  <entry producer="producer3" in="00:01:50.800" out="00:01:56.880">
    <property name="kdenlive:id">2</property>
   </entry>
-  <entry producer="producer5" in="00:02:46.120" out="00:02:58.480">
-   <property name="kdenlive:id">4</property>
-  </entry>
-  <blank length="00:00:06.360"/>
-  <entry producer="producer5" in="00:02:58.520" out="00:05:54.480">
+  <entry producer="producer4" in="00:02:46.120" out="00:02:58.480">
    <property name="kdenlive:id">4</property>
   </entry>
  </playlist>
  <playlist id="playlist3">
   <property name="kdenlive:audio_track">1</property>
  </playlist>
- <tractor id="tractor1" in="00:00:00.000" out="00:03:20.840">
+ <tractor id="tractor1" in="00:00:00.000" out="00:00:18.480">
   <property name="kdenlive:audio_track">1</property>
   <property name="kdenlive:trackheight">49</property>
   <property name="kdenlive:timeline_active">1</property>
@@ -344,7 +305,7 @@
   <track hide="audio" producer="playlist6"/>
   <track hide="audio" producer="playlist7"/>
  </tractor>
- <tractor id="tractor4" in="00:00:00.000" out="00:23:32.920">
+ <tractor id="tractor4" in="00:00:00.000" out="00:20:18.520">
   <track producer="black_track"/>
   <track producer="tractor0"/>
   <track producer="tractor1"/>

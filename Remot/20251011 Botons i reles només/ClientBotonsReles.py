@@ -52,6 +52,9 @@ def InicialitzarUSBBotons():
     #wPort = configBotonera.get('BotoneraUSB','botonera.port')
 
     ch340_ports = [port for port in myports if 'CH340' in port.description]
+    if not ch340_ports:
+        print("ERROR: no tenim la botonera enxufada")
+        exit(0)
     wPort = ch340_ports[0].device
 
         
@@ -60,7 +63,7 @@ def InicialitzarUSBBotons():
         connexioSerialBotonera = serial.Serial(wPort,wVelocitat) # ,timeout = None
         print('Connexió USB amb la caixa botonera realitzada correctament al port '+wPort)
     except:
-        print('ERROR: no tenim port USB on trobar la botonera')
+        print('ERROR: Al connectar-nos a l''USB de la botonera')
         exit(0)
 
     #la primera comanda la despreciem perquè pot arribar mitja comanda
@@ -78,8 +81,11 @@ def InicialitzarUSBReles():
     wVelocitat = int(configBotonera.get('RelesUSB','reles.velocitat'))
     #wPort = configBotonera.get('RelesUSB','reles.port')
 
-    ch340_ports = [port for port in myports if 'Arduino Uno' in port.description]
-    wPort = ch340_ports[0].device
+    arduino_ports = [port for port in myports if 'Arduino Uno' in port.description]
+    if not arduino_ports:
+        print("ERROR: no tenim els reles enxufats")
+        exit(0)
+    wPort = arduino_ports[0].device
         
     
     try:
@@ -87,7 +93,7 @@ def InicialitzarUSBReles():
         connexioSerialReles = serial.Serial(wPort,wVelocitat) # ,timeout = None
         print('Connexió USB amb la reles realitzada correctament al port '+wPort)
     except:
-        print('ERROR: no tenim port USB on trobar la reles')
+        print('ERROR: Al connectar-nos a l''USB de els reles')
         exit(0)
 
     #la primera comanda la despreciem perquè pot arribar mitja comanda

@@ -74,11 +74,25 @@ def InicialitzarUSB():
 def LlistarUSB():
 
     #Primera forma de mirar els elements connectats via USB
-    myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
+    myports =  list(serial.tools.list_ports.comports())
     print( myports)
 
+    print("-" * 40)
+    for port in myports:
+        print("Port:", port.device)
+        print("Descripció:", port.description)
+        print("Fabricant:", port.manufacturer)
+        print("Producte:", port.product)
+        print("Número de sèrie:", port.serial_number)
+        print("Vendedor ID VID:", port.vid)
+        print("Product ID:", port.pid)
+        print("HWID:", port.hwid)
+        print("Ubicació:", port.location)
+        print("Interfície:", port.interface)
+        print("-" * 40)
+
     #Segona forma de mirar els elements connectats via USB
-    os.system(" powershell \"Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match '^USB' } | Where-Object { $_.FriendlyName -match 'CH340' } \"")
+    #os.system(" powershell \"Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match '^USB' } | Where-Object { $_.FriendlyName -match 'CH340' } \"")
 
 
     

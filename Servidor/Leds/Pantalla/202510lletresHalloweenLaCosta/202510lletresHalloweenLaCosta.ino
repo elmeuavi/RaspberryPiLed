@@ -874,7 +874,7 @@ void writeTextMemCopyAleatori() {
   
   char buffer[255];  // Espai per copiar la frase
   strcpy_P(buffer, (char*)pgm_read_word(&(frases[index])));
-  //Serial.println(buffer);
+  Serial.println(buffer);
   
   const uint8_t* fraseAleatoria = (const uint8_t*)pgm_read_word(&(frases[index]));
   writeTextMemCopy(fraseAleatoria);
@@ -955,7 +955,7 @@ boolean cercarFont(char pCaracter) {
 */
 void cercarFontLletres(int quinaArray, byte pQuantesLLetres, byte pMidaLletres, int pCaracter) {
 
-  Serial.println(pCaracter);
+  //Serial.println(pCaracter);
   for (byte lletra = 0; lletra < pQuantesLLetres; lletra++) {
 
     int posIni = (2 /*bytes*/ * lletra * (pMidaLletres + 1)); //apuntem al codi de caràcter

@@ -22,6 +22,9 @@ import winreg
 import json
 import urllib.request
 
+#so mp3
+import vlc
+
 
 
 import serial.tools.list_ports  
@@ -38,6 +41,11 @@ configBotonera.read(               os.path.join(os.path.dirname(os.path.abspath(
 
 url1 = "file:///"+os.getcwd()+"/BotonsCelPanic.html"
 url2 = "file:///"+os.getcwd()+"/BotonsCelPanic.html?data=1s2s5s7s9&premut=2"
+
+
+player = None
+
+
 
 def InicialitzarUSB():
     InicialitzarUSBReles()
@@ -118,8 +126,8 @@ def LlistarUSB():
         print("Fabricant:", port.manufacturer)
         print("Producte:", port.product)
         print("Número de sèrie:", port.serial_number)
-        print("VID:", port.vid)
-        print("PID:", port.pid)
+        print("Vendedor ID VID:", port.vid)
+        print("Product ID PID:", port.pid)
         print("HWID:", port.hwid)
         print("Ubicació:", port.location)
         print("Interfície:", port.interface)
@@ -212,6 +220,29 @@ def InicialitzarBrowser():
 
 
 
+def InicialitzarMusica():
+    
+    global player
+    
+    # Crear instància del reproductor
+    instance = vlc.Instance()
+    media = instance.media_new("ambient.mp3")
+
+    # Crear MediaPlayer i configurar bucle
+    player = instance.media_player_new()
+    player.set_media(media)
+
+    # Activar bucle infinit
+    media_list = instance.media_list_new([media])
+    media_list_player = instance.media_list_player_new()
+    media_list_player.set_media_list(media_list)
+    media_list_player.set_media_player(player)
+    media_list_player.set_playback_mode(vlc.PlaybackMode.loop)
+
+    # Reproduir en bucle
+    media_list_player.play()
+
+
 
 
 def CanviarBrowser(pUrl):      
@@ -230,9 +261,11 @@ def CanviarBrowser(pUrl):
 if __name__ == '__main__':
 
 
+    InicialitzarMusica()
     LlistarUSB()
     InicialitzarUSB()
     InicialitzarBrowser()
+    
     
     print("Configuració incial finalitzada")
     
@@ -243,6 +276,8 @@ if __name__ == '__main__':
                 #time.sleep(0.2)
                 if connexioSerialBotonera.inWaiting():
                     botoPremut=None
+                    player.pause()
+                    
                     idBotonera= connexioSerialBotonera.readline().decode("utf-8") .rstrip("\r\n")
                     print("-"+idBotonera+"-")
                     try:
@@ -278,6 +313,9 @@ if __name__ == '__main__':
                         connexioSerialReles.write( ("pb:" + "\n").encode("utf-8"))    
                         CanviarBrowser(url1)
                         time.sleep(0.5)
+                        
+                        player.play()
+                        
                         connexioSerialBotonera.reset_input_buffer() 
                         connexioSerialReles.reset_input_buffer() 
 
@@ -300,8 +338,9 @@ if __name__ == '__main__':
                     #LlistarUSB()
                     InicialitzarUSBBotons()
 
-
     finally:
         connexioSerialBotonera.close()   
         connexioSerialReles.close()
         websocketBrowser.close()
+        player.stop()
+        print("Reproducció aturada.")

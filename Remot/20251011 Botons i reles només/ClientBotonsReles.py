@@ -23,6 +23,8 @@ import json
 import urllib.request
 
 #so mp3
+#pip install python-vlc 
+#cal tenir el vlc instal·lat amb la mateixa versió 32 o 64 bits que el python, això només connecta amb la API del VLC
 import vlc
 
 
@@ -231,6 +233,7 @@ def InicialitzarMusica():
     # Crear MediaPlayer i configurar bucle
     player = instance.media_player_new()
     player.set_media(media)
+    player.audio_set_volume(120)
 
     # Activar bucle infinit
     media_list = instance.media_list_new([media])

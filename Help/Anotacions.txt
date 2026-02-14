@@ -2,6 +2,55 @@
 
 C:\Users\xbrunet\AppData\Roaming\AccessPaquets\putty 192.168.1.144 -l pi -pw raspberry
 
+per canviar el teclat a espaÑol cal posar ES en comptes de GB a /etc/default/keyboard
+
+
+
+
+
+No em funcionava la xarxa wifi i no sé quines coses fet que funcioni:
+
+
+pi@raspberrypi:/etc/network $ cat interfaces
+....
+auto wlan0
+iface wlan0 inet manual
+wpa-conf /etc/wpasupplicant/wpa_supplicant.conf
+
+
+pi@raspberrypi:/etc/network $ sudo cat /etc/wpa_supplicant/wpa_supplicant.conf
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=es
+network={
+ssid="NASDECACADEVACA"
+psk="xxxx"
+priority=40
+}
+network={
+ssid="CACADEVACA"
+psk="xxxx"
+priority=30
+}
+network={
+ssid="HOLA"
+psk="xxxx"
+priority=20
+}
+
+
+sudo groupadd netdev
+sudo usermod -aG netdev pi
+
+
+... i corregir la hora del sistema i la zona horaria amb systemctl 
+
+
+
+
+
+
+
 Per autoinicialitzar un programa al arrencar la raspberry: afegir-lo al /etc/rc.local
 per parar l'apache sudo /etc/init.d/apache2 stop
 montar un directori sudo mount -t nfs 192.168.1.155:/volume1/web/ReisMags /mnt/

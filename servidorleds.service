@@ -1,0 +1,13 @@
+[Unit]
+Description=Servidor de leds
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=3
+User=pi
+ExecStart=/bin/bash -c 'sudo python3 /home/pi/RaspberryPiLed/Servidor/Leds/SERVIDOR.py'
+
+[Install]
+WantedBy=multi-user.target
